@@ -6,4 +6,7 @@ set REMOTE_PATH=%REMOTE_ROOT%/%REMOTE_DIR%
 
 c:\\JN\\bash.exe -c 'ssh %REMOTE_HOST% "mkdir -p %REMOTE_PATH%"'
 
-c:\\JN\\bash.exe -c 'scp -r %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%'
+rem c:\\JN\\bash.exe -c 'scp -r %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%'
+
+c:\\JN\\bash.exe -c 'rsync -rvz %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%'
+
