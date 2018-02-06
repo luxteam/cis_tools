@@ -17,10 +17,8 @@ def main():
     inc = args.inc
 
     version_split = re.split(r'\.', version)
-    index_version = str(version_split[index-1])
-    new_index_version = str(int(index_version) + inc) 
-    result = version.replace(index_version, new_index_version)
-    print(result)
+    version_split[index - 1] = str(int(version_split[index-1])+ 1)
+    print(".".join(version_split))
 
 if __name__ == "__main__":
 
