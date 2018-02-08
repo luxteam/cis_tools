@@ -18,7 +18,7 @@ def main():
     inc = args.inc
     delimiter = args.delimiter
 
-    version_split = re.split("\\" + delimiter, version)
+    version_split = version.split(delimiter)
     version_split[index - 1] = str(int(version_split[index-1])+ inc)
     print(delimiter.join(version_split))
 

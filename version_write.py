@@ -20,7 +20,7 @@ def main():
 
     old_version = []
 
-    with open(file, encoding="utf8") as f:
+    with open(file) as f:
         for line in f:
             if line.find(prefix) != -1:
                 prefix_line = line
@@ -48,11 +48,11 @@ def main():
     result = prefix_line.replace(old_version[0], str(version))
     print("SUCCES. Version build update to", str(version), "in file", file)
 
-    with open(file, "r", encoding="utf8") as f1:
+    with open(file, "r") as f1:
         text =  f1.read()
 
     text = text.replace(prefix_line, result)
-    with open(file, "w", encoding="utf8") as f2:
+    with open(file, "w") as f2:
         f2.write(text)
 
 if __name__ == "__main__":
