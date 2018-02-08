@@ -16,8 +16,7 @@ def main():
 	prefix = args.prefix
 	delimiter = args.delimiter
 	prefix = prefix.replace("\'", "\"")
-	print("PREFIX: " + prefix)
-	print("DELIMITR: " + delimiter)
+
 
 	old_version = []
 
