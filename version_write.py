@@ -9,14 +9,14 @@ def main():
     parser.add_argument('--file', required = True, help = 'File with build version string')
     parser.add_argument('--prefix', required = True, help = 'Prefix before build version')
     parser.add_argument('--version', required = True, help = 'Version which will be written in file')
-    parser.add_argument('--delimiter', default = ".", required = True, help = 'Delimiter between numbers in version')
+    parser.add_argument('--delimeter', default = ".", required = True, help = 'delimeter between numbers in version')
 
     args = parser.parse_args()
 
     prefix = args.prefix
     version = args.version
     file = args.file
-    delimiter = args.delimiter
+    delimeter = args.delimeter
 
     old_version = []
 
@@ -27,12 +27,12 @@ def main():
 
     try:
 
-        old_version = re.findall('\d'+ delimiter +'\d'+ delimiter+'\d'+ delimiter + '\d+', prefix_line)
+        old_version = re.findall('\d'+ delimeter +'\d'+ delimeter+'\d'+ delimeter + '\d+', prefix_line)
 
         if len(old_version) == 0:
-            old_version = re.findall('\d'+ delimiter +'\d'+ delimiter+'\d', prefix_line)
+            old_version = re.findall('\d'+ delimeter +'\d'+ delimeter+'\d', prefix_line)
             if len(old_version) == 0:
-                old_version = re.findall('\d'+ delimiter +'\d', prefix_line)
+                old_version = re.findall('\d'+ delimeter +'\d', prefix_line)
                 if len(old_version) == 0: 
                     old_version = re.findall('\d+', prefix_line)
 
