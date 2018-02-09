@@ -27,12 +27,12 @@ def main():
 
     try:
 
-        old_version = re.findall('\d'+ delimeter +'\d'+ delimeter+'\d'+ delimeter + '\d+', prefix_line)
+        old_version = re.findall('\d+'+ delimeter +'\d+'+ delimeter+'\d+'+ delimeter + '\d+', prefix_line)
 
         if len(old_version) == 0:
-            old_version = re.findall('\d'+ delimeter +'\d'+ delimeter+'\d', prefix_line)
+            old_version = re.findall('\d+'+ delimeter +'\d+'+ delimeter+'\d+', prefix_line)
             if len(old_version) == 0:
-                old_version = re.findall('\d'+ delimeter +'\d', prefix_line)
+                old_version = re.findall('\d+'+ delimeter +'\d+', prefix_line)
                 if len(old_version) == 0: 
                     old_version = re.findall('\d+', prefix_line)
 
