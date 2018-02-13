@@ -9,7 +9,8 @@ def main():
 	parser.add_argument('--file', required = True, help = 'File with build version string')
 	parser.add_argument('--prefix', required = True, help = 'Prefix before build version')
 	parser.add_argument('--delimiter', default = ".", required = True, help = 'Delimiter between numbers in version')
-
+	parser.add_argument('--format', default = False, help = 'Format output string to *.*.*')
+	
 	args = parser.parse_args()
 
 	file = args.file
@@ -36,7 +37,10 @@ def main():
 		if len(old_version) == 0:
 			print("Unsupported version. No numbers in prefix line.")
 		else:	
-			print(old_version[0])
+			if (args.format):
+				print(".".join(old_version[0].split(delimiter)))
+			else:
+				print(old_version[0])
 				
 	except UnboundLocalError:
 		print("Error. No search string.")
