@@ -16,8 +16,6 @@ def main():
 	file = args.file
 	prefix = args.prefix
 	delimiter = args.delimiter
-	print(args.format)
-	print(type(args.format)
 
 	old_version = []
 
@@ -39,7 +37,7 @@ def main():
 		if len(old_version) == 0:
 			print("Unsupported version. No numbers in prefix line.")
 		else:	
-			if (args.format):
+			if (args.format == "false"):
 				print(".".join(old_version[0].split(delimiter)))
 			else:
 				print(old_version[0])
