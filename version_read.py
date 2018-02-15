@@ -17,7 +17,7 @@ def main():
 	prefix = args.prefix
 	delimiter = args.delimiter
 	print(args.format)
-	print(type(args.format)
+	print(type(args.format))
 
 	old_version = []
 
