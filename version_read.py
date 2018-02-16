@@ -16,8 +16,6 @@ def main():
 	file = args.file
 	prefix = args.prefix
 	delimiter = args.delimiter
-	print(args.format)
-	print(type(args.format))
 
 	old_version = []
 
