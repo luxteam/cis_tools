@@ -9,7 +9,7 @@ def main():
 	parser.add_argument('--file', required = True, help = 'File with build version string')
 	parser.add_argument('--prefix', required = True, help = 'Prefix before build version')
 	parser.add_argument('--delimiter', default = ".", required = True, help = 'Delimiter between numbers in version')
-	parser.add_argument('--format', default = False, help = 'Format output string to *.*.*')
+	parser.add_argument('--format', default = "false", help = 'Format output string to *.*.*')
 	
 	args = parser.parse_args()
 
