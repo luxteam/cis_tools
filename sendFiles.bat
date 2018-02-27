@@ -8,5 +8,5 @@ c:\\JN\\bash.exe -c 'ssh %REMOTE_HOST% "mkdir -p %REMOTE_PATH%"'
 
 rem c:\\JN\\bash.exe -c 'scp -r %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%'
 
-c:\\JN\\bash.exe -c 'rsync -rvz %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%'
+c:\\JN\\bash.exe -c 'rsync -rvzW %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%'
 
