@@ -26,9 +26,9 @@ def filesystem_benchmark():
     start_time = time.time()
     if os.name == 'nt':
         os.chdir('c:')
-        subprocess.call(['tree'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(['tree'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif os.name == 'posix':
-        subprocess.call(['ls -R /'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(['ls -R /'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     return time.time() - start_time
 
