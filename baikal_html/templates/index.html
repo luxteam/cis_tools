@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style media="screen" type="text/css">
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: auto;
+            padding: 5px;
+	        text-align: center;
+        }
+
+        .bitExact td {
+            background: #d9fcd9;
+        }
+
+         .notBitExact td {
+            background: #f4d7d2;
+         }
+    </style>
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            {% for folder in folders %}
+            <th>{{ folder }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for file in files_list %}
+            {% if exact[file] %}
+        <tr class="bitExact">
+            {% else %}
+        <tr class="notBitExact">
+            {% endif %}
+            {% for folder in files_list[file] %}
+            <td>
+                {{ file }}
+                <img src="{{folder}}/{{file}}"/>
+                {{ files_list[file][folder] }}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+
+    </table>
+</body>
+
+</html>
