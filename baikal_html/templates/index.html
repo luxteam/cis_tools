@@ -38,8 +38,8 @@
             {% endif %}
             {% for folder in folders %}
             <td>
-                {{ file }}
-                <img src="{{folder}}/{{file}}"/>
+                {{ file }}<br/>
+                <img src="{{folder}}/{{file}}"/><br/>
                 {{ files_list[file][folder] }}
             </td>
             {% endfor %}
