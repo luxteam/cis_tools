@@ -33,8 +33,13 @@ def main():
                     files_list[file_key] = {}
                     exact.update({file_key: True})
                     for base in folders:
-                        files_list[file_key].update({base:
+                        try:
+                            files_list[file_key].update({base:
                                                      hashlib.md5(open(os.path.join(args.input_path, base,file_key), 'rb').read()).hexdigest()})
+                        except Exception as err:
+                            files_list[file_key].update({base: ""})
+                            print(str(err))
+                            
                     if len(set(files_list[file_key].values())) > 1:
                         exact.update({file_key: False})
 
