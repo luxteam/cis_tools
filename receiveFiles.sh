@@ -1,5 +1,5 @@
 REMOTE_HOST=admin@172.30.23.112
-REMOTE_ROOT=/var/data/storage.rpr/www/html
+REMOTE_ROOT=/home/admin/Server/storage.rpr/www/html
 
 REMOTE_SOURCE=$1
 LOCAL_DIR=$2
