@@ -1,5 +1,5 @@
 set REMOTE_HOST=admin@172.30.23.112
-set REMOTE_ROOT=/var/data/storage.rpr/www/html
+set REMOTE_ROOT=/home/admin/Server/storage.rpr/www/html
 
 set REMOTE_SOURCE=%1
 set LOCAL_DIR=%2
