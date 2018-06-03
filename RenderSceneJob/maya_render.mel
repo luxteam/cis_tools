@@ -1,0 +1,48 @@
+global proc rpr_render(){{
+	
+	file -f -options "v=0;"  -ignoreVersion -o {scene};
+	
+	if( `pluginInfo -query -loaded RadeonProRender` == 0){{
+    	loadPlugin RadeonProRender;
+	}}
+	
+	setAttr "defaultRenderGlobals.currentRenderer" -type "string" "FireRender";
+	setAttr "defaultRenderGlobals.imageFormat" 8;
+	
+	string $scene_name  = `file -q -sn -shn`;
+
+	float $startTime = 0;
+	float $testTime = 0;
+	fireRender -waitForItTwo;
+	$startTime = `timerX`;
+	renderIntoNewWindow render;
+	string $ff = "";
+	sysFile -makeDir ("C:/JN/WS/Render_Scene_Test/Output");
+	$ff = "C:/JN/WS/Render_Scene_Test/Output/" + $scene_name;
+	renderWindowEditor -edit  -dst "color" renderView;
+	renderWindowEditor -edit -com -writeImage $ff renderView;
+	$testTime = `timerX -startTime $startTime`;
+
+	optionVar -rm "RPR_DevicesSelected";
+	optionVar -iva "RPR_DevicesSelected" 1;
+	optionVar -iva "RPR_DevicesSelected" 0;
+	
+	string $render_device_name[] = `optionVar -q "RPR_DevicesName"`;
+	string $RPR_version[] = `RPRImageComparing -rprPluginDetails`;
+	string $filePath = "C:/JN/WS/Render_Scene_Test/Output/" + $scene_name + ".json";
+	int $fileID = `fopen $filePath "a"`;
+	fprint $fileID ("[");
+	fprint $fileID ("\r\n {{");
+	fprint $fileID ("\r\n  \"render_device\": \"" + $render_device_name[0] + "\",");
+	fprint $fileID ("\r\n  \"tool\": \"Maya " + `about -version` + "\",");
+	fprint $fileID ("\r\n  \"date_time\": \"" + `date -format "YYYY-MM-DD_hh-mm-ss"` + "\",");
+	fprint $fileID ("\r\n  \"render_version\": \"" + $RPR_version[0] + "\",");
+	fprint $fileID ("\r\n  \"file_name\": \"" + $scene_name + ".jpg\",");
+	fprint $fileID ("\r\n  \"render_time\": " + $testTime + ",");
+	fprint $fileID ("\r\n }}");
+	fprint $fileID ("\r\n]");
+	fclose $fileID;
+	
+	evalDeferred("quit -abort");
+
+}}
