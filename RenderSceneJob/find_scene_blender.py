@@ -10,8 +10,11 @@ def main():
 
 	folder = args.folder
 
-	files = os.listdir(folder)
-	scene = list(filter(lambda x: x.endswith('.blend'), files))
+	scene = []
+	for rootdir, dirs, files in os.walk(folder):
+	for file in files:
+		if file.split('.')[-1] == 'blend':
+			scene.append(file)
 	print (scene[0])
 
 	
