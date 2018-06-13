@@ -10,10 +10,13 @@ def main():
 
 	folder = args.folder
 
-	files = os.listdir(folder)
-	scene = list(filter(lambda x: x.endswith('.max'), files))
+	scene = []
+	for rootdir, dirs, files in os.walk(folder):
+	for file in files:
+		if file.split('.')[-1] == 'max':
+			scene.append(file)
 	print (scene[0])
-
+	
 	
 if __name__ == "__main__":
 
