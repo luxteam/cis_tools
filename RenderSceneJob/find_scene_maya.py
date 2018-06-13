@@ -10,13 +10,14 @@ def main():
 
 	folder = args.folder
 
-	files = os.listdir(folder)
-	scene = list(filter(lambda x: x.endswith('.ma'), files))
-	if (len(scene) == 0):
-		scene = list(filter(lambda x: x.endswith('.mb'), files))
+	scene = []
+	for rootdir, dirs, files in os.walk(folder):
+	for file in files:
+		if file.split('.')[-1] == 'ma' or file.split('.')[-1] == 'mb':
+			scene.append(file)
 	print (scene[0])
-
 	
+
 if __name__ == "__main__":
 
 	main()
