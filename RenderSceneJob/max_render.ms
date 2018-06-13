@@ -36,7 +36,7 @@ function rpr_render = (
     json_line = "  \"tool\": \"" + ver_max[ver_max.count] +  "\",\n"
     format "%" json_line to:a
 
-    json_line = "  \"render_device\": \"" + "2" + "\",\n"
+    json_line = "  \"render_device\": \"" + "GPU" + "\",\n"
     format "%" json_line to:a
 
     json_line = "  \"pass_limit\": " + (renderers.current.passLimit as string) + ",\n"
@@ -48,19 +48,16 @@ function rpr_render = (
     json_line = "  \"date_time\": \"" + (localtime as String) + "\",\n"
     format "%" json_line to:a
 
-    json_line = "  \"render_color_path\": \"Color/" + filename + "\",\n"
-    format "%" json_line to:a
-
     json_line = "  \"file_name\": \"" + filename + "\",\n"
     format "%" json_line to:a  
 
     json_line = "  \"render_time\": " + (relapsed as string) + ",\n"
     format "%" json_line to:a 
 
-    json_line = "  \"plugin_version\": " + "0" + ",\n"
+    json_line = "  \"plugin_version\": " + "no api" + ",\n"
     format "%" json_line to:a 
 
-    json_line = "  \"core_version\": " + "0" + ",\n"
+    json_line = "  \"core_version\": " + "no api" + ",\n"
     format "%" json_line to:a 
 
     json_line = "  \"resolution_x\": " + (renderWidth as string) + ",\n"
