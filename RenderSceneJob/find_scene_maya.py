@@ -12,9 +12,9 @@ def main():
 
 	scene = []
 	for rootdir, dirs, files in os.walk(folder):
-	for file in files:
-		if file.split('.')[-1] == 'ma' or file.split('.')[-1] == 'mb':
-			scene.append(file)
+		for file in files:
+			if file.split('.')[-1] == 'ma' or file.split('.')[-1] == 'mb':
+				scene.append(file)
 	print (scene[0])
 	
 
