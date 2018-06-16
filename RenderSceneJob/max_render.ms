@@ -8,9 +8,9 @@ function rpr_render = (
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
 	renderers.current = Radeon_ProRender()
-    renderers.current.passLimit = 10
+    renderers.current.passLimit = {pass_limit}
 	
-    renderers.current.renderDevice = 2
+    renderers.current.renderDevice = {render_device}
     renderers.current.renderLimit = 1
 	
     image_path = "C:\\JN\\WS\\Render_Scene_Test\\Output\\"
