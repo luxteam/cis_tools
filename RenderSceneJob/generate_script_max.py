@@ -15,7 +15,7 @@ def main():
 
 	with open("max_render.ms") as f:
             max_template = f.read()
-	maxScript = max_template.format(scene=args.scene, pass_limit=args.pass_limit, render_device=args.render_device)
+	maxScript = max_template.format(scene=args.scene, pass_limit=int(args.pass_limit), render_device=int(args.render_device))
 
 	with open("max_render.ms", 'w') as f:
             f.write(maxScript)
