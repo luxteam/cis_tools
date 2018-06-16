@@ -11,6 +11,7 @@ def main():
 	args = parser.parse_args()
 	
 	folder = args.folder
+	scene = args.scene
 	scene = folder + "\\\\" + scene
 
 	with open("max_render.ms") as f:
