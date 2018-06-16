@@ -6,15 +6,16 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--folder')
 	parser.add_argument('--scene')
+	parser.add_argument('--pass_limit')
+	parser.add_argument('--render_device')
 	args = parser.parse_args()
 	
 	folder = args.folder
-	scene = args.scene
 	scene = folder + "\\\\" + scene
 
 	with open("max_render.ms") as f:
             max_template = f.read()
-	maxScript = max_template.format(scene=scene)
+	maxScript = max_template.format(scene=args.scene, pass_limit=args.pass_limit, render_device=args.render_device)
 
 	with open("max_render.ms", 'w') as f:
             f.write(maxScript)
