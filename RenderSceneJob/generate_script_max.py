@@ -13,10 +13,17 @@ def main():
 	folder = args.folder
 	scene = args.scene
 	scene = folder + "\\\\" + scene
+	render_device = args.render_device
+	if render_device == 'gpu':
+		render_device = '2'
+	elif render_device == 'cpu':
+		render_device = '1'
+	elif render_device == 'dual':
+		render_device = '3'
 
 	with open("max_render.ms") as f:
             max_template = f.read()
-	maxScript = max_template.format(scene=args.scene, pass_limit=int(args.pass_limit), render_device=int(args.render_device))
+	maxScript = max_template.format(scene=args.scene, pass_limit=int(args.pass_limit), render_device=args.render_device)
 
 	with open("max_render.ms", 'w') as f:
             f.write(maxScript)
