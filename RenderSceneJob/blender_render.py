@@ -36,7 +36,7 @@ def render(*argv):
 		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'gpu'
 	elif '{render_device}' == 'cpu':
 		device_name = "CPU"
-		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = '{render_mode}'
+		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'cpu'
 		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type_plus_cpu = False
 	elif '{render_device}' == 'gpu':
 		device_name = helpers.render_resources_helper.get_used_devices()
