@@ -73,7 +73,7 @@ def render(*argv):
 
 	# LOG
 	log_name = os.path.join("C:\\JN\\WS\\Render_Scene_Test\\Output", name_scene + ".json")
-	report = {}
+	report = {{}}
 	report['render_version'] = version
 	report['render_mode'] = 'gpu'
 	report['core_version'] = core_ver_str()
