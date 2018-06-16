@@ -25,8 +25,21 @@ def render(*argv):
 	if((addon_utils.check("rprblender"))[0] == False) : 
 		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
 	bpy.data.scenes[Scenename].render.engine = "RPR"
+	
+	bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations = {pass_limit}
 
-	device_name = helpers.render_resources_helper.get_used_devices()
+	device_name = ""
+	# Render device in RPR
+	if '{render_device}' == 'dual':
+		device_name = "CPU" + " + " + helpers.render_resources_helper.get_used_devices()
+		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type_plus_cpu = True
+		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'gpu'
+	elif '{render_device}' == 'cpu':
+		device_name = "CPU"
+		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = '{render_mode}'
+		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type_plus_cpu = False
+	elif '{render_device}' == 'gpu':
+		device_name = helpers.render_resources_helper.get_used_devices()
 	bpy.context.user_preferences.addons["rprblender"].preferences.settings.include_uncertified_devices = True
 
 	# frame range
