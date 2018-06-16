@@ -14,7 +14,7 @@ def main():
 
 	with open(os.path.join(folder, "maya_render.mel")) as f:
             mel_template = f.read()
-	melScript = mel_template.format(scene=args.scene, pass_limit=args.pass_limit, render_device=args.render_device)
+	melScript = mel_template.format(scene=args.scene, pass_limit=int(args.pass_limit), render_device=args.render_device)
 
 	with open(os.path.join(folder, "maya_render.mel"), 'w') as f:
             f.write(melScript)
