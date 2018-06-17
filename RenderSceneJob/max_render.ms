@@ -5,7 +5,7 @@ units.SystemType = #Meters
 
 function rpr_render = (
 	
-	assetsFile = "C:\\JN\\WS\\Render_Scene_Test\\" + "{scene}"
+	assetsFile = "C:\\JN\\WS\\Render_Scene_Test\\{scene}"
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
 	renderers.current = Radeon_ProRender()
