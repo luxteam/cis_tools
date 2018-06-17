@@ -53,7 +53,7 @@ def main():
     cmdRun = '''
     set MAYA_CMD_FILE_OUTPUT=%cd%/{scene}_log.txt 
     set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
-    "C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\maya.exe" -command "source script.mel; evalDeferred -lp (main());"''' \
+    "C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\maya.exe" -command "source maya_render.mel; evalDeferred -lp (main());"''' \
         .format(scene=args.scene, tool=args.tool)
 
     with open('launch_render.bat', 'w') as f:
