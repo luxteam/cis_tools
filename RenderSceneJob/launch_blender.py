@@ -33,6 +33,7 @@ def main():
     if (system_pl == 'Linux'):
         cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
             .format(tool=args.tool, scene=args.scene, template="blender_render.py")
+        cmdScriptPath = 'launch_render.sh'
         with open('launch_render.sh', 'w') as f:
             f.write(cmdRun)
         os.system('chmod +x launch_render.sh')
@@ -41,12 +42,14 @@ def main():
         cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
             .format(tool="C:\\Program Files\\Blender Foundation\\Blender\\blender.exe", \
                 scene=args.scene, template="blender_render.py")
+        cmdScriptPath = 'launch_render.bat'
         with open('launch_render.bat', 'w') as f:
             f.write(cmdRun)
 
     elif system_pl == 'Darwin':
         cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
             .format(tool=args.tool, scene=args.scene, template="blender_render.py")
+        cmdScriptPath = 'launch_render.sh'
         with open('launch_render.sh', 'w') as f:
            f.write(cmdRun)
         os.system('chmod +x launch_render.sh')
@@ -56,11 +59,11 @@ def main():
     p = subprocess.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
 
-    with open(os.path.join(args.output, "renderTool.log"), 'w') as file:
+    with open(os.path.join('Output', "renderTool.log"), 'w') as file:
         stdout = stdout.decode("utf-8")
         file.write(stdout)
 
-    with open(os.path.join(args.output, "renderTool.log"), 'a') as file:
+    with open(os.path.join('Output', "renderTool.log"), 'a') as file:
         file.write("\n ----STEDERR---- \n")
         stderr = stderr.decode("utf-8")
         file.write(stderr)
@@ -72,7 +75,7 @@ def main():
     except psutil.TimeoutExpired as err:
         rc = -1
         error_screen = pyscreenshot.grab()
-        error_screen.save(os.path.join(args.output, 'Output/error_screenshot.jpg'))
+        error_screen.save(os.path.join('Output', 'error_screenshot.jpg'))
         for child in reversed(p.children(recursive=True)):
             child.terminate()
         p.terminate()
