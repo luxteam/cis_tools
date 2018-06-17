@@ -11,6 +11,8 @@ import platform
 
 def main():
 
+    parser = argparse.ArgumentParser()
+    
     parser.add_argument('--tool', required=True)
     parser.add_argument('--scene', required=True)
     parser.add_argument('--render_mode', required=True)
