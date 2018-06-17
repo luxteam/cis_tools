@@ -23,12 +23,7 @@ def main():
     with open ("blender_render.py") as f:
         blender_script_template = f.read()
 
-    BlenderScript = blender_script_template.format(work_dir=work_dir, render_device=args.render_device,
-                                                   pass_limit=args.pass_limit,
-                                                   res_path=args.res_path, resolution_x=args.resolution_x,
-                                                   resolution_y=args.resolution_y, package_name=args.package_name,
-                                                   start=0)
-
+    BlenderScript = blender_script_template.format(render_device=args.render_device, pass_limit=args.pass_limit)
 
     with open("blender_render.py", 'w') as f:
         f.write(BlenderScript)
