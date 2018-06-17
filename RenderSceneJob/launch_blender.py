@@ -12,10 +12,10 @@ import platform
 def main():
 
     parser = argparse.ArgumentParser()
-    
+
     parser.add_argument('--tool', required=True)
     parser.add_argument('--scene', required=True)
-    parser.add_argument('--render_mode', required=True)
+    parser.add_argument('--render_device', required=True)
     parser.add_argument('--pass_limit', required=True)
 
     args = parser.parse_args()
@@ -23,7 +23,7 @@ def main():
     with open ("blender_render.py") as f:
         blender_script_template = f.read()
 
-    BlenderScript = blender_script_template.format(work_dir=work_dir, render_mode=args.render_mode,
+    BlenderScript = blender_script_template.format(work_dir=work_dir, render_device=args.render_device,
                                                    pass_limit=args.pass_limit,
                                                    res_path=args.res_path, resolution_x=args.resolution_x,
                                                    resolution_y=args.resolution_y, package_name=args.package_name,
@@ -33,21 +33,25 @@ def main():
     with open("blender_render.py", 'w') as f:
         f.write(BlenderScript)
 
-    cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
-        .format(tool=args.tool, scene=args.scene, template="blender_render.py")
-
     system_pl = platform.system()
 
     if (system_pl == 'Linux'):
+        cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
+            .format(tool=args.tool, scene=args.scene, template="blender_render.py")
         with open('launch_render.sh', 'w') as f:
             f.write(cmdRun)
         os.system('chmod +x launch_render.sh')
 
     elif (system_pl == "Windows"):
+        cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
+            .format(tool="C:\\Program Files\\Blender Foundation\\Blender\\blender.exe", \
+                scene=args.scene, template="blender_render.py")
         with open('launch_render.bat', 'w') as f:
             f.write(cmdRun)
 
     elif system_pl == 'Darwin':
+        cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
+            .format(tool=args.tool, scene=args.scene, template="blender_render.py")
         with open('launch_render.sh', 'w') as f:
            f.write(cmdRun)
         os.system('chmod +x launch_render.sh')
