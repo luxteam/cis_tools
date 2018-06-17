@@ -1,5 +1,6 @@
 resetMaxFile #noPrompt
 SetQuietMode true
+logsystem.logName "Output\\{scene}_log.txt"
 units.SystemType = #Meters
 
 function rpr_render = (
