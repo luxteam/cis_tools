@@ -42,6 +42,14 @@ def main():
 
 	args = parser.parse_args()
 
+	render_device = args.render_device
+	if render_device == 'gpu':
+		render_device = '2'
+	elif render_device == 'cpu':
+		render_device = '1'
+	elif render_device == 'dual':
+		render_device = '3'
+
 	tool = args.tool
 
 	with open("max_render.ms") as f:
