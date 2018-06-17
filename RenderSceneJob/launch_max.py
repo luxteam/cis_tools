@@ -72,7 +72,7 @@ def main():
 
 	while True:
 		try:
-			rc = p.wait(timeout=5)
+			rc = p.wait(timeout=30)
 		except psutil.TimeoutExpired as err:
 			fatal_errors_titles = ['Radeon ProRender', 'AMD Radeon ProRender debug assert']
 			if set(fatal_errors_titles).intersection(get_windows_titles()):
