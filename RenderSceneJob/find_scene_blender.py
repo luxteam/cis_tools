@@ -15,6 +15,10 @@ def main():
 		for file in files:
 			if file.split('.')[-1] == 'blend':
 				scene.append(file)
+
+	if " " in scene[0]:
+		os.rename(scene[0], scene[0].replace(" ", "_"))
+		scene[0] = scene[0].replace(" ", "_")
 	print (scene[0])
 
 	
