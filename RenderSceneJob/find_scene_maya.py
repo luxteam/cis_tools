@@ -23,7 +23,8 @@ def main():
 	scene = []
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
-			if file.split('.')[-1] == 'ma' or file.split('.')[-1] == 'mb':
+			if file.endswith('.ma') or file..endswith('mb'):
+				print(os.path.join(rootdir, file))
 				update_license(os.path.join(rootdir, file))
 				scene.append(os.path.join(rootdir, file))
 	if " " in scene[0]:
