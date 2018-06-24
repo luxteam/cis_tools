@@ -29,9 +29,6 @@ def main():
 				except Exception:
 					pass
 				scene.append(os.path.join(rootdir, file))
-	if " " in scene[0]:
-		os.rename(scene[0], scene[0].replace(" ", "_"))
-		scene[0] = scene[0].replace(" ", "_")
 
 	scene[0] = scene[0].replace("\\", "/")
 	print (scene[0])
