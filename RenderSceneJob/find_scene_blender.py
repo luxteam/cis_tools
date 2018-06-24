@@ -16,9 +16,6 @@ def main():
 			if file.endswith('.blend'):
 				scene.append(os.path.join(rootdir, file))
 
-	if " " in scene[0]:
-		os.rename(scene[0], scene[0].replace(" ", "_"))
-		scene[0] = scene[0].replace(" ", "_")
 	print (scene[0])
 
 	
