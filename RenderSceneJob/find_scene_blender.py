@@ -13,8 +13,8 @@ def main():
 	scene = []
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
-			if file.split('.')[-1] == 'blend':
-				scene.append(file)
+			if file.endswith('.blend'):
+				scene.append(os.path.join(rootdir, file))
 
 	if " " in scene[0]:
 		os.rename(scene[0], scene[0].replace(" ", "_"))
