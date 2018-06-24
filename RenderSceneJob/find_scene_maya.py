@@ -24,8 +24,8 @@ def main():
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
 			if file.split('.')[-1] == 'ma' or file.split('.')[-1] == 'mb':
-				update_license(file)
-				scene.append(file)
+				update_license(os.path.join(rootdir, file))
+				scene.append(os.path.join(rootdir, file))
 	if " " in scene[0]:
 		os.rename(scene[0], scene[0].replace(" ", "_"))
 		scene[0] = scene[0].replace(" ", "_")
