@@ -23,13 +23,17 @@ def main():
 	scene = []
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
-			if file.endswith('.ma') or file..endswith('mb'):
-				print(os.path.join(rootdir, file))
-				update_license(os.path.join(rootdir, file))
+			if file.endswith('.ma') or file.endswith('mb'):
+				try:
+					update_license(os.path.join(rootdir, file))
+				except Exception:
+					pass
 				scene.append(os.path.join(rootdir, file))
 	if " " in scene[0]:
 		os.rename(scene[0], scene[0].replace(" ", "_"))
 		scene[0] = scene[0].replace(" ", "_")
+
+	scene[0] = scene[0].replace("\\", "/")
 	print (scene[0])
 
 

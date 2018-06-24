@@ -1,6 +1,6 @@
 global proc rpr_render(){{
 	
-	file -f -options "v=0;"  -ignoreVersion -o {scene};
+	file -f -options "v=0;"  -ignoreVersion -o "{scene}";
 	
 	if( `pluginInfo -query -loaded RadeonProRender` == 0){{
     	loadPlugin RadeonProRender;
