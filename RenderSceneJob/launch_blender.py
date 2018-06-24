@@ -47,7 +47,7 @@ def main():
         cmdScriptPath = 'launch_render.bat'
         with open('launch_render.bat', 'w') as f:
             f.write(cmdRun)
-            scene = scene.split("//")[-1]
+        scene = scene.split("//")[-1]
 
     elif system_pl == 'Darwin':
         cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
