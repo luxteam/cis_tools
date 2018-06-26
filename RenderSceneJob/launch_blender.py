@@ -61,6 +61,8 @@ def main():
         scene = scene.split("/")[-1]
     
     print(system_pl)
+    if not os.path.exists("Output"):
+        os.makedirs("Output")
 
     p = subprocess.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
