@@ -25,8 +25,6 @@ def render(*argv):
 	if((addon_utils.check("rprblender"))[0] == False) : 
 		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
 	bpy.data.scenes[Scenename].render.engine = "RPR"
-	
-	#bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations = {pass_limit}
 
 	device_name = ""
 	# Render device in RPR
