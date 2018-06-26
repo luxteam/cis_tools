@@ -40,8 +40,6 @@ def render(*argv):
 		device_name = helpers.render_resources_helper.get_used_devices()
 	bpy.context.user_preferences.addons["rprblender"].preferences.settings.include_uncertified_devices = True
 
-	bpy.context.scene.rpr.use_render_stamp = {render_stamp}
-
 	# frame range
 	bpy.data.scenes[Scenename].frame_start = 1
 	bpy.data.scenes[Scenename].frame_end = 1
