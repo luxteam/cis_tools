@@ -40,6 +40,7 @@ def main():
         with open('launch_render.sh', 'w') as f:
             f.write(cmdRun)
         os.system('chmod +x launch_render.sh')
+        scene = scene.split("/")[-1]
 
     elif (system_pl == "Windows"):
         cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
@@ -57,6 +58,7 @@ def main():
         with open('launch_render.sh', 'w') as f:
            f.write(cmdRun)
         os.system('chmod +x launch_render.sh')
+        scene = scene.split("/")[-1]
     
     print(system_pl)
 
