@@ -49,7 +49,7 @@ def render(*argv):
 	name_scene = bpy.path.basename(bpy.context.blend_data.filepath)
 
 	# output
-	output = os.path.join("C:\\JN\\WS\\Render_Scene_Test\\Output", name_scene)
+	output = os.path.join("Output", name_scene)
 	bpy.data.scenes[Scenename].render.filepath = output 
 	bpy.data.scenes[Scenename].render.use_placeholder = True
 	bpy.data.scenes[Scenename].render.use_file_extension = True
@@ -72,7 +72,7 @@ def render(*argv):
 		image_format = 'jpg'
 
 	# LOG
-	log_name = os.path.join("C:\\JN\\WS\\Render_Scene_Test\\Output", name_scene + ".json")
+	log_name = os.path.join("Output", name_scene + ".json")
 	report = {{}}
 	report['render_version'] = version
 	report['render_mode'] = 'gpu'
