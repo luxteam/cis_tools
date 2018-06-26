@@ -26,6 +26,8 @@ def render(*argv):
 		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
 	bpy.data.scenes[Scenename].render.engine = "RPR"
 
+	bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations = {pass_limit}
+
 	device_name = ""
 	# Render device in RPR
 	if '{render_device}' == 'dual':
@@ -70,7 +72,7 @@ def render(*argv):
 		image_format = 'jpg'
 
 	# LOG
-	log_name = os.path.join("{res_path}","Output", name_scene + ".json")
+	log_name = os.path.join("{res_path}", "Output", name_scene + ".json")
 	report = {{}}
 	report['render_version'] = version
 	report['render_mode'] = 'gpu'
