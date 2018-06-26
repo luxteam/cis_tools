@@ -26,7 +26,7 @@ def render(*argv):
 		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
 	bpy.data.scenes[Scenename].render.engine = "RPR"
 	
-	bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations = {pass_limit}
+	#bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations = {pass_limit}
 
 	device_name = ""
 	# Render device in RPR
@@ -42,6 +42,8 @@ def render(*argv):
 		device_name = helpers.render_resources_helper.get_used_devices()
 	bpy.context.user_preferences.addons["rprblender"].preferences.settings.include_uncertified_devices = True
 
+	bpy.context.scene.rpr.use_render_stamp = {render_stamp}
+
 	# frame range
 	bpy.data.scenes[Scenename].frame_start = 1
 	bpy.data.scenes[Scenename].frame_end = 1
@@ -49,7 +51,7 @@ def render(*argv):
 	name_scene = bpy.path.basename(bpy.context.blend_data.filepath)
 
 	# output
-	output = os.path.join("Output", name_scene)
+	output = os.path.join("{res_path}", "Output", name_scene)
 	bpy.data.scenes[Scenename].render.filepath = output 
 	bpy.data.scenes[Scenename].render.use_placeholder = True
 	bpy.data.scenes[Scenename].render.use_file_extension = True
@@ -72,11 +74,12 @@ def render(*argv):
 		image_format = 'jpg'
 
 	# LOG
-	log_name = os.path.join("Output", name_scene + ".json")
+	log_name = os.path.join("{res_path}","Output", name_scene + ".json")
 	report = {{}}
 	report['render_version'] = version
 	report['render_mode'] = 'gpu'
 	report['core_version'] = core_ver_str()
+	report['pass_limit'] = bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations
 	report['render_device'] = device_name
 	report['tool'] = "Blender " + bpy.app.version_string.split(" (")[0]
 	report['scene_name'] = bpy.path.basename(bpy.context.blend_data.filepath)
