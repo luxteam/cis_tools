@@ -35,7 +35,7 @@ def main():
 
     if (system_pl == 'Linux'):
         cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
-            .format(tool="/home/user/Desktop/blender-2.79-linux-glibc219-x86_64/blender",\
+            .format(tool="blender",\
              scene=args.scene, template="blender_render.py")
         cmdScriptPath = './launch_render.sh'
         with open('launch_render.sh', 'w') as f:
@@ -54,7 +54,7 @@ def main():
 
     elif system_pl == 'Darwin':
         cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
-            .format(tool="/home/user/Desktop/blender-2.79-linux-glibc219-x86_64/blender",\
+            .format(tool="blender",\
              scene=args.scene, template="blender_render.py")
         cmdScriptPath = './launch_render.sh'
         with open('launch_render.sh', 'w') as f:
