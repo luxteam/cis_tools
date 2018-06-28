@@ -1,3 +1,4 @@
 benchmark.csv
 *.pyc
 RenderSceneJob/config.py
+RenderSceneJob/__pycache__
