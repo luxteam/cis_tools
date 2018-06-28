@@ -10,6 +10,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--build_number')
 	parser.add_argument('--status')
+	parser.add_argument('--id')
 	args = parser.parse_args()
 
 	django_url = config.django_url
@@ -24,7 +25,7 @@ def main():
 	for job in job_json['artifacts']:
 		artifacts[job['fileName']] = "https://rpr.cis.luxoft.com/job/RenderSceneJob/{build_number}/artifact/Output/{art}".format(build_number=args.build_number, art=job['fileName'])
 
-	post_data = {'status': args.status, 'Build_number': args.build_number, 'artifacts':str(artifacts)}
+	post_data = {'status': args.status, 'Build_number': args.build_number, 'artifacts':str(artifacts), 'id': args.id}
 	response = requests.post(django_url, data=post_data)
 
 if __name__ == "__main__":
