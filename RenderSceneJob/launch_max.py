@@ -76,7 +76,7 @@ def main():
 		except psutil.TimeoutExpired as err:
 			fatal_errors_titles = ['Radeon ProRender', 'AMD Radeon ProRender debug assert',\
 			'3ds Max', 'Microsoft Visual C++ Runtime Library', \
-			'3ds Max Error Report', '3ds Max application', 'Radeon ProRender Error', 'Image I/O Error']
+			'3ds Max Error Report', '3ds Max application', 'Radeon ProRender Error', 'Image I/O Error', 'Warning', 'Error']
 			if set(fatal_errors_titles).intersection(get_windows_titles()):
 				rc = -1
 				try:
