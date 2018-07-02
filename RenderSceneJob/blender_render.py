@@ -30,6 +30,7 @@ def render(*argv):
 
 	device_name = ""
 	# Render device in RPR
+	bpy.context.user_preferences.addons["rprblender"].preferences.settings.include_uncertified_devices = True
 	if '{render_device}' == 'dual':
 		device_name = "CPU" + " + " + helpers.render_resources_helper.get_used_devices()
 		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type_plus_cpu = True
@@ -39,9 +40,9 @@ def render(*argv):
 		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'cpu'
 		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type_plus_cpu = False
 	elif '{render_device}' == 'gpu':
+		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'gpu'
 		device_name = helpers.render_resources_helper.get_used_devices()
-	bpy.context.user_preferences.addons["rprblender"].preferences.settings.include_uncertified_devices = True
-
+	
 	# frame range
 	bpy.data.scenes[Scenename].frame_start = 1
 	bpy.data.scenes[Scenename].frame_end = 1
