@@ -22,7 +22,7 @@ def main():
 				installer_name = file
 
 	if not os.path.exists(plugin_folder):
-    	os.makedirs(plugin_folder)
+		os.makedirs(plugin_folder)
 
 	path_size = get_size(plugin_folder)
 
@@ -36,12 +36,12 @@ def main():
 	print('OK')
 
 def get_size(folder):
-    total_size = 0
-    for dirpath, dirnames, filenames in os.walk(folder):
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
-            total_size += os.path.getsize(fp)
-    return total_size
+	total_size = 0
+	for dirpath, dirnames, filenames in os.walk(folder):
+		for f in filenames:
+			fp = os.path.join(dirpath, f)
+			total_size += os.path.getsize(fp)
+	return total_size
 
 
 	
