@@ -1,4 +1,4 @@
-set REMOTE_SOURCE=%1
-set NAME=%2
+set REMOTE_SOURCE=%2
+set NAME=%1
 
 bash -c 'wget -O %NAME% %REMOTE_SOURCE%'
