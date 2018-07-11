@@ -66,7 +66,7 @@ def main():
         try:
             rc = p.wait(timeout=30)
         except psutil.TimeoutExpired as err:
-            fatal_errors_titles = ['maya', 'Radeon ProRender Error', 'Student Version File']
+            fatal_errors_titles = ['maya', 'Radeon ProRender Error', 'Student Version File', 'Script Editor']
             if set(fatal_errors_titles).intersection(get_windows_titles()):
                 rc = -1
                 try:
