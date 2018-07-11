@@ -26,7 +26,7 @@ def main():
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
 			if file == installer_name:
-				copyfile(os.path.join(plugin_folder, installer_name), ".")
+				copyfile(os.path.join(plugin_folder, installer_name), folder)
 				match = True
 
 	print('Match')
