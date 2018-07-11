@@ -21,6 +21,9 @@ def main():
 				installer_path = os.path.join(rootdir, file)
 				installer_name = file
 
+	if not os.path.exists(plugin_folder):
+    	os.makedirs(plugin_folder)
+
 	path_size = get_size(plugin_folder)
 
 	for rootdir, dirs, files in os.walk(folder):
