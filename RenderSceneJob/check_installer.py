@@ -13,6 +13,7 @@ def main():
 	plugin_folder = "../../RenderServiceStorage"
 	match = False
 	_50GB = 5 * 10^9
+	installer_name = ""
 
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
