@@ -6,34 +6,31 @@ from shutil import copyfile
 def main():
 
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--folder')
+	parser.add_argument('--link')
 	args = parser.parse_args()
 
-	folder = args.folder
+	link = args.link
+
 	plugin_folder = "../../RenderServiceStorage"
 	match = False
-	_50GB = 5 * 10^9
-	installer_name = ""
+	_20GB = 2 * 10^9
 
-	for rootdir, dirs, files in os.walk(folder):
-		for file in files:
-			if file.endswith('.msi') or file.endswith('.run') or file.endswith('.dmg'):
-				installer_path = os.path.join(rootdir, file)
-				installer_name = file
+	installer_name = os.path.split(link)[-1]
 
 	if not os.path.exists(plugin_folder):
 		os.makedirs(plugin_folder)
-
 	path_size = get_size(plugin_folder)
-
 	for rootdir, dirs, files in os.walk(plugin_folder):
 		for file in files:
 			if file == installer_name:
-				copyfile(os.path.join(plugin_folder, installer_name), folder)
 				match = True
 
-	print('Match')
-	print('OK')
+	if path_size < _20GB and not match:
+		print('DOWNLOAD_COPY')
+	elif path_size > _20GB and not match:
+		print('ONLY_DOWNLOAD')
+	elif match:
+		print('COPY')
 
 def get_size(folder):
 	total_size = 0
