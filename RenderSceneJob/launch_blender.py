@@ -70,11 +70,11 @@ def main():
     p = subprocess.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
 
-    with open(os.path.join('Output', "{scene}_log.txt".format(scene=scene)), 'w') as file:
+    with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'w') as file:
         stdout = stdout.decode("utf-8")
         file.write(stdout)
 
-    with open(os.path.join('Output', "{scene}_log.txt".format(scene=scene)), 'a') as file:
+    with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'a') as file:
         file.write("\n ----STEDERR---- \n")
         stderr = stderr.decode("utf-8")
         file.write(stderr)
