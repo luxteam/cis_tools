@@ -51,7 +51,7 @@ def main():
         f.write(melScript)
 
     cmdRun = '''
-    set MAYA_CMD_FILE_OUTPUT=Output/{scene}_log.txt 
+    set MAYA_CMD_FILE_OUTPUT=Output/maya_log.txt 
     set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
     "C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\maya.exe" -command "source maya_render.mel; evalDeferred -lp (rpr_render());"''' \
         .format(scene=args.scene, tool=args.tool)
@@ -66,7 +66,7 @@ def main():
         try:
             rc = p.wait(timeout=30)
         except psutil.TimeoutExpired as err:
-            fatal_errors_titles = ['maya', 'Radeon ProRender Error', 'Student Version File']
+            fatal_errors_titles = ['maya', 'Radeon ProRender Error', 'Student Version File', 'Script Editor']
             if set(fatal_errors_titles).intersection(get_windows_titles()):
                 rc = -1
                 try:
