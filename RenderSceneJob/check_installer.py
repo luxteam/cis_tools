@@ -26,7 +26,7 @@ def main():
 
 	path_size = get_size(plugin_folder)
 
-	for rootdir, dirs, files in os.walk(folder):
+	for rootdir, dirs, files in os.walk(plugin_folder):
 		for file in files:
 			if file == installer_name:
 				copyfile(os.path.join(plugin_folder, installer_name), folder)
