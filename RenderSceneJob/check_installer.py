@@ -45,8 +45,7 @@ def main():
 	elif path_size > _20GB and not match:
 		print('ONLY_DOWNLOAD')
 	elif match:
-		print('COPY')
-		copyfile(installer_path, args.folder)
+		print(installer_path)
 
 
 if __name__ == "__main__":
