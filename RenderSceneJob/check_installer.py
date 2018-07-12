@@ -22,10 +22,8 @@ def get_size(folder):
 def main():
 
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--link')
+	parser.add_argument('--plugin_md5')
 	args = parser.parse_args()
-
-	link = args.link
 
 	plugin_folder = "../../RenderServiceStorage"
 	match = False
@@ -37,7 +35,7 @@ def main():
 	for rootdir, dirs, files in os.walk(plugin_folder):
 		for file in files:
 			current_md5 = file_md5(os.path.join(rootdir, file))
-			if installer_md5 == current_md5:
+			if args.plugin_md5 == current_md5:
 				installer_path = os.path.join(rootdir, file)
 				match = True
 
