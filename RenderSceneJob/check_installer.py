@@ -1,6 +1,22 @@
 import os
 import argparse
 from shutil import copyfile
+import hashlib
+
+
+def file_md5(file_path):
+	with open(file_path, 'rb') as file:
+		file_as_bytes = file.read()
+	return hashlib.md5(file_as_bytes).hexdigest()
+
+
+def get_size(folder):
+	total_size = 0
+	for dirpath, dirnames, filenames in os.walk(folder):
+		for f in filenames:
+			fp = os.path.join(dirpath, f)
+			total_size += os.path.getsize(fp)
+	return total_size
 
 
 def main():
@@ -15,14 +31,14 @@ def main():
 	match = False
 	_20GB = 2 * 10^9
 
-	installer_name = os.path.split(link)[-1]
-
 	if not os.path.exists(plugin_folder):
 		os.makedirs(plugin_folder)
 	path_size = get_size(plugin_folder)
 	for rootdir, dirs, files in os.walk(plugin_folder):
 		for file in files:
-			if file == installer_name:
+			current_md5 = file_md5(os.path.join(rootdir, file))
+			if installer_md5 == current_md5:
+				installer_path = os.path.join(rootdir, file)
 				match = True
 
 	if path_size < _20GB and not match:
@@ -31,17 +47,9 @@ def main():
 		print('ONLY_DOWNLOAD')
 	elif match:
 		print('COPY')
-
-def get_size(folder):
-	total_size = 0
-	for dirpath, dirnames, filenames in os.walk(folder):
-		for f in filenames:
-			fp = os.path.join(dirpath, f)
-			total_size += os.path.getsize(fp)
-	return total_size
+		copyfile(installer_path, '.')
 
 
-	
 if __name__ == "__main__":
 
 	main()
