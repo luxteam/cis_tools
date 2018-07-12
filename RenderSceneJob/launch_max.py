@@ -52,6 +52,9 @@ def main():
 
 	tool = args.tool
 
+	if not os.path.exists('Output'):
+		os.makedirs('Output')
+
 	with open("max_render.ms") as f:
 		max_script_template = f.read()
 
