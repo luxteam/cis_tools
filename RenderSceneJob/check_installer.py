@@ -22,6 +22,7 @@ def get_size(folder):
 def main():
 
 	parser = argparse.ArgumentParser()
+	parser.add_argument('--folder')
 	parser.add_argument('--plugin_md5')
 	args = parser.parse_args()
 
@@ -45,7 +46,7 @@ def main():
 		print('ONLY_DOWNLOAD')
 	elif match:
 		print('COPY')
-		copyfile(installer_path, '.')
+		copyfile(installer_path, args.folder)
 
 
 if __name__ == "__main__":
