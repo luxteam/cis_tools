@@ -11,88 +11,89 @@ import platform
 
 def main():
 
-    parser = argparse.ArgumentParser()
+	parser = argparse.ArgumentParser()
 
-    parser.add_argument('--tool', required=True)
-    parser.add_argument('--scene', required=True)
-    parser.add_argument('--render_device', required=True)
-    parser.add_argument('--pass_limit', required=True)
+	parser.add_argument('--tool', required=True)
+	parser.add_argument('--scene', required=True)
+	parser.add_argument('--render_device', required=True)
+	parser.add_argument('--pass_limit', required=True)
 
-    args = parser.parse_args()
-    current_path = os.getcwd()
-    
-    scene = args.scene
-    print(scene)
+	args = parser.parse_args()
+	current_path = os.getcwd()
+	
+	scene = args.scene
+	if not os.path.exists('Output'):
+		os.makedirs('Output')
 
-    with open ("blender_render.py") as f:
-        blender_script_template = f.read()
+	with open ("blender_render.py") as f:
+		blender_script_template = f.read()
 
-    BlenderScript = blender_script_template.format(render_device=args.render_device, pass_limit=args.pass_limit, res_path=current_path)
+	BlenderScript = blender_script_template.format(render_device=args.render_device, pass_limit=args.pass_limit, res_path=current_path)
 
-    with open("blender_render.py", 'w') as f:
-        f.write(BlenderScript)
+	with open("blender_render.py", 'w') as f:
+		f.write(BlenderScript)
 
-    system_pl = platform.system()
+	system_pl = platform.system()
 
-    if (system_pl == 'Linux'):
-        cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
-            .format(tool="blender",\
-             scene=args.scene, template="blender_render.py")
-        cmdScriptPath = './launch_render.sh'
-        with open('launch_render.sh', 'w') as f:
-            f.write(cmdRun)
-        os.system('chmod +x launch_render.sh')
-        scene = scene.split("/")[-1]
+	if (system_pl == 'Linux'):
+		cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
+			.format(tool="blender",\
+			 scene=args.scene, template="blender_render.py")
+		cmdScriptPath = './launch_render.sh'
+		with open('launch_render.sh', 'w') as f:
+			f.write(cmdRun)
+		os.system('chmod +x launch_render.sh')
+		scene = scene.split("/")[-1]
 
-    elif (system_pl == "Windows"):
-        cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
-            .format(tool="C:\\Program Files\\Blender Foundation\\Blender\\blender.exe", \
-                scene=args.scene, template="blender_render.py")
-        cmdScriptPath = 'launch_render.bat'
-        with open('launch_render.bat', 'w') as f:
-            f.write(cmdRun)
-        scene = scene.split("\\")[-1]
+	elif (system_pl == "Windows"):
+		cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
+			.format(tool="C:\\Program Files\\Blender Foundation\\Blender\\blender.exe", \
+				scene=args.scene, template="blender_render.py")
+		cmdScriptPath = 'launch_render.bat'
+		with open('launch_render.bat', 'w') as f:
+			f.write(cmdRun)
+		scene = scene.split("\\")[-1]
 
-    elif system_pl == 'Darwin':
-        cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
-            .format(tool="blender",\
-             scene=args.scene, template="blender_render.py")
-        cmdScriptPath = './launch_render.sh'
-        with open('launch_render.sh', 'w') as f:
-           f.write(cmdRun)
-        os.system('chmod +x launch_render.sh')
-        scene = scene.split("/")[-1]
-    
-    print(system_pl)
-    if not os.path.exists("Output"):
-        os.makedirs("Output")
+	elif system_pl == 'Darwin':
+		cmdRun = '"{tool}" -b "{scene}" -P "{template}"\n' \
+			.format(tool="blender",\
+			 scene=args.scene, template="blender_render.py")
+		cmdScriptPath = './launch_render.sh'
+		with open('launch_render.sh', 'w') as f:
+		   f.write(cmdRun)
+		os.system('chmod +x launch_render.sh')
+		scene = scene.split("/")[-1]
+	
+	print(system_pl)
+	if not os.path.exists("Output"):
+		os.makedirs("Output")
 
-    p = subprocess.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
+	p = subprocess.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	stdout, stderr = p.communicate()
 
-    with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'w') as file:
-        stdout = stdout.decode("utf-8")
-        file.write(stdout)
+	with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'w') as file:
+		stdout = stdout.decode("utf-8")
+		file.write(stdout)
 
-    with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'a') as file:
-        file.write("\n ----STEDERR---- \n")
-        stderr = stderr.decode("utf-8")
-        file.write(stderr)
+	with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'a') as file:
+		file.write("\n ----STEDERR---- \n")
+		stderr = stderr.decode("utf-8")
+		file.write(stderr)
 
-    rc = -1
+	rc = -1
 
-    try:
-        rc = p.wait(timeout=100)
-    except psutil.TimeoutExpired as err:
-        rc = -1
-        error_screen = pyscreenshot.grab()
-        error_screen.save(os.path.join('Output', 'error_screenshot.jpg'))
-        for child in reversed(p.children(recursive=True)):
-            child.terminate()
-        p.terminate()
+	try:
+		rc = p.wait(timeout=100)
+	except psutil.TimeoutExpired as err:
+		rc = -1
+		error_screen = pyscreenshot.grab()
+		error_screen.save(os.path.join('Output', 'error_screenshot.jpg'))
+		for child in reversed(p.children(recursive=True)):
+			child.terminate()
+		p.terminate()
 
-    return rc
+	return rc
 
 if __name__ == "__main__":
-    rc = main()
-    exit(rc)
+	rc = main()
+	exit(rc)
