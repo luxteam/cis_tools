@@ -6,6 +6,7 @@ import json
 import ctypes
 import pyscreenshot
 from shutil import copyfile
+import PIL.ImageGrab as IG
 
 
 def get_windows_titles():
@@ -73,7 +74,7 @@ def main():
 			if set(fatal_errors_titles).intersection(get_windows_titles()):
 				rc = -1
 				try:
-					error_screen = pyscreenshot.grab()
+					error_screen = IG.grab()
 					error_screen.save(os.path.join('Output', 'error_screenshot.jpg'))
 				except:
 					pass
