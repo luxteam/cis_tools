@@ -28,10 +28,11 @@ def main():
 
 	plugin_folder = "../../RenderServiceStorage"
 	match = False
-	_20GB = 2 * 10^9
+	_20GB = 20 * 10**9
 
 	if not os.path.exists(plugin_folder):
 		os.makedirs(plugin_folder)
+
 	path_size = get_size(plugin_folder)
 	for rootdir, dirs, files in os.walk(plugin_folder):
 		for file in files:
