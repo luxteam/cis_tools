@@ -11,9 +11,10 @@ def main():
 	parser.add_argument('--build_number')
 	parser.add_argument('--status')
 	parser.add_argument('--id')
+	parser.add_argument('--django_ip')
 	args = parser.parse_args()
 
-	django_url = config.django_url
+	django_url = args.django_ip
 
 	get_json = requests.get("https://rpr.cis.luxoft.com/job/RenderSceneJob/{build_number}/api/json?pretty=true".format(build_number=args.build_number), \
 		auth=(config.username, config.password))
