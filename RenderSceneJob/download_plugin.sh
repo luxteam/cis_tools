@@ -1,0 +1,3 @@
+REMOTE_SOURCE=$1
+
+wget ${REMOTE_SOURCE}
