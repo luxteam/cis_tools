@@ -24,10 +24,11 @@ def main():
 	
 	artifacts = {}
 	for job in job_json['artifacts']:
-		artifacts[job['fileName']] = "https://rpr.cis.luxoft.com/job/RenderSceneJob/{build_number}/artifact/Output/{art}".format(build_number=args.build_number, art=job['fileName'])
+		artifacts[job['fileName']] = "https://rpr.int-cis.luxoft.com/job/RenderSceneJob/{build_number}/artifact/Output/{art}".format(build_number=args.build_number, art=job['fileName'])
 
 	post_data = {'status': args.status, 'Build_number': args.build_number, 'artifacts':str(artifacts), 'id': args.id}
 	response = requests.post(django_url, data=post_data)
+	print(response)
 
 if __name__ == "__main__":
 
