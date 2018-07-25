@@ -26,7 +26,7 @@ def main():
 	parser.add_argument('--plugin_md5')
 	args = parser.parse_args()
 
-	plugin_folder = "../../RenderServiceStorage"
+	plugin_folder = os.path.join("..", "..", "RenderServiceStorage")
 	match = False
 	_20GB = 20 * 10**9
 
