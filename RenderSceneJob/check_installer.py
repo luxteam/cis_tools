@@ -46,6 +46,7 @@ def main():
 	elif path_size > _20GB and not match:
 		print('ONLY_DOWNLOAD')
 	elif match:
+		installer_path.replace('\\','\\\\')
 		print(installer_path)
 
 
