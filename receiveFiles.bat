@@ -8,4 +8,4 @@ set REMOTE_PATH=%REMOTE_ROOT%/%REMOTE_SOURCE%
 bash -c 'mkdir -p %LOCAL_DIR%'
 
 rem c:\\JN\\bash.exe -c 'scp -r %REMOTE_HOST%:%REMOTE_PATH% %LOCAL_DIR%'
-bash -c 'rsync -rvz %REMOTE_HOST%:%REMOTE_PATH% %LOCAL_DIR%'
+bash -c 'rsync -rvzc %REMOTE_HOST%:%REMOTE_PATH% %LOCAL_DIR%'
