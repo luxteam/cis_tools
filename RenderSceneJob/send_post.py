@@ -12,11 +12,12 @@ def main():
 	parser.add_argument('--status')
 	parser.add_argument('--id')
 	parser.add_argument('--django_ip')
+	parser.add_argument('--jenkins_job')
 	args = parser.parse_args()
 
 	django_url = args.django_ip
 
-	get_json = requests.get("https://rpr.cis.luxoft.com/job/RenderSceneJob/{build_number}/api/json?pretty=true".format(build_number=args.build_number), \
+	get_json = requests.get("https://rpr.cis.luxoft.com/job/{jenkins_job}/{build_number}/api/json?pretty=true".format(jenkins_job=args.jenkins_job, build_number=args.build_number), \
 		auth=(config.username, config.password))
 
 	job_json = json.loads(get_json.text)
