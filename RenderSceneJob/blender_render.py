@@ -9,6 +9,7 @@ from rprblender import material_browser
 from rprblender import helpers
 from pyrpr import API_VERSION
 from shutil import copyfile
+import logging
 
 def core_ver_str():
 	core_ver = API_VERSION
@@ -16,50 +17,71 @@ def core_ver_str():
 	mn = (core_ver & 0xFFFFF) >> 8
 	return "%x.%x" % (mj, mn)
 
-def render(*argv):
 
-	#get scene name
-	Scenename = bpy.context.scene.name
+def set_value(path, name, value):
+	if hasattr(path, name):
+		setattr(path, name, value)
+	else:
+		logging.warning("No attribute found ")
+
+def get_value(path, name, value):
+	if hasattr(path, name):
+		return getattr(path, name)
+	else:
+		logging.warning("No attribute found ")
+
+
+def render(scene_name):
+
+	# open scene
+	bpy.ops.wm.open_mainfile(filepath=os.path.join(r"{res_path}", scene_name))
+
+	# get scene name
+	scene_name, scene = helpers.get_current_scene()
 
 	# RPR Settings
-	if((addon_utils.check("rprblender"))[0] == False) : 
+	if not addon_utils.check("rprblender")[0]:
 		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
-	bpy.data.scenes[Scenename].render.engine = "RPR"
+	set_value(scene.render, 'engine', "RPR")
 
-	bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations = {pass_limit}
-
-	device_name = ""
 	# Render device in RPR
-	bpy.context.user_preferences.addons["rprblender"].preferences.settings.include_uncertified_devices = True
-	if '{render_device}' == 'dual':
-		device_name = "CPU" + " + " + helpers.render_resources_helper.get_used_devices()
-		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type_plus_cpu = True
-		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'gpu'
-	elif '{render_device}' == 'cpu':
-		device_name = "CPU"
-		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'cpu'
-		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type_plus_cpu = False
-	elif '{render_device}' == 'gpu':
-		bpy.context.user_preferences.addons["rprblender"].preferences.settings.device_type = 'gpu'
-		device_name = helpers.render_resources_helper.get_used_devices()
-	
-	# frame range
-	bpy.data.scenes[Scenename].frame_start = 1
-	bpy.data.scenes[Scenename].frame_end = 1
+	set_value(helpers.get_user_settings(), "include_uncertified_devices", True)
 
-	name_scene = bpy.path.basename(bpy.context.blend_data.filepath)
+	if '{render_device_type}' == 'dual':
+		helpers.set_render_devices(use_cpu=True, use_gpu=True)
+	elif '{render_device_type}' == 'cpu':
+		helpers.set_render_devices(use_cpu=True, use_gpu=False)
+	elif '{render_device_type}' == 'gpu':
+		helpers.set_render_devices(use_cpu=False, use_gpu=True)
+
+	device_name = helpers.render_resources_helper.get_used_devices()
+
+	# frame range
+	set_value(scene, "frame_start", {startFrame})
+	set_value(scene, "frame_end", {endFrame})
+	set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', {pass_limit})
+
+	# image format
+	set_value(scene.render.image_settings, 'quality', 100)
+	set_value(scene.render.image_settings, 'compression', 0)
+	set_value(scene.render.image_settings, 'color_mode', 'RGB')
 
 	# output
-	output = os.path.join("{res_path}", "Output", name_scene)
-	bpy.data.scenes[Scenename].render.filepath = output 
-	bpy.data.scenes[Scenename].render.use_placeholder = True
-	bpy.data.scenes[Scenename].render.use_file_extension = True
-	bpy.data.scenes[Scenename].render.use_overwrite = True
+	name_scene = bpy.path.basename(bpy.context.blend_data.filepath)
+	set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", name_scene))
+	set_value(scene.render, 'use_placeholder', True)
+	set_value(scene.render, 'use_file_extension', True)
+	set_value(scene.render, 'use_overwrite', True)
 
 	# start render animation
-	TIMER = datetime.datetime.now()
-	bpy.ops.render.render(write_still=True,scene=Scenename)
-	Render_time = datetime.datetime.now() - TIMER
+	if {startFrame} == {endFrame}:
+		TIMER = datetime.datetime.now()
+		bpy.ops.render.render(write_still=True, scene=scene_name)
+		render_time = datetime.datetime.now() - TIMER
+	else:
+		TIMER = datetime.datetime.now()
+		bpy.ops.render.render(animation=True, scene=scene_name)
+		render_time = datetime.datetime.now() - TIMER
 
 	# get version of rpr addon
 	for mod_name in bpy.context.user_preferences.addons.keys():
@@ -68,21 +90,21 @@ def render(*argv):
 			ver = mod.bl_info.get('version')
 			version = str(ver[0]) + "." + str(ver[1]) + "." + str(ver[2])
 		
-	image_format = (bpy.data.scenes[Scenename].render.image_settings.file_format).lower()
+	image_format = get_value(scene.render.image_settings, 'file_format').lower()
 	if (image_format == 'jpeg'):
 		image_format = 'jpg'
 
 	# LOG
-	log_name = os.path.join("{res_path}", "Output", name_scene + ".json")
+	log_name = os.path.join("{res_path}", "Output", scene_name + ".json")
 	report = {{}}
 	report['render_version'] = version
-	report['render_mode'] = 'gpu'
+	report['render_device_type'] = '{render_device_type}'
 	report['core_version'] = core_ver_str()
-	report['pass_limit'] = bpy.data.scenes[Scenename].rpr.render.rendering_limits.iterations
+	report['pass_limit'] = get_value(scene.render.rpr.render.rendering_limits, 'iterations')
 	report['render_device'] = device_name
 	report['tool'] = "Blender " + bpy.app.version_string.split(" (")[0]
 	report['scene_name'] = bpy.path.basename(bpy.context.blend_data.filepath)
-	report['render_time'] = Render_time.total_seconds()
+	report['render_time'] = render_time.total_seconds()
 	report['date_time'] = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
 
 	with open(log_name, 'w') as file:
@@ -91,4 +113,4 @@ def render(*argv):
 
 if __name__ == "__main__":
 		
-		render()
+	render('{scene_name}')
