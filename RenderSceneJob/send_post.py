@@ -12,11 +12,12 @@ def main():
 	parser.add_argument('--status')
 	parser.add_argument('--id')
 	parser.add_argument('--django_ip')
+	parser.add_argument('--jenkins_job')
 	args = parser.parse_args()
 
 	django_url = args.django_ip
 
-	get_json = requests.get("https://rpr.cis.luxoft.com/job/RenderSceneJob/{build_number}/api/json?pretty=true".format(build_number=args.build_number), \
+	get_json = requests.get("http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/api/json?pretty=true".format(jenkins_job=args.jenkins_job, build_number=args.build_number), \
 		auth=(config.username, config.password))
 
 	job_json = json.loads(get_json.text)
@@ -24,7 +25,7 @@ def main():
 	
 	artifacts = {}
 	for job in job_json['artifacts']:
-		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/RenderSceneJob/{build_number}/artifact/Output/{art}".format(build_number=args.build_number, art=job['fileName'])
+		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/Output/{art}".format(jenkins_job=args.jenkins_job, build_number=args.build_number, art=job['fileName'])
 
 	post_data = {'status': args.status, 'Build_number': args.build_number, 'artifacts':str(artifacts), 'id': args.id}
 	response = requests.post(django_url, data=post_data)
