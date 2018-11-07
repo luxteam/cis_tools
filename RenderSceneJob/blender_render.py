@@ -34,7 +34,7 @@ def get_value(path, name, value):
 def render(scene_name):
 
 	# open scene
-	bpy.ops.wm.open_mainfile(filepath=scene_name)
+	bpy.ops.wm.open_mainfile(filepath=os.path.join(r"{res_path}", scene_name))
 
 	# get scene name
 	scene_name, scene = helpers.get_current_scene()
