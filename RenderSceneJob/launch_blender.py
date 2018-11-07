@@ -19,6 +19,7 @@ def main():
 	parser.add_argument('--pass_limit', required=True)
 	parser.add_argument('--startFrame', required=True)
 	parser.add_argument('--endFrame', required=True)
+	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
 	current_path = os.getcwd()
@@ -30,7 +31,8 @@ def main():
 		blender_script_template = f.read()
 
 	BlenderScript = blender_script_template.format(render_device_type=args.render_device_type, pass_limit=args.pass_limit, \
-													res_path=current_path, scene_name=args.scene, startFrame=args.startFrame, endFrame=args.endFrame)
+													res_path=current_path, scene_name=args.scene, startFrame=args.startFrame, endFrame=args.endFrame, \
+													sceneName=args.sceneName)
 
 	with open("blender_render.py", 'w') as f:
 		f.write(BlenderScript)
