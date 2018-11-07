@@ -67,8 +67,7 @@ def render(scene_name):
 	set_value(scene.render.image_settings, 'color_mode', 'RGB')
 
 	# output
-	name_scene = bpy.path.basename(bpy.context.blend_data.filepath)
-	set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", name_scene))
+	set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}"))
 	set_value(scene.render, 'use_placeholder', True)
 	set_value(scene.render, 'use_file_extension', True)
 	set_value(scene.render, 'use_overwrite', True)

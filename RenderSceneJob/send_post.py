@@ -2,7 +2,6 @@ import requests
 import config
 import json
 import argparse
-from ast import literal_eval
 
 
 def main():
