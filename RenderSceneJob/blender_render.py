@@ -112,4 +112,4 @@ def render(scene_name):
 
 if __name__ == "__main__":
 		
-	render('{scene_name}')
+	render(r'{scene_name}')
