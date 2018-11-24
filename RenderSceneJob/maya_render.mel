@@ -22,8 +22,6 @@ global proc rpr_render(){{
 		optionVar -iva "RPR_DevicesSelected" 1;
 		optionVar -iva "RPR_DevicesSelected" 1;
 	}}
-	
-	string $scene_name  = `file -q -sn -shn`;
 
 	float $startTime = 0;
 	float $testTime = 0;
@@ -32,14 +30,10 @@ global proc rpr_render(){{
 	renderIntoNewWindow render;
 	string $ff = "";
 	sysFile -makeDir ("C:/JN/WS/Render_Scene_Test/Output");
-	$ff = "C:/JN/WS/Render_Scene_Test/Output/" + $scene_name;
+	$ff = "C:/JN/WS/Render_Scene_Test/Output/" + "{scene_name}";
 	renderWindowEditor -edit  -dst "color" renderView;
 	renderWindowEditor -edit -com -writeImage $ff renderView;
 	$testTime = `timerX -startTime $startTime`;
-
-	optionVar -rm "RPR_DevicesSelected";
-	optionVar -iva "RPR_DevicesSelected" 1;
-	optionVar -iva "RPR_DevicesSelected" 0;
 	
 	string $render_device_name[] = `optionVar -q "RPR_DevicesName"`;
 	string $RPR_version[] = `RPRImageComparing -rprPluginDetails`;

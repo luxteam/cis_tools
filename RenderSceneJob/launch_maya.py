@@ -40,13 +40,21 @@ def main():
 	parser.add_argument('--render_device', required=True)
 	parser.add_argument('--scene', required=True)
 
+	parser.add_argument('--tool', required=True)
+	parser.add_argument('--scene', required=True)
+	parser.add_argument('--render_device_type', required=True)
+	parser.add_argument('--pass_limit', required=True)
+	parser.add_argument('--startFrame', required=True)
+	parser.add_argument('--endFrame', required=True)
+	parser.add_argument('--sceneName', required=True)
+
 	args = parser.parse_args()
 
 	with open("maya_render.mel") as f:
 		mel_template = f.read()
 
-	melScript = mel_template.format(scene = args.scene, render_device = args.render_device, \
-		pass_limit = args.pass_limit)
+	melScript = mel_template.format(scene = args.scene, render_device_type = args.render_device_type, \
+		pass_limit = args.pass_limit, scene_name = args.sceneName)
 
 	with open('maya_render.mel', 'w') as f:
 		f.write(melScript)
@@ -58,7 +66,7 @@ def main():
 	set MAYA_CMD_FILE_OUTPUT=Output/maya_log.txt 
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\maya.exe" -command "source maya_render.mel; evalDeferred -lp (rpr_render());"''' \
-		.format(scene=args.scene, tool=args.tool)
+		.format(tool=args.tool)
 
 	with open('launch_render.bat', 'w') as f:
 		f.write(cmdRun)
