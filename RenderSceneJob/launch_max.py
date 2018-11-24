@@ -36,21 +36,23 @@ def main():
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument('--tool', required=True)
-	parser.add_argument('--pass_limit', required=True)
-	parser.add_argument('--render_device', required=True)
 	parser.add_argument('--scene', required=True)
+	parser.add_argument('--render_device_type', required=True)
+	parser.add_argument('--pass_limit', required=True)
+	parser.add_argument('--startFrame', required=True)
+	parser.add_argument('--endFrame', required=True)
+	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
+	current_path = os.getcwd()
 
-	render_device = args.render_device
-	if render_device == 'gpu':
-		render_device = '2'
-	elif render_device == 'cpu':
-		render_device = '1'
-	elif render_device == 'dual':
-		render_device = '3'
-
-	tool = args.tool
+	render_device_type = args.render_device_type
+	if render_device_type == 'gpu':
+		render_device_type = '2'
+	elif render_device_type == 'cpu':
+		render_device_type = '1'
+	elif render_device_type == 'dual':
+		render_device_type = '3'
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
@@ -59,7 +61,7 @@ def main():
 		max_script_template = f.read()
 
 	maxScript = max_script_template.format(scene=args.scene, pass_limit=args.pass_limit, \
-		render_device=render_device)
+		render_device_type=render_device_type, scene_name = args.sceneName, res_path=current_path)
 
 	with open('max_render.ms', 'w') as f:
 		f.write(maxScript)

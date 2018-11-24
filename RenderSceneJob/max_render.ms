@@ -5,19 +5,17 @@ units.SystemType = #Meters
 
 function rpr_render = (
 	
-	assetsFile = "C:\\JN\\WS\\Render_Scene_Test\\{scene}"
+	assetsFile = "{res_path}\\{scene}"
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
 	renderers.current = Radeon_ProRender()
     renderers.current.passLimit = {pass_limit}
 	
-    renderers.current.renderDevice = {render_device}
+    renderers.current.renderDevice = {render_device_type}
     renderers.current.renderLimit = 1
 	
-    image_path = "C:\\JN\\WS\\Render_Scene_Test\\Output\\"
-    makeDir image_path
-
-    filename = maxFileName + ".png"
+    image_path = "{res_path}\\Output\\"
+    filename = maxFileName + ".jpg"
     image_path = image_path + filename
 
     rstart = timeStamp()
@@ -27,7 +25,7 @@ function rpr_render = (
 
     ver_max = filterString (getdir #maxroot) "\\"
 
-    json_path = "C:\\JN\\WS\\Render_Scene_Test\\Output\\" + maxFileName + ".json"
+    json_path = "{res_path}\\Output\\" + maxFileName + ".json"
     a = (createFile json_path mode:"w")
     format "%" "[\n" to:a
 
@@ -37,7 +35,7 @@ function rpr_render = (
     json_line = "  \"tool\": \"" + ver_max[ver_max.count] +  "\",\n"
     format "%" json_line to:a
 
-    json_line = "  \"render_device\": \"" + "GPU" + "\",\n"
+    json_line = "  \"render_device_type\": \"" + {render_device_type} + "\",\n"
     format "%" json_line to:a
 
     json_line = "  \"pass_limit\": " + (renderers.current.passLimit as string) + ",\n"
