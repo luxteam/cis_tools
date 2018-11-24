@@ -44,12 +44,13 @@ def main():
 	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
+	current_path = os.getcwd()
 
 	with open("maya_render.mel") as f:
 		mel_template = f.read()
 
 	melScript = mel_template.format(scene = args.scene, render_device_type = args.render_device_type, \
-		pass_limit = args.pass_limit, scene_name = args.sceneName)
+		pass_limit = args.pass_limit, scene_name = args.sceneName, res_path=current_path)
 
 	with open('maya_render.mel', 'w') as f:
 		f.write(melScript)
