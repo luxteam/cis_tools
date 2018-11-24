@@ -37,7 +37,7 @@ global proc rpr_render(){{
 	
 	string $render_device_name[] = `optionVar -q "RPR_DevicesName"`;
 	string $RPR_version[] = `RPRImageComparing -rprPluginDetails`;
-	string $filePath = "C:/JN/WS/Render_Scene_Test/Output/" + $scene_name + ".json";
+	string $filePath = "C:/JN/WS/Render_Scene_Test/Output/" + "{scene_name}" + ".json";
 	int $fileID = `fopen $filePath "a"`;
 	fprint $fileID ("[");
 	fprint $fileID ("\r\n {{");
@@ -45,7 +45,7 @@ global proc rpr_render(){{
 	fprint $fileID ("\r\n  \"tool\": \"Maya " + `about -version` + "\",");
 	fprint $fileID ("\r\n  \"date_time\": \"" + `date -format "YYYY-MM-DD_hh-mm-ss"` + "\",");
 	fprint $fileID ("\r\n  \"render_version\": \"" + $RPR_version[0] + "\",");
-	fprint $fileID ("\r\n  \"file_name\": \"" + $scene_name + ".jpg\",");
+	fprint $fileID ("\r\n  \"file_name\": \"" + "{scene_name}" + ".jpg\",");
 	fprint $fileID ("\r\n  \"render_time\": " + $testTime + ",");
 	fprint $fileID ("\r\n }}");
 	fprint $fileID ("\r\n]");
