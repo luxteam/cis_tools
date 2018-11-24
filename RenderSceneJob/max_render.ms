@@ -15,7 +15,7 @@ function rpr_render = (
     renderers.current.renderLimit = 1
 	
     image_path = "{res_path}\\Output\\"
-    filename = maxFileName + ".jpg"
+    filename = "{scene_name}.jpg"
     image_path = image_path + filename
 
     rstart = timeStamp()
@@ -25,7 +25,7 @@ function rpr_render = (
 
     ver_max = filterString (getdir #maxroot) "\\"
 
-    json_path = "{res_path}\\Output\\" + maxFileName + ".json"
+    json_path = "{res_path}\\Output\\{scene_name}.json"
     a = (createFile json_path mode:"w")
     format "%" "[\n" to:a
 
@@ -41,7 +41,7 @@ function rpr_render = (
     json_line = "  \"pass_limit\": " + (renderers.current.passLimit as string) + ",\n"
     format "%" json_line to:a
 
-    json_line = "  \"scene_name\": \"" + maxFileName + "\",\n"
+    json_line = "  \"scene_name\": \"" + "{scene_name}" + "\",\n"
     format "%" json_line to:a
 
     json_line = "  \"date_time\": \"" + (localtime as String) + "\",\n"
