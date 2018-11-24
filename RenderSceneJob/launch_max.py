@@ -67,7 +67,7 @@ def main():
 		f.write(maxScript)
 
 	cmdRun = '"C:\\Program Files\\Autodesk\\3ds Max {tool}\\3dsmax.exe" -U MAXScript "{job_script}" -silent' \
-		.format(tool=tool, job_script="max_render.ms")
+		.format(tool=args.tool, job_script="max_render.ms")
 
 	with open("launch_render.bat", 'w') as f:
 		f.write(cmdRun)
