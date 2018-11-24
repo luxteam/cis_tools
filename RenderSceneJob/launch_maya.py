@@ -45,6 +45,7 @@ def main():
 
 	args = parser.parse_args()
 	current_path = os.getcwd()
+	current_path = current_path.replace("\\", "/")
 
 	with open("maya_render.mel") as f:
 		mel_template = f.read()
