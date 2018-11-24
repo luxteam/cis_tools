@@ -28,9 +28,8 @@ global proc rpr_render(){{
 	fireRender -waitForItTwo;
 	$startTime = `timerX`;
 	renderIntoNewWindow render;
-	string $ff = "";
+	string $ff = "{res_path}/Output/{scene_name}";
 	sysFile -makeDir ("C:/JN/WS/Render_Scene_Test/Output");
-	$ff = "C:/JN/WS/Render_Scene_Test/Output/" + "{scene_name}";
 	renderWindowEditor -edit  -dst "color" renderView;
 	renderWindowEditor -edit -com -writeImage $ff renderView;
 	$testTime = `timerX -startTime $startTime`;
