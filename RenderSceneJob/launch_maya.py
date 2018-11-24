@@ -36,11 +36,6 @@ def main():
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument('--tool', required=True)
-	parser.add_argument('--pass_limit', required=True)
-	parser.add_argument('--render_device', required=True)
-	parser.add_argument('--scene', required=True)
-
-	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
 	parser.add_argument('--render_device_type', required=True)
 	parser.add_argument('--pass_limit', required=True)
