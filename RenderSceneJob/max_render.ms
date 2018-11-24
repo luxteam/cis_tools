@@ -35,7 +35,7 @@ function rpr_render = (
     json_line = "  \"tool\": \"" + ver_max[ver_max.count] +  "\",\n"
     format "%" json_line to:a
 
-    json_line = "  \"render_device_type\": \"" + {render_device_type} + "\",\n"
+    json_line = "  \"render_device_type\": \"" + "{render_device_type}" + "\",\n"
     format "%" json_line to:a
 
     json_line = "  \"pass_limit\": " + (renderers.current.passLimit as string) + ",\n"
