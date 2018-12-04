@@ -84,11 +84,11 @@ def main():
 			stderr = stderr.decode("utf-8")
 			file.write(stderr)
 	else:
-		with open(os.path.join('Output', "frame_{startFrame}_{endFrame}_blender_log.txt".format(startFrame=args.startFrame, endFrame=args.endFrame)), 'w') as file:
+		with open(os.path.join('Output', "frame_{startFrame}_{endFrame}_blender_log.txt".format(startFrame=args.startFrame, endFrame=args.endFrame)), 'w', encoding='utf-8') as file:
 			stdout = stdout.decode("utf-8")
 			file.write(stdout)
 
-		with open(os.path.join('Output', "frame_{startFrame}_{endFrame}_blender_log.txt".format(startFrame=args.startFrame, endFrame=args.endFrame)), 'a') as file:
+		with open(os.path.join('Output', "frame_{startFrame}_{endFrame}_blender_log.txt".format(startFrame=args.startFrame, endFrame=args.endFrame)), 'a', encoding='utf-8') as file:
 			file.write("\n ----STEDERR---- \n")
 			stderr = stderr.decode("utf-8")
 			file.write(stderr)
