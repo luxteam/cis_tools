@@ -60,6 +60,8 @@ def main():
 	with open("max_render.ms") as f:
 		max_script_template = f.read()
 
+	args.sceneName = os.path.basename(args.sceneName)
+
 	maxScript = max_script_template.format(scene=args.scene, pass_limit=args.pass_limit, \
 		render_device_type=render_device_type, scene_name = args.sceneName, res_path=current_path)
 
