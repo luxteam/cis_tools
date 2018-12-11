@@ -50,6 +50,8 @@ def main():
 	with open("maya_render.mel") as f:
 		mel_template = f.read()
 
+	args.sceneName = os.path.basename(args.sceneName)
+
 	melScript = mel_template.format(scene = args.scene, render_device_type = args.render_device_type, \
 		pass_limit = args.pass_limit, scene_name = args.sceneName, res_path=current_path)
 

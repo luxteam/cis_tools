@@ -30,6 +30,8 @@ def main():
 	with open ("blender_render.py") as f:
 		blender_script_template = f.read()
 
+	args.sceneName = os.path.basename(args.sceneName)
+
 	BlenderScript = blender_script_template.format(render_device_type=args.render_device_type, pass_limit=args.pass_limit, \
 													res_path=current_path, scene_name=args.scene, startFrame=args.startFrame, endFrame=args.endFrame, \
 													sceneName=args.sceneName)
