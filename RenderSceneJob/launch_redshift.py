@@ -36,7 +36,7 @@ def main():
 		
 	mayapy = "C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\mayapy.exe".format(tool=args.tool)
 	params = [mayapy]
-	params += ["cmd_render.py"]
+	params += ["redshift_cmd_render.py"]
 
 	p = Popen(params)
 	stdout, stderr = p.communicate()
