@@ -67,7 +67,7 @@ def main():
 	rpr_render(scene)
 
 	for file in os.listdir("."):
-	    if file.endswith(".log"):
+	    if file.endswith(".log") and file != "tahoe.log":
 	        os.rename(file, os.path.join("Output", "{scene_name}.log"))
 
 	os.rename(os.path.join("Output", "color", "converted_{scene_name}.jpg"), os.path.join("Output", "converted_{scene_name}.jpg"))
