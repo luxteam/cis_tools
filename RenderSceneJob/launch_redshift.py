@@ -44,12 +44,12 @@ def main():
 	rc = -1
 
 	try:
-        rc = p.wait(timeout=100)
-    except psutil.TimeoutExpired as err:
-        rc = -1
-        for child in reversed(p.children(recursive=True)):
-            child.terminate()
-        p.terminate()
+		rc = p.wait(timeout=100)
+	except psutil.TimeoutExpired as err:
+		rc = -1
+		for child in reversed(p.children(recursive=True)):
+			child.terminate()
+		p.terminate()
 
 	return rc
 
