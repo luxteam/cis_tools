@@ -7,6 +7,7 @@ import ctypes
 import pyscreenshot
 from shutil import copyfile
 import PIL.ImageGrab as IG
+from subprocess import Popen
 
 
 def main():
@@ -33,27 +34,11 @@ def main():
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
 		
-	cmdRun = '''
-	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\mayapy.exe" redshift_cmd_render.py
-	'''.format(tool=args.tool)
+	mayapy = r"C:\Program Files\Autodesk\Maya{tool}\bin\mayapy.exe".format(tool=args.tool)
 
-	with open('launch_conversion.bat', 'w') as f:
-		f.write(cmdRun)
-
-	p = psutil.Popen('launch_conversion.bat', stdout=subprocess.PIPE)
-	rc = -1
-
-	try:
-		rc = p.wait(timeout=100)
-	except psutil.TimeoutExpired as err:
-		rc = -1
-		for child in reversed(p.children(recursive=True)):
-			child.terminate()
-		p.terminate()
-
-	return rc
-
+	p = Popen("redshift_cmd_render.py", cwd=mayapy)
+	stdout, stderr = p.communicate()
+	
 
 if __name__ == "__main__":
-	rc = main()
-	exit(rc)
+	main()
