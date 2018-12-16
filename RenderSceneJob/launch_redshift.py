@@ -34,11 +34,13 @@ def main():
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
 		
-	mayapy = r"C:\Program Files\Autodesk\Maya{tool}\bin\mayapy.exe".format(tool=args.tool)
+	mayapy_folder = r"C:\Program Files\Autodesk\Maya{tool}\bin".format(tool=args.tool)
+	params = ["mayapy"]
+	params += ["redshift_cmd_render.py"]
 
-	p = Popen("redshift_cmd_render.py", cwd=mayapy)
+	p = Popen(params, cwd=mayapy_folder)
 	stdout, stderr = p.communicate()
-	
+
 
 if __name__ == "__main__":
 	main()
