@@ -66,7 +66,7 @@ def main():
 
 	rpr_render(scene)
 
-	for file in os.listdir(os.getcwd):
+	for file in os.listdir("."):
 	    if file.endswith(".log"):
 	        os.rename(filr, os.path.join("Output", "{scene_name}.log"))
 
