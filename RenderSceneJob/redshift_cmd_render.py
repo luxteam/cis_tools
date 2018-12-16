@@ -50,11 +50,11 @@ def rs_render(scene):
 	p = Popen(params, cwd=renderer_folder)
 	stdout, stderr = p.communicate()
 
-	with open(os.path.join("Output", "rprRenderTool.log"), 'w', encoding='utf-8') as file:
+	with open(os.path.join("Output", "rprRenderTool.log"), 'w') as file:
 		stdout = stdout.decode("utf-8")
 		file.write(stdout)
 
-	with open(os.path.join("Output", "rprRenderTool.log"), 'a', encoding='utf-8') as file:
+	with open(os.path.join("Output", "rprRenderTool.log"), 'a') as file:
 		file.write("\n ----STEDERR---- \n")
 		stderr = stderr.decode("utf-8")
 		file.write(stderr)
