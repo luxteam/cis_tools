@@ -22,7 +22,7 @@ def rpr_render(scene):
 	params += [scene]
 	p = Popen(params, cwd=renderer_folder)
 	stdout, stderr = p.communicate()
-	
+
 
 def rs_render(scene):
 
@@ -66,7 +66,10 @@ def main():
 
 	rpr_render(scene)
 
-	os.rename("{scene_name}.log", os.path.join("Output", "{scene_name}.log"))
+	for file in os.listdir(os.getcwd):
+	    if file.endswith(".log"):
+	        os.rename(filr, os.path.join("Output", "{scene_name}.log"))
+
 	os.rename(os.path.join("Output", "color", "converted_{scene_name}.jpg"), os.path.join("Output", "converted_{scene_name}.jpg"))
 	os.remove(os.path.join("Output", "opacity", "converted_{scene_name}.jpg"))
 	os.rmdir(os.path.join("Output", "opacity"))
