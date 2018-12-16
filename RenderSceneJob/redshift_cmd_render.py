@@ -68,7 +68,7 @@ def main():
 
 	for file in os.listdir("."):
 	    if file.endswith(".log"):
-	        os.rename(filr, os.path.join("Output", "{scene_name}.log"))
+	        os.rename(file, os.path.join("Output", "{scene_name}.log"))
 
 	os.rename(os.path.join("Output", "color", "converted_{scene_name}.jpg"), os.path.join("Output", "converted_{scene_name}.jpg"))
 	os.remove(os.path.join("Output", "opacity", "converted_{scene_name}.jpg"))
