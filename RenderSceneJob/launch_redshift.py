@@ -40,7 +40,7 @@ def main():
 	with open('launch_conversion.bat', 'w') as f:
 		f.write(cmdRun)
 
-	p = psutil.Popen('launch_render.bat', stdout=subprocess.PIPE)
+	p = psutil.Popen('launch_conversion.bat', stdout=subprocess.PIPE)
 	rc = -1
 
 	try:
