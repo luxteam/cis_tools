@@ -51,7 +51,7 @@ def main():
 
 	# Redshift batch render
 
-	renderer_folder = "C:\\Program Files\\Autodesk\\Maya{tool}\\bin".format(args.tool)
+	renderer_folder = "C:\\Program Files\\Autodesk\\Maya{tool}\\bin".format(tool=rgs.tool)
 	renderer_exec_name = "Render"
 	params = [renderer_exec_name]
 	params += ['-r', 'redshift']
