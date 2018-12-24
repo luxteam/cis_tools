@@ -80,8 +80,6 @@ def main():
 	with open(os.path.join( current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
-	os.chdir(output_path)
-	os.chdir(output_path)
 	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE)
 	rc = -1
 
