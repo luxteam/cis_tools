@@ -1,6 +1,9 @@
 
-import convertRS2RPR.auto_launch as convert
+import convertRS2RPR
 import os
+import maya.cmds as cmds
+import maya.mel as mel
+
 
 def rpr_render():
 	
@@ -12,7 +15,7 @@ def rpr_render():
 	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", {pass_limit})
 	
 	cmds.optionVar(rm="RPR_DevicesSelected")
-	cmds.optionVar(iva="RPR_DevicesSelected", 1)
+	cmds.optionVar(iva=("RPR_DevicesSelected", 1))
 
 
 	cmds.fireRender(waitForItTwo=True)
@@ -26,6 +29,6 @@ def rpr_render():
 def main():
 
 	cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
-	convert()
+	convertRS2RPR.auto_launch()
 	rpr_render()
-	evalDeferred("quit -abort");
+	cmds.evalDeferred(cmds.quit(abort=True))

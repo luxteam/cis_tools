@@ -40,27 +40,25 @@ def main():
 
 	args = parser.parse_args()
 
-	current_path = os.getcwd().replace("\\", "/")
-	redshift_scene = os.path.join(current_path, args.scene).replace("\\", "/")
+	current_path = os.getcwd()
+	redshift_scene = os.path.join(current_path, "pcvc7npjl4afquy.ma")
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
-	output_path = os.path.join(current_path, "Output").replace("\\", "/")
+	output_path = os.path.join(current_path, "Output")
 	
 	args.sceneName = os.path.basename(args.sceneName)
 
 	# Redshift batch render
-
-	renderer_folder = "C:\\Program Files\\Autodesk\\Maya{tool}\\bin".format(tool=args.tool)
-	renderer_exec_name = "Render"
-	params = [renderer_exec_name]
+	renderer_folder = "C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe".format(tool=args.tool)
+	params = [renderer_folder]
 	params += ['-r', 'redshift']
-	params += ['-cam', 'camera1']
+	#params += ['-cam', 'camera1']
 	params += ['-im', args.sceneName]
 	params += ['-of', 'jpg']
 	params += ['-rd', output_path]
 	params += [redshift_scene]
-	p = Popen(params, cwd=renderer_folder)
+	p = Popen(params)
 	stdout, stderr = p.communicate()
 
 
@@ -75,14 +73,16 @@ def main():
 	cmdRun = '''
 	set MAYA_CMD_FILE_OUTPUT=%cd%/renderTool.log 
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
-	"{tool}" -command "python(import maya_convert_render.py); python(main());"''' \
+	set PYTHONPATH=%cd%;%PYTHONPATH%
+	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\"import maya_convert_render as converter\"); python(\"converter.main()\");" ''' \
 		.format(tool=args.tool)
 
-	with open(os.path.join(args.output, 'script.bat'), 'w') as f:
+	with open(os.path.join( current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
-	os.chdir(args.output)
-	p = psutil.Popen(os.path.join(args.output, 'script.bat'), stdout=subprocess.PIPE)
+	os.chdir(output_path)
+	os.chdir(output_path)
+	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE)
 	rc = -1
 
 	while True:
