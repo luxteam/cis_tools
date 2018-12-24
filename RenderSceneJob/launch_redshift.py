@@ -74,7 +74,7 @@ def main():
 	set MAYA_CMD_FILE_OUTPUT=%cd%/renderTool.log 
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 	set PYTHONPATH=%cd%;%PYTHONPATH%
-	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\"import maya_convert_render as converter\"); python(\"converter.main()\");" ''' \
+	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import maya_convert_render as converter\\"); python(\\"converter.main()\\");" ''' \
 		.format(tool=args.tool)
 
 	with open(os.path.join( current_path, 'script.bat'), 'w') as f:
