@@ -41,7 +41,7 @@ def main():
 	args = parser.parse_args()
 
 	current_path = os.getcwd()
-	redshift_scene = os.path.join(current_path, "pcvc7npjl4afquy.ma")
+	redshift_scene = os.path.join(current_path, args.scene)
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
