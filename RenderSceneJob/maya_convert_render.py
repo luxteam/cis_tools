@@ -21,7 +21,7 @@ def rpr_render():
 	cmds.fireRender(waitForItTwo=True)
 	
 	mel.eval("renderIntoNewWindow render")
-	output = os.path.join("{res_path}", "{scene_name}")
+	output = os.path.join("{res_path}", "{scene_name}_converted")
 	cmds.renderWindowEditor("renderView", edit=True, dst="color")
 	cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 
