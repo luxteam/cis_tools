@@ -1,5 +1,4 @@
 import requests
-import config
 import json
 import argparse
 
