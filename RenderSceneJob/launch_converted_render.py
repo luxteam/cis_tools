@@ -49,15 +49,6 @@ def main():
 	
 	args.sceneName = os.path.basename(args.sceneName)
 
-	# Redshift batch render
-	cmd_render = '''"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -im {scene_name} -of jpg -rd {output_path} {redshift_scene}'''\
-					.format(tool=args.tool, scene_name = args.sceneName, output_path=output_path, redshift_scene=redshift_scene)
-
-	with open(os.path.join(current_path, 'redshift_script.bat'), 'w') as f:
-		f.write(cmd_render)				
-
-	p = psutil.Popen(os.path.join(current_path, 'redshift_script.bat'), stdout=subprocess.PIPE)
-
 	with open("maya_convert_render.py") as f:
 		py_template = f.read()
 	
