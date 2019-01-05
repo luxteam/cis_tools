@@ -32,8 +32,8 @@ def main():
 	with open(os.path.join(current_path, 'redshift_script.bat'), 'w') as f:
 		f.write(cmd_render)				
 
-	p = psutil.Popen(os.path.join(current_path, 'redshift_script.bat'), stdout=subprocess.PIPE)
-	
+	p = psutil.Popen(os.path.join(current_path, 'redshift_script.bat'))
+
 
 if __name__ == "__main__":
 	main()
