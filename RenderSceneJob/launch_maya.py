@@ -44,45 +44,48 @@ def main():
 	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
+
 	current_path = os.getcwd()
-	current_path = current_path.replace("\\", "/")
-
-	with open("maya_render.mel") as f:
-		mel_template = f.read()
-
-	args.sceneName = os.path.basename(args.sceneName)
-
-	melScript = mel_template.format(scene = args.scene, render_device_type = args.render_device_type, \
-		pass_limit = args.pass_limit, scene_name = args.sceneName, res_path=current_path)
-
-	with open('maya_render.mel', 'w') as f:
-		f.write(melScript)
+	redshift_scene = os.path.join(current_path, args.scene)
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
+	output_path = os.path.join(current_path, "Output")
+	
+	args.sceneName = os.path.basename(args.sceneName)
+
+	with open("maya_render.py") as f:
+		py_template = f.read()
+	
+	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, \
+			res_path=output_path, render_device_type = args.render_device_type)
+
+	with open('maya_render.py', 'w') as f:
+		f.write(pyScript)
 
 	cmdRun = '''
-	set MAYA_CMD_FILE_OUTPUT=Output/maya_log.txt 
+	set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_tool.log 
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
-	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\maya.exe" -command "source maya_render.mel; evalDeferred -lp (rpr_render());"''' \
+	set PYTHONPATH=%cd%;%PYTHONPATH%
+	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import maya_render as render\\"); python(\\"render.main()\\");" ''' \
 		.format(tool=args.tool)
 
-	with open('launch_render.bat', 'w') as f:
+	with open(os.path.join(current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
-	p = psutil.Popen('launch_render.bat', stdout=subprocess.PIPE)
+	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE)
 	rc = -1
 
 	while True:
 		try:
-			rc = p.wait(timeout=30)
+			rc = p.wait(timeout=5)
 		except psutil.TimeoutExpired as err:
-			fatal_errors_titles = ['maya', 'Radeon ProRender Error', 'Student Version File', 'Script Editor']
+			fatal_errors_titles = ['maya', 'Student Version File', 'Radeon ProRender Error', 'Script Editor']
 			if set(fatal_errors_titles).intersection(get_windows_titles()):
 				rc = -1
 				try:
-					error_screen = IG.grab()
-					error_screen.save(os.path.join('Output', 'error_screenshot.jpg'))
+					error_screen = pyscreenshot.grab()
+					error_screen.save(os.path.join(args.output, 'error_screenshot.jpg'))
 				except:
 					pass
 				for child in reversed(p.children(recursive=True)):
@@ -92,7 +95,7 @@ def main():
 		else:
 			break
 
-	return rc
+	stdout, stderr = p.communicate()
 
 
 if __name__ == "__main__":
