@@ -89,9 +89,12 @@ def main():
 		else:
 			break
 
+	stdout, stderr = p.communicate()
 
-if __name__ == "__main__":
-	main()
 	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
 	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
 	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
+	
+
+if __name__ == "__main__":
+	main()
