@@ -33,6 +33,7 @@ def main():
 		f.write(cmd_render)				
 
 	p = psutil.Popen(os.path.join(current_path, 'redshift_script.bat'))
+	stdout, stderr = p.communicate()
 
 
 if __name__ == "__main__":

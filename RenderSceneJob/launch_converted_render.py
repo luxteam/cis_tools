@@ -89,7 +89,7 @@ def main():
 		else:
 			break
 
-	os.rename(args.sceneName + ".log", os.path.join("Output", args.sceneName + ".log"))	
+	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
 
 
 if __name__ == "__main__":
