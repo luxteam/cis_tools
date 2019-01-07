@@ -31,6 +31,4 @@ def main():
 	cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
 	convertRS2RPR.auto_launch()
 	rpr_render()
-	cmds.file( rename='converted_scene.ma')
-	cmds.file( save=True, type='mayaAscii' )
 	cmds.evalDeferred(cmds.quit(abort=True))

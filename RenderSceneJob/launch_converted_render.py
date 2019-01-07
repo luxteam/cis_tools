@@ -89,11 +89,9 @@ def main():
 		else:
 			break
 
-	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
-	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
-	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
-	os.rename("converted_scene.ma".format(scene_name=args.sceneName), os.path.join("Output", "converted_scene.ma".format(scene_name=args.sceneName)))	
-
 
 if __name__ == "__main__":
 	main()
+	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
+	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
+	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
