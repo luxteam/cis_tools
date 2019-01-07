@@ -58,7 +58,7 @@ def main():
 		f.write(pyScript)
 
 	cmdRun = '''
-	set MAYA_CMD_FILE_OUTPUT=%cd%/renderTool.log 
+	set MAYA_CMD_FILE_OUTPUT=%cd%/rpr_tool.log 
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 	set PYTHONPATH=%cd%;%PYTHONPATH%
 	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import maya_convert_render as converter\\"); python(\\"converter.main()\\");" ''' \
@@ -89,7 +89,13 @@ def main():
 		else:
 			break
 
-	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
+	try:
+		os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
+		os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
+		os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
+		os.rename("{scene_name}_converted.ma".format(scene_name=args.sceneName), os.path.join("Output", "{scene_name}_converted.ma".format(scene_name=args.sceneName)))	
+	except Exception as ex:
+		print(ex)
 
 
 if __name__ == "__main__":
