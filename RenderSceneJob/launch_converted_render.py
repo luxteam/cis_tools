@@ -89,13 +89,10 @@ def main():
 		else:
 			break
 
-	try:
-		os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
-		os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
-		os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
-		os.rename("{scene_name}_converted.ma".format(scene_name=args.sceneName), os.path.join("Output", "{scene_name}_converted.ma".format(scene_name=args.sceneName)))	
-	except Exception as ex:
-		print(ex)
+	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
+	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
+	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
+	os.rename("converted_scene.ma".format(scene_name=args.sceneName), os.path.join("Output", "converted_scene.ma".format(scene_name=args.sceneName)))	
 
 
 if __name__ == "__main__":
