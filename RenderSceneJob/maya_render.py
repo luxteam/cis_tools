@@ -41,6 +41,7 @@ def rpr_render():
 		cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 	else:
 		for i in range(startFrame, endFrame):
+			cmds.currentTime(i)
 			mel.eval("renderIntoNewWindow render")
 			output = os.path.join("{res_path}", "{scene_name}_" + str(i))
 			cmds.renderWindowEditor("renderView", edit=True, dst="color")
