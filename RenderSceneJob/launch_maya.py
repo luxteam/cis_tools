@@ -58,7 +58,7 @@ def main():
 		py_template = f.read()
 	
 	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, \
-			res_path=output_path, render_device_type = args.render_device_type)
+			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame)
 
 	with open('maya_render.py', 'w') as f:
 		f.write(pyScript)

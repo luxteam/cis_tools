@@ -30,11 +30,21 @@ def rpr_render():
 	for cam in cameras:
 	    if cmds.getAttr(cam + ".renderable"):
 	        cmds.lookThru(cam)
+
+	startFrame = {startFrame}
+	endFrame = {endFrame}
 	
-	mel.eval("renderIntoNewWindow render")
-	output = os.path.join("{res_path}", "{scene_name}")
-	cmds.renderWindowEditor("renderView", edit=True, dst="color")
-	cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
+	if startFrame == endFrame:
+		mel.eval("renderIntoNewWindow render")
+		output = os.path.join("{res_path}", "{scene_name}")
+		cmds.renderWindowEditor("renderView", edit=True, dst="color")
+		cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
+	else:
+		for i in range(startFrame, endFrame):
+			mel.eval("renderIntoNewWindow render")
+			output = os.path.join("{res_path}", "{scene_name}_" + str(i))
+			cmds.renderWindowEditor("renderView", edit=True, dst="color")
+			cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 
 def main():
 
