@@ -39,7 +39,7 @@ def rpr_render():
 		cmds.renderWindowEditor("renderView", edit=True, dst="color")
 		cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 	else:
-		for i in range(startFrame, endFrame):
+		for i in range(startFrame, endFrame + 1):
 			cmds.fireRender(waitForItTwo=True)
 			cmds.currentTime(i)
 			mel.eval("renderIntoNewWindow render")
