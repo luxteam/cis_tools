@@ -24,8 +24,6 @@ def rpr_render():
 		cmds.optionVar(iva=("RPR_DevicesSelected", 1))
 		cmds.optionVar(iva=("RPR_DevicesSelected", 1))
 
-	cmds.fireRender(waitForItTwo=True)
-
 	cameras = cmds.ls(type="camera")
 	for cam in cameras:
 	    if cmds.getAttr(cam + ".renderable"):
@@ -35,12 +33,14 @@ def rpr_render():
 	endFrame = {endFrame}
 	
 	if startFrame == endFrame:
+		cmds.fireRender(waitForItTwo=True)
 		mel.eval("renderIntoNewWindow render")
 		output = os.path.join("{res_path}", "{scene_name}")
 		cmds.renderWindowEditor("renderView", edit=True, dst="color")
 		cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 	else:
 		for i in range(startFrame, endFrame):
+			cmds.fireRender(waitForItTwo=True)
 			cmds.currentTime(i)
 			mel.eval("renderIntoNewWindow render")
 			output = os.path.join("{res_path}", "{scene_name}_" + str(i))
