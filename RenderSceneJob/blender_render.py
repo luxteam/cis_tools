@@ -82,33 +82,6 @@ def render(scene_name):
 		bpy.ops.render.render(animation=True, scene=scene_name)
 		render_time = datetime.datetime.now() - TIMER
 
-	# get version of rpr addon
-	for mod_name in bpy.context.user_preferences.addons.keys():
-		if (mod_name == 'rprblender') : 
-			mod = sys.modules[mod_name]
-			ver = mod.bl_info.get('version')
-			version = str(ver[0]) + "." + str(ver[1]) + "." + str(ver[2])
-		
-	image_format = get_value(scene.render.image_settings, 'file_format').lower()
-	if (image_format == 'jpeg'):
-		image_format = 'jpg'
-
-	# LOG
-	log_name = os.path.join("{res_path}", "Output", scene_name + ".json")
-	report = {{}}
-	report['render_version'] = version
-	report['render_device_type'] = '{render_device_type}'
-	report['core_version'] = core_ver_str()
-	report['pass_limit'] = get_value(scene.render.rpr.render.rendering_limits, 'iterations')
-	report['render_device'] = device_name
-	report['tool'] = "Blender " + bpy.app.version_string.split(" (")[0]
-	report['scene_name'] = bpy.path.basename(bpy.context.blend_data.filepath)
-	report['render_time'] = render_time.total_seconds()
-	report['date_time'] = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
-
-	with open(log_name, 'w') as file:
-		json.dump([report], file, indent=' ')
-	
 
 if __name__ == "__main__":
 		
