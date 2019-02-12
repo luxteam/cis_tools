@@ -10,7 +10,9 @@ def rpr_render():
 	
 	cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
 	cmds.setAttr("defaultRenderGlobals.imageFormat", 8)
-	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", {pass_limit})
+	iterations = {pass_limit}
+	if iterations:
+		cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", iterations)
 	
 	render_device_type = "{render_device_type}"
 	if render_device_type == "gpu":
