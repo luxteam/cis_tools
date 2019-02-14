@@ -12,11 +12,9 @@ def rpr_render():
 	
 	cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
 	cmds.setAttr("defaultRenderGlobals.imageFormat", 8)
-	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", {pass_limit})
 	
 	cmds.optionVar(rm="RPR_DevicesSelected")
 	cmds.optionVar(iva=("RPR_DevicesSelected", 1))
-
 
 	cmds.fireRender(waitForItTwo=True)
 	
