@@ -35,7 +35,6 @@ def main():
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
-	parser.add_argument('--pass_limit', required=True)
 	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
@@ -52,7 +51,7 @@ def main():
 	with open("maya_convert_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, res_path=output_path)
+	pyScript = py_template.format(scene = args.scene, scene_name = args.sceneName, res_path=output_path)
 
 	with open('maya_convert_render.py', 'w') as f:
 		f.write(pyScript)
