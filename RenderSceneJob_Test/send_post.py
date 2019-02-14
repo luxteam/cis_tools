@@ -12,6 +12,7 @@ def main():
 	parser.add_argument('--id')
 	parser.add_argument('--django_ip')
 	parser.add_argument('--jenkins_job')
+	parser.add_argument('--build_number')
 	args = parser.parse_args()
 
 	django_url = args.django_ip
