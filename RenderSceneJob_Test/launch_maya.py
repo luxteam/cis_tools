@@ -64,7 +64,7 @@ def main():
 		f.write(pyScript)
 
 	cmdRun = '''
-	set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_tool.log 
+	set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_tool.txt
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 	set PYTHONPATH=%cd%;%PYTHONPATH%
 	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import maya_render as render\\"); python(\\"render.main()\\");" ''' \
