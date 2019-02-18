@@ -53,12 +53,13 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	args.sceneName = os.path.basename(args.sceneName)
+	project = "C:/JN/WS/Render_Scene_Render/" + args.scene.split("/")[1]
 
 	with open("maya_render.py") as f:
 		py_template = f.read()
 	
 	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, \
-			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame)
+			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame, project=project)
 
 	with open('maya_render.py', 'w') as f:
 		f.write(pyScript)
