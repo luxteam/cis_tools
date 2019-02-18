@@ -24,9 +24,11 @@ def main():
 	
 	args.sceneName = os.path.basename(args.sceneName)
 
+	project = args.scene.split("\\")[0]
+
 	# Redshift batch render
-	cmd_render = '''"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -log redshift_tool.log -im {scene_name} -of jpg -rd {output_path} {redshift_scene}'''\
-					.format(tool=args.tool, scene_name = args.sceneName, output_path=output_path, redshift_scene=redshift_scene)
+	cmd_render = '''"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -proj "{project}" -log redshift_tool.log -im {scene_name} -of jpg -rd {output_path} {redshift_scene}'''\
+					.format(tool=args.tool, scene_name = args.sceneName, output_path=output_path, redshift_scene=redshift_scene, project=project)
 
 	with open(os.path.join(current_path, 'redshift_script.bat'), 'w') as f:
 		f.write(cmd_render)				

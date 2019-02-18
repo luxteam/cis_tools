@@ -47,11 +47,12 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	args.sceneName = os.path.basename(args.sceneName)
+	project = args.scene.split("\\")[0]
 
 	with open("maya_convert_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, scene_name = args.sceneName, res_path=output_path)
+	pyScript = py_template.format(scene = args.scene, scene_name = args.sceneName, res_path=output_path, project=project)
 
 	with open('maya_convert_render.py', 'w') as f:
 		f.write(pyScript)
@@ -66,11 +67,9 @@ def main():
 	with open(os.path.join(current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
+	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	rc = -1
 
-	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	stdout, stderr = p.communicate()
-	
 	while True:
 		try:
 			rc = p.wait(timeout=5)
@@ -90,7 +89,8 @@ def main():
 			else:
 				break
 
-	
+	stdout, stderr = p.communicate()
+
 	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
 	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
 	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
