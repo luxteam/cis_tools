@@ -16,6 +16,11 @@ def rpr_render():
 	cmds.optionVar(rm="RPR_DevicesSelected")
 	cmds.optionVar(iva=("RPR_DevicesSelected", 1))
 
+	cameras = cmds.ls(type="camera")
+	for cam in cameras:
+	    if cmds.getAttr(cam + ".renderable"):
+	        cmds.lookThru(cam)
+
 	cmds.fireRender(waitForItTwo=True)
 	
 	mel.eval("renderIntoNewWindow render")
@@ -27,6 +32,7 @@ def rpr_render():
 def main():
 
 	cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
+	mel.eval("setProject(\"{project}\")")
 	convertRS2RPR.auto_launch()
 	rpr_render()
 	cmds.evalDeferred(cmds.quit(abort=True))
