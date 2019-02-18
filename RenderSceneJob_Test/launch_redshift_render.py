@@ -24,7 +24,7 @@ def main():
 	
 	args.sceneName = os.path.basename(args.sceneName)
 
-	project = args.scene.split("\\")[0]
+	project = "C:/JN/WS/Render_Scene_Render/" + args.scene.split("/")[0]
 
 	# Redshift batch render
 	cmd_render = '''"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -proj "{project}" -log redshift_tool.log -im {scene_name} -of jpg -rd {output_path} {redshift_scene}'''\
