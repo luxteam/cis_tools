@@ -66,9 +66,11 @@ def main():
 	with open(os.path.join(current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
-	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE)
 	rc = -1
 
+	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	stdout, stderr = p.communicate()
+	
 	while True:
 		try:
 			rc = p.wait(timeout=5)
@@ -85,11 +87,10 @@ def main():
 					child.terminate()
 				p.terminate()
 				break
-		else:
-			break
+			else:
+				break
 
-	stdout, stderr = p.communicate()
-
+	
 	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
 	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
 	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
