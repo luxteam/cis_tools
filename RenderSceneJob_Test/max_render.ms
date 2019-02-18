@@ -9,8 +9,7 @@ function rpr_render = (
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
 	renderers.current = Radeon_ProRender()
-    pass_limit = {pass_limit}
-    if pass_limit do renderers.current.passLimit = pass_limit
+    renderers.current.passLimit = {pass_limit}
 	
     renderers.current.renderDevice = {render_device_type}
     renderers.current.renderLimit = 1
