@@ -47,9 +47,17 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	args.sceneName = os.path.basename(args.sceneName)
-	project = "C:/JN/WS/Render_Scene_Render/"
-	for e in args.scene.split("/")[0:-1]:
-		project += e + "/"
+	work_path = "C:/JN/WS/Render_Scene_Render/"
+	# check zip/7z
+	files = os.listdir(work_path)
+	zip_file = False
+	for file in files:
+		if file.endswith(".zip") or file.endswith(".7z"):
+			project = work_path + args.scene.split("/")[1]
+
+	if not zip_file:
+		project = "C:/JN/WS/Render_Scene_Render/"
+	
 
 	with open("maya_convert_render.py") as f:
 		py_template = f.read()
