@@ -53,7 +53,9 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	args.sceneName = os.path.basename(args.sceneName)
-	project = "C:/JN/WS/Render_Scene_Render/" + args.scene.split("/")[1]
+	project = "C:/JN/WS/Render_Scene_Render/"
+	for e in args.scene.split("/")[0:-1]:
+    	project += e + "/"
 
 	with open("maya_render.py") as f:
 		py_template = f.read()
