@@ -53,10 +53,11 @@ def main():
 	zip_file = False
 	for file in files:
 		if file.endswith(".zip") or file.endswith(".7z"):
+			zip_file = True
 			project = work_path + args.scene.split("/")[1]
 
 	if not zip_file:
-		project = "C:/JN/WS/Render_Scene_Render/"
+		project = work_path
 	
 
 	with open("maya_convert_render.py") as f:
