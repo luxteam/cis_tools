@@ -12,11 +12,14 @@ def rpr_render():
 	
 	cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
 	cmds.setAttr("defaultRenderGlobals.imageFormat", 8)
-	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", {pass_limit})
 	
 	cmds.optionVar(rm="RPR_DevicesSelected")
 	cmds.optionVar(iva=("RPR_DevicesSelected", 1))
 
+	cameras = cmds.ls(type="camera")
+	for cam in cameras:
+	    if cmds.getAttr(cam + ".renderable"):
+	        cmds.lookThru(cam)
 
 	cmds.fireRender(waitForItTwo=True)
 	
@@ -28,6 +31,7 @@ def rpr_render():
 
 def main():
 
+	mel.eval("setProject(\"{project}\")")
 	cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
 	convertRS2RPR.auto_launch()
 	rpr_render()

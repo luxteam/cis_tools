@@ -35,7 +35,6 @@ def main():
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
-	parser.add_argument('--pass_limit', required=True)
 	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
@@ -48,11 +47,23 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	args.sceneName = os.path.basename(args.sceneName)
+	work_path = "C:/JN/WS/Render_Scene_Render/"
+	# check zip/7z
+	files = os.listdir(work_path)
+	zip_file = False
+	for file in files:
+		if file.endswith(".zip") or file.endswith(".7z"):
+			zip_file = True
+			project = work_path + args.scene.split("/")[1]
+
+	if not zip_file:
+		project = work_path
+	
 
 	with open("maya_convert_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, res_path=output_path)
+	pyScript = py_template.format(scene = args.scene, scene_name = args.sceneName, res_path=output_path, project=project)
 
 	with open('maya_convert_render.py', 'w') as f:
 		f.write(pyScript)
@@ -67,7 +78,7 @@ def main():
 	with open(os.path.join(current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
-	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE)
+	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	rc = -1
 
 	while True:
@@ -86,8 +97,8 @@ def main():
 					child.terminate()
 				p.terminate()
 				break
-		else:
-			break
+			else:
+				break
 
 	stdout, stderr = p.communicate()
 

@@ -53,18 +53,29 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	args.sceneName = os.path.basename(args.sceneName)
+	work_path = "C:/JN/WS/Render_Scene_Render/"
+	# check zip/7z
+	files = os.listdir(work_path)
+	zip_file = False
+	for file in files:
+		if file.endswith(".zip") or file.endswith(".7z"):
+			zip_file = True
+			project = work_path + args.scene.split("/")[1]
+
+	if not zip_file:
+		project = work_path
 
 	with open("maya_render.py") as f:
 		py_template = f.read()
 	
 	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, \
-			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame)
+			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame, project=project)
 
 	with open('maya_render.py', 'w') as f:
 		f.write(pyScript)
 
 	cmdRun = '''
-	set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_tool.log 
+	set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_tool.txt
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 	set PYTHONPATH=%cd%;%PYTHONPATH%
 	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import maya_render as render\\"); python(\\"render.main()\\");" ''' \
