@@ -59,7 +59,9 @@ def render(scene_name):
 	# frame range
 	set_value(scene, "frame_start", {startFrame})
 	set_value(scene, "frame_end", {endFrame})
-	set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', {pass_limit})
+	iterations = {pass_limit}
+	if iterations:
+		set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', iterations)
 
 	# image format
 	set_value(scene.render.image_settings, 'quality', 100)
