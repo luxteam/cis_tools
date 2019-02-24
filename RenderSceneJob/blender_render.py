@@ -64,6 +64,7 @@ def render(scene_name):
 		set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', iterations)
 
 	# image format
+	set_value(scene.render.image_settings, 'file_format', 'JPEG')
 	set_value(scene.render.image_settings, 'quality', 100)
 	set_value(scene.render.image_settings, 'compression', 0)
 	set_value(scene.render.image_settings, 'color_mode', 'RGB')
