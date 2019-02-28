@@ -13,6 +13,8 @@ def rpr_render():
 	iterations = {pass_limit}
 	if iterations:
 		cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", iterations)
+	if cmds.getAttr("RadeonProRenderGlobals.completionCriteriaIterations") > 1000:
+		cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", 1000)
 	
 	render_device_type = "{render_device_type}"
 	if render_device_type == "gpu":

@@ -62,6 +62,9 @@ def render(scene_name):
 	iterations = {pass_limit}
 	if iterations:
 		set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', iterations)
+		
+	if get_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations') > 1000:
+		set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', 1000)
 
 	# image format
 	set_value(scene.render.image_settings, 'quality', 100)
