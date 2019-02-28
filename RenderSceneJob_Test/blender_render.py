@@ -24,7 +24,7 @@ def set_value(path, name, value):
 	else:
 		logging.warning("No attribute found ")
 
-def get_value(path, name, value):
+def get_value(path, name):
 	if hasattr(path, name):
 		return getattr(path, name)
 	else:
