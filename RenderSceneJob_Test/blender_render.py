@@ -56,9 +56,6 @@ def render(scene_name):
 
 	device_name = helpers.render_resources_helper.get_used_devices()
 
-	# frame range
-	set_value(scene, "frame_start", {startFrame})
-	set_value(scene, "frame_end", {endFrame})
 	iterations = {pass_limit}
 	if iterations:
 		set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', iterations)
@@ -78,14 +75,18 @@ def render(scene_name):
 	set_value(scene.render, 'use_overwrite', True)
 
 	# start render animation
-	if {startFrame} == {endFrame}:
-		TIMER = datetime.datetime.now()
+	startFrame = {startFrame}
+	endFrame = {endFrame}
+	if startFrame == endFrame:
+		if startFrame != 1:
+			scene.frame_set(startFrame)
+			scene_name += "_{}".format(startFrame)
 		bpy.ops.render.render(write_still=True, scene=scene_name)
-		render_time = datetime.datetime.now() - TIMER
 	else:
-		TIMER = datetime.datetime.now()
-		bpy.ops.render.render(animation=True, scene=scene_name)
-		render_time = datetime.datetime.now() - TIMER
+		for each in range(startFrame, endFrame+1):
+			scene.frame_set(each)
+			file_name = scene_name + "_{}".format(each)
+			bpy.ops.render.render(write_still=True, scene=file_name)
 
 
 if __name__ == "__main__":

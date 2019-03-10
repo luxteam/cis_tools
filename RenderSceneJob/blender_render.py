@@ -67,6 +67,7 @@ def render(scene_name):
 	set_value(scene.render.image_settings, 'quality', 100)
 	set_value(scene.render.image_settings, 'compression', 0)
 	set_value(scene.render.image_settings, 'color_mode', 'RGB')
+	set_value(scene.render.image_settings, 'file_format', 'JPEG')
 
 	# output
 	set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}"))
