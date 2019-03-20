@@ -6,7 +6,7 @@ import psutil
 import json
 
 
-def main(args):
+def main():
 
     parser = argparse.ArgumentParser()
 
@@ -64,7 +64,7 @@ def main(args):
         for child in reversed(p.children(recursive=True)):
             child.terminate()
         p.terminate()
-        
+
 
 if __name__ == "__main__":
     rc = main()
