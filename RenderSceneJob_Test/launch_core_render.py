@@ -58,7 +58,7 @@ def main():
     rc = 0
 
     try:
-        rc = p.wait(timeout=600)
+        rc = p.wait(timeout=3600)
     except psutil.TimeoutExpired as err:
         rc = -1
         for child in reversed(p.children(recursive=True)):
