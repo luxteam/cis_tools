@@ -26,12 +26,12 @@ def main():
 
 
     config_json = {}
-    config_json["width"] = args.width
-    config_json["height"] = args.height
+    config_json["width"] = int(args.width)
+    config_json["height"] = int(args.height)
     config_json["gamma"] = 1
-    config_json["iterations"] = args.pass_limit
+    config_json["iterations"] = int(args.pass_limit)
     config_json["threads"] = 4
-    config_json["output"] = os.path.join(output_path, args.sceneName + ".jpg")
+    config_json["output"] = os.path.join(output_path, args.sceneName + ".png")
     config_json["output.json"] = os.path.join(output_path, args.sceneName + "_original.json")
     config_json["context"] = {
         "gpu0": 1,
@@ -43,7 +43,7 @@ def main():
     
     ScriptPath = os.path.join(current_path, "cfg_{}.json".format(args.sceneName))
     cmdRun = '"{tool}" "{scene}" "{template}"\n'.format(tool="C:\\rprSdkWin64\\RprsRender64.exe", scene=args.scene, template=ScriptPath)
-    cmdScriptPath = os.path.join(args.output, '{}.bat'.format(scene))
+    cmdScriptPath = os.path.join(current_path, '{}.bat'.format(args.sceneName))
 
     try:
         with open(ScriptPath, 'w') as f:
@@ -58,7 +58,7 @@ def main():
     rc = 0
 
     try:
-        rc = p.wait(timeout=args.timeout)
+        rc = p.wait(timeout=600)
     except psutil.TimeoutExpired as err:
         rc = -1
         for child in reversed(p.children(recursive=True)):
