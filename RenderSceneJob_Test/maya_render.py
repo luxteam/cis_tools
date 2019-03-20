@@ -37,9 +37,12 @@ def rpr_render():
 	endFrame = {endFrame}
 	
 	if startFrame == endFrame:
+		if startFrame != 1:
+			output = os.path.join("{res_path}", "{scene_name}_" + str(startFrame))
+		else:
+			output = os.path.join("{res_path}", "{scene_name}")
 		cmds.fireRender(waitForItTwo=True)
 		mel.eval("renderIntoNewWindow render")
-		output = os.path.join("{res_path}", "{scene_name}")
 		cmds.renderWindowEditor("renderView", edit=True, dst="color")
 		cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 	else:
