@@ -6,7 +6,6 @@ import json
 import ctypes
 import pyscreenshot
 from shutil import copyfile
-import PIL.ImageGrab as IG
 
 
 def get_windows_titles():
