@@ -29,7 +29,7 @@ def main():
     config_json["width"] = args.width
     config_json["height"] = args.height
     config_json["gamma"] = 1
-    config_json["iterations"] = args.iterations
+    config_json["iterations"] = args.pass_limit
     config_json["threads"] = 4
     config_json["output"] = os.path.join(output_path, args.sceneName + ".jpg")
     config_json["output.json"] = os.path.join(output_path, args.sceneName + "_original.json")
