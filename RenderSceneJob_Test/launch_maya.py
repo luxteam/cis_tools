@@ -51,7 +51,7 @@ def main():
 		os.makedirs('Output')
 	output_path = os.path.join(current_path, "Output")
 	
-	args.sceneName = args.sceneName.split(".")[0]
+	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
 	# check zip/7z
 	files = os.listdir(work_path)
@@ -67,7 +67,7 @@ def main():
 	with open("maya_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, \
+	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = sceneName, \
 			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame, project=project)
 
 	with open('maya_render.py', 'w') as f:

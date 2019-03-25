@@ -22,7 +22,7 @@ def main():
 		os.makedirs('Output')
 	output_path = os.path.join(current_path, "Output")
 	
-	args.sceneName = args.sceneName.split(".")[0]
+	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
 	# check zip/7z
 	files = os.listdir(work_path)
@@ -37,7 +37,7 @@ def main():
 
 	# Redshift batch render
 	cmd_render = '''"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -proj "{project}" -log redshift_tool.log -im {scene_name} -of jpg -rd {output_path} {redshift_scene}'''\
-					.format(tool=args.tool, scene_name = args.sceneName, output_path=output_path, redshift_scene=redshift_scene, project=project)
+					.format(tool=args.tool, scene_name = sceneName, output_path=output_path, redshift_scene=redshift_scene, project=project)
 
 	with open(os.path.join(current_path, 'redshift_script.bat'), 'w') as f:
 		f.write(cmd_render)				
