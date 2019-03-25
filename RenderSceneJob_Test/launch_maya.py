@@ -51,7 +51,7 @@ def main():
 		os.makedirs('Output')
 	output_path = os.path.join(current_path, "Output")
 	
-	args.sceneName = os.path.basename(args.sceneName)
+	args.sceneName = args.sceneName.split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
 	# check zip/7z
 	files = os.listdir(work_path)
