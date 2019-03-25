@@ -32,8 +32,9 @@ def main():
     timeout = 3600 / (endFrame - startFrame + 1)
 
     # parse file
-    file_name = args.sceneName.split("_")[0]
-    file_format = args.sceneName.split(".")[1]
+    sceneName = os.path.basename(args.sceneName).split(".")[0]
+    file_name = sceneName.split("_")[0]
+    file_format = sceneName.split(".")[1]
 
     for frame in range(startFrame, endFrame + 1):
 
