@@ -46,7 +46,7 @@ def main():
 		os.makedirs('Output')
 	output_path = os.path.join(current_path, "Output")
 	
-	args.sceneName = args.sceneName.split(".")[0]
+	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
 	# check zip/7z
 	files = os.listdir(work_path)
@@ -63,7 +63,7 @@ def main():
 	with open("maya_convert_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, scene_name = args.sceneName, res_path=output_path, project=project)
+	pyScript = py_template.format(scene = args.scene, scene_name = sceneName, res_path=output_path, project=project)
 
 	with open('maya_convert_render.py', 'w') as f:
 		f.write(pyScript)
