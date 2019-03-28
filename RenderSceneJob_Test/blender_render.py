@@ -81,12 +81,12 @@ def render(scene_name):
 	if startFrame == endFrame:
 		if startFrame != 1:
 			scene.frame_set(startFrame)
-			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(startFrame)))
+			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(startFrame).zfill(3)))
 		bpy.ops.render.render(write_still=True, scene=scene_name)
 	else:
 		for each in range(startFrame, endFrame+1):
 			scene.frame_set(each)
-			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(each)))
+			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(each).zfill(3)))
 			bpy.ops.render.render(write_still=True, scene=scene_name)
 
 
