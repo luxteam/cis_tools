@@ -44,8 +44,8 @@ def main():
         config_json["gamma"] = 1
         config_json["iterations"] = int(args.pass_limit)
         config_json["threads"] = 4
-        config_json["output"] = os.path.join(output_path, file_name + "_" + str(frame) + ".png")
-        config_json["output.json"] = os.path.join(output_path, file_name + "_" + str(frame) + "_original.json")
+        config_json["output"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".png")
+        config_json["output.json"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")
         config_json["context"] = {
             "gpu0": 1,
             "gpu1": 0,
@@ -55,11 +55,11 @@ def main():
 
         # change render scene
         scene_name = args.scene.split("\\")[-1].split(".")[0]
-        scene = args.scene.replace(scene_name, file_name + "_" + str(frame))
+        scene = args.scene.replace(scene_name, file_name + "_" + str(frame).zfill(3))
 
-        ScriptPath = os.path.join(current_path, "cfg_{}.json".format(file_name + "_" + str(frame)))
+        ScriptPath = os.path.join(current_path, "cfg_{}.json".format(file_name + "_" + str(frame).zfill(3)))
         cmdRun = '"{tool}" "{scene}" "{template}"\n'.format(tool="C:\\rprSdkWin64\\RprsRender64.exe", scene=scene, template=ScriptPath)
-        cmdScriptPath = os.path.join(current_path, '{}.bat'.format(file_name + "_" + str(frame)))
+        cmdScriptPath = os.path.join(current_path, '{}.bat'.format(file_name + "_" + str(frame).zfill(3)))
         
         try:
             with open(ScriptPath, 'w') as f:
