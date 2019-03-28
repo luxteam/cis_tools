@@ -38,7 +38,7 @@ def rpr_render():
 	
 	if startFrame == endFrame:
 		if startFrame != 1:
-			output = os.path.join("{res_path}", "{scene_name}_" + str(startFrame))
+			output = os.path.join("{res_path}", "{scene_name}_" + str(startFrame).zfill(3))
 		else:
 			output = os.path.join("{res_path}", "{scene_name}")
 		cmds.fireRender(waitForItTwo=True)
@@ -50,7 +50,7 @@ def rpr_render():
 			cmds.fireRender(waitForItTwo=True)
 			cmds.currentTime(i)
 			mel.eval("renderIntoNewWindow render")
-			output = os.path.join("{res_path}", "{scene_name}_" + str(i))
+			output = os.path.join("{res_path}", "{scene_name}_" + str(i).zfill(3))
 			cmds.renderWindowEditor("renderView", edit=True, dst="color")
 			cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 
