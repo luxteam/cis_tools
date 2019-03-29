@@ -82,6 +82,12 @@ def main():
             p.terminate()
 
 
+        # post request
+        sendPost = "python send_post.py --current_frame {frame} --render_time {time}".format(frame=str(frame).zfill(3), time=str(1.33))
+        post = psutil.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = post.communicate()
+
+
 if __name__ == "__main__":
     rc = main()
     exit(rc)

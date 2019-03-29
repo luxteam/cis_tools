@@ -10,6 +10,8 @@ def main():
 	parser.add_argument('--status')
 	parser.add_argument('--id')
 	parser.add_argument('--django_ip')
+	parser.add_argument('--current_frame')
+	parser.add_argument('--render_time')
 	args = parser.parse_args()
 
 	django_url = args.django_ip
