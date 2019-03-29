@@ -41,6 +41,9 @@ def main():
 
     for frame in range(startFrame, endFrame + 1):
 
+        post_data = {'tool': 'Core', 'current_frame': frame, 'id': args.id, 'status':'frame'}
+        response = requests.post(args.django_ip, data=post_data)
+
         config_json = {}
         config_json["width"] = int(args.width)
         config_json["height"] = int(args.height)
@@ -89,7 +92,7 @@ def main():
         with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")) as f:
             data = json.loads(f.read().replace("\\", "\\\\"))
         time = round(data['render.time.ms'] / 1000, 2)
-        post_data = {'tool': 'Core', 'render_time': time, 'current_frame': frame, 'id': args.id, 'status':'rendering'}
+        post_data = {'tool': 'Core', 'render_time': time, 'id': args.id, 'status':'time'}
         response = requests.post(args.django_ip, data=post_data)
 
 
