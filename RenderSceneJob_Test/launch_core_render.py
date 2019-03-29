@@ -10,6 +10,9 @@ def main():
 
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('--django_ip', required=True)
+    parser.add_argument('--id', required=True)
+
     parser.add_argument('--tool', required=True)
     parser.add_argument('--scene', required=True)
     parser.add_argument('--pass_limit', required=True)
@@ -83,7 +86,8 @@ def main():
 
 
         # post request
-        sendPost = "python send_post.py --current_frame {frame} --render_time {time}".format(frame=str(frame).zfill(3), time=str(1.33))
+        sendPost = "python send_post.py --tool Core --django_ip {ip} --id {id} --current_frame {frame} --render_time {time}".format(frame=str(frame).zfill(3),\
+             time=str(1.33), ip=args.django_ip, id=args.id)
         post = psutil.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = post.communicate()
 
