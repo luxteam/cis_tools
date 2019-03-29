@@ -4,7 +4,7 @@ import os
 import subprocess
 import psutil
 import json
-
+import requests
 
 def main():
 
@@ -86,10 +86,11 @@ def main():
 
 
         # post request
-        sendPost = "python send_post.py --tool Core --django_ip {ip} --id {id} --current_frame {frame} --render_time {time}".format(frame=str(frame).zfill(3),\
-             time=str(1.33), ip=args.django_ip, id=args.id)
-        post = psutil.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = post.communicate()
+        with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")) as f:
+            data = json.loads(f.read().replace("\\", "\\\\"))
+        time = round(data['render.time.ms'] / 1000, 2)
+        post_data = {'tool': 'Core', 'render_time': time, 'current_frame': frame, 'id': args.id, 'status':'rendering'}
+        response = requests.post(args.django_ip, data=post_data)
 
 
 if __name__ == "__main__":
