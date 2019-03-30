@@ -14,7 +14,7 @@ def main():
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument('--django_ip', required=True)
-    parser.add_argument('--id', required=True)
+	parser.add_argument('--id', required=True)
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
