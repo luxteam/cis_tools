@@ -100,7 +100,7 @@ def render(scene_name):
 	report['width'] = get_value(bpy.context.scene.render, 'resolution_x')
 	report['height'] = get_value(bpy.context.scene.render, 'resolution_y')
 	report['iterations'] = get_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations')
-	with open("{res_path}", "render_info.json", 'w') as f:
+	with open(os.path.join("{res_path}", "render_info.json"), 'w') as f:
 		json.dump([report], f, indent=' ')
 
 

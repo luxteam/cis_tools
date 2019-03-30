@@ -108,15 +108,15 @@ def main():
 		p.terminate()
 
 	# post request
-    with open(os.path.join(current_path, "render_info.json")) as f:
-        data = json.loads(f.read())
+	with open(os.path.join(current_path, "render_info.json")) as f:
+		data = json.loads(f.read())
 
-    render_time = round(data['render.time.ms'] / 1000, 2)
+	render_time = round(data['render.time.ms'] / 1000, 2)
 
 
-    post_data = {'tool': 'Blender', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
-    	 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
-    response = requests.post(args.django_ip, data=post_data)
+	post_data = {'tool': 'Blender', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
+		 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
+	response = requests.post(args.django_ip, data=post_data)
 
 	return rc
 
