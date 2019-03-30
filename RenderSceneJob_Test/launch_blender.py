@@ -7,6 +7,7 @@ import json
 import ctypes
 import pyscreenshot
 import platform
+import requests
 
 
 def main():
