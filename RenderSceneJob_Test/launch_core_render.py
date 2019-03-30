@@ -42,8 +42,9 @@ def main():
 
     for frame in range(startFrame, endFrame + 1):
 
-        post_data = {'tool': 'Core', 'current_frame': frame, 'id': args.id, 'status':'frame'}
-        response = requests.post(args.django_ip, data=post_data)
+        if endFrame - startFrame != 0:
+            post_data = {'tool': 'Core', 'current_frame': frame, 'id': args.id, 'status':'frame'}
+            response = requests.post(args.django_ip, data=post_data)
 
         config_json = {}
         config_json["width"] = int(args.width)

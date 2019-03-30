@@ -85,18 +85,18 @@ def render(scene_name):
 			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(startFrame).zfill(3)))
 		start_time = datetime.datetime.now()
 		bpy.ops.render.render(write_still=True, scene=scene_name)
-		render_time += datetime.datetime.now() - start_time
+		render_time += (datetime.datetime.now() - start_time).total_seconds()
 	else:
 		for each in range(startFrame, endFrame+1):
 			scene.frame_set(each)
 			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(each).zfill(3)))
 			start_time = datetime.datetime.now()
 			bpy.ops.render.render(write_still=True, scene=scene_name)
-			render_time += round(datetime.datetime.now() - start_time, 2)
+			render_time += (datetime.datetime.now() - start_time).total_seconds()
 
 	# results json
 	report = {{}}
-	report['render_time'] = render_time
+	report['render_time'] = round(render_time, 2)
 	report['width'] = get_value(bpy.context.scene.render, 'resolution_x')
 	report['height'] = get_value(bpy.context.scene.render, 'resolution_y')
 	report['iterations'] = get_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations')
