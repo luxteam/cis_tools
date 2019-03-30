@@ -85,7 +85,7 @@ def render(scene_name):
 			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(startFrame).zfill(3)))
 		start_time = datetime.datetime.now()
 		bpy.ops.render.render(write_still=True, scene=scene_name)
-		render_time += round(datetime.datetime.now() - start_time, 2)
+		render_time += datetime.datetime.now() - start_time
 	else:
 		for each in range(startFrame, endFrame+1):
 			scene.frame_set(each)
