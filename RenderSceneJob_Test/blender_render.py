@@ -4,18 +4,8 @@ import datetime
 import sys
 import json
 import os
-from rprblender import node_editor
-from rprblender import material_browser
 from rprblender import helpers
-from pyrpr import API_VERSION
-from shutil import copyfile
 import logging
-
-def core_ver_str():
-	core_ver = API_VERSION
-	mj = (core_ver & 0xFFFF00000) >> 28
-	mn = (core_ver & 0xFFFFF) >> 8
-	return "%x.%x" % (mj, mn)
 
 
 def set_value(path, name, value):

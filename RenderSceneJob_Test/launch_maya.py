@@ -108,6 +108,14 @@ def main():
 
 	stdout, stderr = p.communicate()
 
+	# post request
+	with open(os.path.join(current_path, "render_info.json")) as f:
+		data = json.loads(f.read())
+
+	post_data = {'tool': 'Maya', 'render_time': data[0]['render_time'], 'width': data[0]['width'], 'height': data[0]['height'],\
+		 'iterations': data[0]['iterations'], 'id': args.id, 'status':'render_info'}
+	response = requests.post(args.django_ip, data=post_data)
+
 
 if __name__ == "__main__":
 	rc = main()
