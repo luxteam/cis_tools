@@ -109,7 +109,6 @@ def main():
 	stdout, stderr = p.communicate()
 
 	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
-	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
 	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
 
 	# post request
