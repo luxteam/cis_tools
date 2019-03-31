@@ -3,6 +3,8 @@ import convertRS2RPR
 import os
 import maya.cmds as cmds
 import maya.mel as mel
+import datetime
+import json
 
 
 def rpr_render():
@@ -23,11 +25,21 @@ def rpr_render():
 
 	cmds.fireRender(waitForItTwo=True)
 	
+	start_time = datetime.datetime.now()
 	mel.eval("renderIntoNewWindow render")
+	render_time = (datetime.datetime.now() - start_time).total_seconds()
 	output = os.path.join("{res_path}", "{scene_name}_converted")
 	cmds.renderWindowEditor("renderView", edit=True, dst="color")
 	cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 
+	# results json
+	report = {{}}
+	report['render_time'] = round(render_time, 2)
+	report['width'] = cmds.getAttr("defaultResolution.width")
+	report['height'] = cmds.getAttr("defaultResolution.height")
+	report['iterations'] = cmds.getAttr("RadeonProRenderGlobals.completionCriteriaIterations")
+	with open(os.path.join(".", "render_info.json"), 'w') as f:
+		json.dump(report, f, indent=4)
 
 def main():
 

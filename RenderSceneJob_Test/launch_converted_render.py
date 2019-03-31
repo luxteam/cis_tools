@@ -5,6 +5,8 @@ import psutil
 import ctypes
 import pyscreenshot
 from subprocess import Popen
+import requests
+import json
 
 
 def get_windows_titles():
@@ -32,6 +34,9 @@ def get_windows_titles():
 def main():
 
 	parser = argparse.ArgumentParser()
+
+	parser.add_argument('--django_ip', required=True)
+	parser.add_argument('--id', required=True)
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
@@ -106,6 +111,13 @@ def main():
 	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
 	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
 	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
+
+	# post request
+	with open(os.path.join(current_path, "render_info.json")) as f:
+		data = json.loads(f.read())
+
+	post_data = {'tool': 'RedshiftConvert', 'rpr_render_time': data['render_time'], 'id': args.id, 'status':'rpr_render_info'}
+	response = requests.post(args.django_ip, data=post_data)
 	
 
 if __name__ == "__main__":
