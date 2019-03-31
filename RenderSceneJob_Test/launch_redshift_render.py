@@ -6,6 +6,7 @@ import pyscreenshot
 from subprocess import Popen
 import requests
 import json
+import datetime
 
 def get_rs_render_time(log_name):
 	with open(log_name, 'r') as file:
