@@ -50,7 +50,7 @@ def main():
 	for file in files:
 		if file.endswith(".zip") or file.endswith(".7z"):
 			zip_file = True
-			scene_path = "/".join(args.scene.split("/")[1:-1])
+			scene_path = "/".join(args.scene.split("/")[1:-2])
 			project = work_path + scene_path
 
 	if not zip_file:
