@@ -66,8 +66,8 @@ def rpr_render():
 	report['width'] = cmds.getAttr("defaultResolution.width")
 	report['height'] = cmds.getAttr("defaultResolution.height")
 	report['iterations'] = cmds.getAttr("RadeonProRenderGlobals.completionCriteriaIterations")
-	with open(os.path.join("{res_path}", "render_info.json"), 'w') as f:
-		json.dump([report], f, indent=' ')
+	with open(os.path.join(".", "render_info.json"), 'w') as f:
+		json.dump(report, f, indent=4)
 
 def main():
 

@@ -91,7 +91,7 @@ def render(scene_name):
 	report['height'] = get_value(bpy.context.scene.render, 'resolution_y')
 	report['iterations'] = get_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations')
 	with open(os.path.join("{res_path}", "render_info.json"), 'w') as f:
-		json.dump([report], f, indent=' ')
+		json.dump(report, f, indent=' ')
 
 
 if __name__ == "__main__":
