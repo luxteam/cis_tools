@@ -115,8 +115,8 @@ def main():
 	with open(os.path.join(current_path, "render_info.json")) as f:
 		data = json.loads(f.read())
 
-	post_data = {'tool': 'Blender', 'render_time': data[0]['render_time'], 'width': data[0]['width'], 'height': data[0]['height'],\
-		 'iterations': data[0]['iterations'], 'id': args.id, 'status':'render_info'}
+	post_data = {'tool': 'Blender', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
+		 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
 	response = requests.post(args.django_ip, data=post_data)
 
 	return rc
