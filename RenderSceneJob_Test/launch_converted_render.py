@@ -108,7 +108,7 @@ def main():
 
 	stdout, stderr = p.communicate()
 
-	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
+	os.rename(args.scene + ".log", os.path.join("Output", sceneName + ".log"))	
 	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
 
 	# post request
