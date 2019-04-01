@@ -5,12 +5,17 @@ import datetime
 import json
 
 
-def rpr_render():
-	
+def initializeRPR():
 	if not cmds.pluginInfo("RadeonProRender", q=True, loaded=True):
 		cmds.loadPlugin("RadeonProRender")
-	
+
 	cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
+	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", 1)
+	cmds.fireRender(waitForItTwo=True)
+	mel.eval("renderIntoNewWindow render")
+
+def rpr_render():
+	
 	cmds.setAttr("defaultRenderGlobals.imageFormat", 8)
 	iterations = {pass_limit}
 	if iterations:
