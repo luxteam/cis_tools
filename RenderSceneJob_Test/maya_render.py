@@ -76,6 +76,7 @@ def rpr_render():
 
 def main():
 
+	initializeRPR()
 	mel.eval("setProject(\"{project}\")")
 	cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
 	rpr_render()
