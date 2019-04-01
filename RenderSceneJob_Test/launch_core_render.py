@@ -49,7 +49,6 @@ def main():
 		config_json = {}
 		config_json["width"] = int(args.width)
 		config_json["height"] = int(args.height)
-		config_json["gamma"] = 1
 		config_json["iterations"] = int(args.pass_limit)
 		config_json["threads"] = 4
 		config_json["output"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".png")
