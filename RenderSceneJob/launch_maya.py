@@ -5,8 +5,7 @@ import psutil
 import json
 import ctypes
 import pyscreenshot
-from shutil import copyfile
-import PIL.ImageGrab as IG
+import requests
 
 
 def get_windows_titles():
@@ -35,6 +34,9 @@ def main():
 
 	parser = argparse.ArgumentParser()
 
+	parser.add_argument('--django_ip', required=True)
+	parser.add_argument('--id', required=True)
+
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
 	parser.add_argument('--render_device_type', required=True)
@@ -52,7 +54,7 @@ def main():
 		os.makedirs('Output')
 	output_path = os.path.join(current_path, "Output")
 	
-	args.sceneName = os.path.basename(args.sceneName)
+	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
 	# check zip/7z
 	files = os.listdir(work_path)
@@ -60,7 +62,8 @@ def main():
 	for file in files:
 		if file.endswith(".zip") or file.endswith(".7z"):
 			zip_file = True
-			project = work_path + args.scene.split("/")[1]
+			scene_path = "/".join(args.scene.split("/")[1:-2])
+			project = work_path + scene_path
 
 	if not zip_file:
 		project = work_path
@@ -68,7 +71,7 @@ def main():
 	with open("maya_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = args.sceneName, \
+	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = sceneName, \
 			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame, project=project)
 
 	with open('maya_render.py', 'w') as f:
@@ -107,6 +110,14 @@ def main():
 			break
 
 	stdout, stderr = p.communicate()
+
+	# post request
+	with open(os.path.join(current_path, "render_info.json")) as f:
+		data = json.loads(f.read())
+
+	post_data = {'tool': 'Maya', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
+		 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
+	response = requests.post(args.django_ip, data=post_data)
 
 
 if __name__ == "__main__":

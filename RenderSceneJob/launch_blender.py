@@ -7,11 +7,15 @@ import json
 import ctypes
 import pyscreenshot
 import platform
+import requests
 
 
 def main():
 
 	parser = argparse.ArgumentParser()
+
+	parser.add_argument('--django_ip', required=True)
+	parser.add_argument('--id', required=True)
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
@@ -30,11 +34,11 @@ def main():
 	with open ("blender_render.py") as f:
 		blender_script_template = f.read()
 
-	args.sceneName = os.path.basename(args.sceneName)
+	sceneName = os.path.basename(args.sceneName).split(".")[0]
 
 	BlenderScript = blender_script_template.format(render_device_type=args.render_device_type, pass_limit=args.pass_limit, \
 													res_path=current_path, scene_name=args.scene, startFrame=args.startFrame, endFrame=args.endFrame, \
-													sceneName=args.sceneName)
+													sceneName=sceneName)
 
 	with open("blender_render.py", 'w') as f:
 		f.write(BlenderScript)
@@ -106,6 +110,14 @@ def main():
 		for child in reversed(p.children(recursive=True)):
 			child.terminate()
 		p.terminate()
+
+	# post request
+	with open(os.path.join(current_path, "render_info.json")) as f:
+		data = json.loads(f.read())
+
+	post_data = {'tool': 'Blender', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
+		 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
+	response = requests.post(args.django_ip, data=post_data)
 
 	return rc
 
