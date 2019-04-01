@@ -7,12 +7,18 @@ import datetime
 import json
 
 
-def rpr_render():
-	
+def initializeRPR():
 	if not cmds.pluginInfo("RadeonProRender", q=True, loaded=True):
 		cmds.loadPlugin("RadeonProRender")
-	
+
 	cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
+	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", 1)
+	cmds.fireRender(waitForItTwo=True)
+	mel.eval("renderIntoNewWindow render")
+
+
+def rpr_render():
+	
 	cmds.setAttr("defaultRenderGlobals.imageFormat", 8)
 	
 	cmds.optionVar(rm="RPR_DevicesSelected")
@@ -43,6 +49,7 @@ def rpr_render():
 
 def main():
 
+	initializeRPR()
 	mel.eval("setProject(\"{project}\")")
 	cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
 	convertRS2RPR.auto_launch()

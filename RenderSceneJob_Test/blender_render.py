@@ -8,11 +8,22 @@ from rprblender import helpers
 import logging
 
 
+def initializeRPR():
+	# RPR Settings
+	if not addon_utils.check("rprblender")[0]:
+		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
+
+	set_value(scene.render, 'engine', "RPR")
+	set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', 1)
+	bpy.ops.render.render()
+
+
 def set_value(path, name, value):
 	if hasattr(path, name):
 		setattr(path, name, value)
 	else:
 		logging.warning("No attribute found ")
+
 
 def get_value(path, name):
 	if hasattr(path, name):
@@ -28,11 +39,6 @@ def render(scene_name):
 
 	# get scene name
 	scene_name, scene = helpers.get_current_scene()
-
-	# RPR Settings
-	if not addon_utils.check("rprblender")[0]:
-		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
-	set_value(scene.render, 'engine', "RPR")
 
 	# Render device in RPR
 	set_value(helpers.get_user_settings(), "include_uncertified_devices", True)
@@ -96,4 +102,5 @@ def render(scene_name):
 
 if __name__ == "__main__":
 		
+	initializeRPR()
 	render(r'{scene_name}')
