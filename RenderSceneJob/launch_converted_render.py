@@ -5,6 +5,8 @@ import psutil
 import ctypes
 import pyscreenshot
 from subprocess import Popen
+import requests
+import json
 
 
 def get_windows_titles():
@@ -33,6 +35,9 @@ def main():
 
 	parser = argparse.ArgumentParser()
 
+	parser.add_argument('--django_ip', required=True)
+	parser.add_argument('--id', required=True)
+
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
 	parser.add_argument('--sceneName', required=True)
@@ -46,7 +51,7 @@ def main():
 		os.makedirs('Output')
 	output_path = os.path.join(current_path, "Output")
 	
-	args.sceneName = os.path.basename(args.sceneName)
+	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
 	# check zip/7z
 	files = os.listdir(work_path)
@@ -54,7 +59,8 @@ def main():
 	for file in files:
 		if file.endswith(".zip") or file.endswith(".7z"):
 			zip_file = True
-			project = work_path + args.scene.split("/")[1]
+			scene_path = "/".join(args.scene.split("/")[1:-2])
+			project = work_path + scene_path
 
 	if not zip_file:
 		project = work_path
@@ -63,7 +69,7 @@ def main():
 	with open("maya_convert_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, scene_name = args.sceneName, res_path=output_path, project=project)
+	pyScript = py_template.format(scene = args.scene, scene_name = sceneName, res_path=output_path, project=project)
 
 	with open('maya_convert_render.py', 'w') as f:
 		f.write(pyScript)
@@ -102,9 +108,15 @@ def main():
 
 	stdout, stderr = p.communicate()
 
-	os.rename(args.scene + ".log", os.path.join("Output", args.sceneName + ".log"))	
-	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
+	os.rename(args.scene + ".log", os.path.join("Output", sceneName + ".log"))	
 	os.rename("rpr_tool.log", os.path.join("Output", "rpr_tool.log"))	
+
+	# post request
+	with open(os.path.join(current_path, "render_info.json")) as f:
+		data = json.loads(f.read())
+
+	post_data = {'tool': 'RedshiftConvert', 'rpr_render_time': data['render_time'], 'id': args.id, 'status':'rpr_render_info'}
+	response = requests.post(args.django_ip, data=post_data)
 	
 
 if __name__ == "__main__":
