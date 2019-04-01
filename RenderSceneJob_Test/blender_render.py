@@ -13,6 +13,7 @@ def initializeRPR():
 	if not addon_utils.check("rprblender")[0]:
 		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
 
+	scene_name, scene = helpers.get_current_scene()
 	set_value(scene.render, 'engine', "RPR")
 	set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', 1)
 	bpy.ops.render.render()
