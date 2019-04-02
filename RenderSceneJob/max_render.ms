@@ -42,16 +42,16 @@ function rpr_render = (
     json_line = "{{\n" 
     format "%" json_line to:a
 
-    json_line = "  \"pass_limit\": " + (renderers.current.passLimit as string) + ",\n"
+    json_line = "  \"iterations\": " + (renderers.current.passLimit as string) + ",\n"
     format "%" json_line to:a
 
     json_line = "  \"render_time\": " + (relapsed as string) + ",\n"
     format "%" json_line to:a 
 
-    json_line = "  \"resolution_x\": " + (renderWidth as string) + ",\n"
+    json_line = "  \"width\": " + (renderWidth as string) + ",\n"
     format "%" json_line to:a 
 
-    json_line = "  \"resolution_x\": " + (renderHeight as string) + "\n"
+    json_line = "  \"height\": " + (renderHeight as string) + "\n"
     format "%" json_line to:a 
 
     json_line = "}}\n"
