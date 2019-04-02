@@ -51,7 +51,7 @@ function rpr_render = (
     json_line = "  \"resolution_x\": " + (renderWidth as string) + ",\n"
     format "%" json_line to:a 
 
-    json_line = "  \"resolution_x\": " + (renderHeight as string) + ",\n"
+    json_line = "  \"resolution_x\": " + (renderHeight as string) + "\n"
     format "%" json_line to:a 
 
     json_line = "}}\n"
