@@ -6,7 +6,7 @@ import psutil
 import json
 import ctypes
 import pyscreenshot
-from shutil import copyfile
+import requests
 
 
 def get_windows_titles():
