@@ -35,6 +35,9 @@ def main():
 
 	parser = argparse.ArgumentParser()
 
+	parser.add_argument('--django_ip', required=True)
+	parser.add_argument('--id', required=True)
+
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
 	parser.add_argument('--render_device_type', required=True)
@@ -71,10 +74,10 @@ def main():
 	cmdRun = '"C:\\Program Files\\Autodesk\\3ds Max {tool}\\3dsmax.exe" -U MAXScript "{job_script}" -silent' \
 		.format(tool=args.tool, job_script="max_render.ms")
 
-	with open("launch_render.bat", 'w') as f:
+	with open(os.path.join(current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
-	p = psutil.Popen('launch_render.bat', stdout=subprocess.PIPE)
+	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE)
 	rc = -1
 
 	while True:
@@ -97,6 +100,16 @@ def main():
 				break
 		else:
 			break
+
+	stdout, stderr = p.communicate()
+
+	# post request
+	with open(os.path.join(current_path, "render_info.json")) as f:
+		data = json.loads(f.read())
+
+	post_data = {'tool': 'Max', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
+		 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
+	response = requests.post(args.django_ip, data=post_data)
 
 	return rc
 
