@@ -20,11 +20,11 @@ function rpr_render = (
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
     pass_limit = {pass_limit}
-    if (pass_limit > 0) then {
+    if (pass_limit > 0) then {{
         renderers.current.passLimit = {pass_limit}
-    } else (pass_limit > 1000) then {
+    }} else (pass_limit > 1000) then {{
         renderers.current.passLimit = 1000
-    }
+    }}
 	
     renderers.current.renderDevice = {render_device_type}
     renderers.current.renderLimit = 1
