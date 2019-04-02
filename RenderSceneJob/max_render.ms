@@ -22,7 +22,7 @@ function rpr_render = (
     pass_limit = {pass_limit}
     if (pass_limit > 0) then {{
         renderers.current.passLimit = {pass_limit}
-    }} else (pass_limit > 1000) then {{
+    }} else if (pass_limit > 1000) then {{
         renderers.current.passLimit = 1000
     }}
 	
