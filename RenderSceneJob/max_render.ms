@@ -16,7 +16,7 @@ function initializeRPR = (
 
 function rpr_render = (
 	
-    pathConfig.setCurrentProjectFolder = {project}
+    pathConfig.setCurrentProjectFolder = "{project}"
 	assetsFile = "{res_path}\\{scene}"
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
