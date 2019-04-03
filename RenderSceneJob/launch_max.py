@@ -77,14 +77,14 @@ def main():
 	with open(os.path.join(current_path, 'script.bat'), 'w') as f:
 		f.write(cmdRun)
 
-	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE)
+	p = psutil.Popen(os.path.join(current_path, 'script.bat'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	rc = -1
 
 	while True:
 		try:
-			rc = p.wait(timeout=30)
+			rc = p.communicate(timeout=60)
 		except psutil.TimeoutExpired as err:
-			fatal_errors_titles = ['Radeon ProRender', 'AMD Radeon ProRender debug assert',\
+			fatal_errors_titles = ['Radeon ProRender', 'AMD Radeon ProRender debug assert', current_path + ' - MAXScript',\
 			'3ds Max', 'Microsoft Visual C++ Runtime Library', \
 			'3ds Max Error Report', '3ds Max application', 'Radeon ProRender Error', 'Image I/O Error', 'Warning', 'Error']
 			if set(fatal_errors_titles).intersection(get_windows_titles()):
@@ -100,8 +100,6 @@ def main():
 				break
 		else:
 			break
-
-	stdout, stderr = p.communicate()
 
 	# post request
 	with open(os.path.join(current_path, "render_info.json")) as f:
