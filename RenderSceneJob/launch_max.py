@@ -64,20 +64,9 @@ def main():
 		max_script_template = f.read()
 
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
-	# check zip/7z
-	files = os.listdir(current_path)
-	zip_file = False
-	for file in files:
-		if file.endswith(".zip") or file.endswith(".7z"):
-			zip_file = True
-			scene_path = "\\\\".join(args.scene.split("/")[1:-2])
-			project = current_path + "\\\\" + scene_path
-
-	if not zip_file:
-		project = current_path
-
+	
 	maxScript = max_script_template.format(scene=args.scene, pass_limit=args.pass_limit, \
-		render_device_type=render_device_type, scene_name = sceneName, res_path=current_path, project=project)
+		render_device_type=render_device_type, scene_name = sceneName, res_path=current_path)
 
 	with open('max_render.ms', 'w') as f:
 		f.write(maxScript)
