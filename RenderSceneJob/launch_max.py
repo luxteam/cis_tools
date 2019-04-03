@@ -99,7 +99,7 @@ def main():
 				p.terminate()
 				break
 		else:
-			break
+			rc = 0
 
 	# post request
 	with open(os.path.join(current_path, "render_info.json")) as f:
