@@ -47,7 +47,7 @@ def main():
 	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
-	current_path = os.getcwd()
+	current_path = os.getcwd().replace("\\", "\\\\")
 
 	render_device_type = args.render_device_type
 	if render_device_type == 'gpu':
@@ -64,18 +64,17 @@ def main():
 		max_script_template = f.read()
 
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
-	work_path = "C:\\JN\\WS\\Render_Scene_Render\\"
 	# check zip/7z
-	files = os.listdir(work_path)
+	files = os.listdir(current_path)
 	zip_file = False
 	for file in files:
 		if file.endswith(".zip") or file.endswith(".7z"):
 			zip_file = True
 			scene_path = "\\".join(args.scene.split("/")[1:-2])
-			project = work_path + scene_path
+			project = current_path + "\\" + scene_path
 
 	if not zip_file:
-		project = work_path
+		project = current_path
 
 	maxScript = max_script_template.format(scene=args.scene, pass_limit=args.pass_limit, \
 		render_device_type=render_device_type, scene_name = sceneName, res_path=current_path, project=project)
