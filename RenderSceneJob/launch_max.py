@@ -83,7 +83,7 @@ def main():
 	while True:
 		try:
 			rc = p.communicate(timeout=60)
-		except psutil.TimeoutExpired as err:
+		except (subprocess.TimeoutExpired, psutil.TimeoutExpired) as err:
 			fatal_errors_titles = ['Radeon ProRender', 'AMD Radeon ProRender debug assert', current_path + ' - MAXScript',\
 			'3ds Max', 'Microsoft Visual C++ Runtime Library', \
 			'3ds Max Error Report', '3ds Max application', 'Radeon ProRender Error', 'Image I/O Error', 'Warning', 'Error']
