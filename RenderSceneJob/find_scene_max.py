@@ -14,10 +14,7 @@ def main():
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
 			if file.split('.')[-1] == 'max':
-				scene.append(file)
-	if " " in scene[0]:
-		os.rename(scene[0], scene[0].replace(" ", "_"))
-		scene[0] = scene[0].replace(" ", "_")
+				scene.append(os.path.join(rootdir, file))
 	print (scene[0])
 	
 	
