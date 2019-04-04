@@ -95,7 +95,7 @@ def main():
 		# post request
 		with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")) as f:
 			data = json.loads(f.read().replace("\\", "\\\\"))
-		render_time += data['render.time.ms'] / 1000, 2
+		render_time += data['render.time.ms'] / 1000
 
 	render_time = round(render_time, 2)
 	post_data = {'tool': 'Core', 'render_time': render_time, 'id': args.id, 'status':'time'}
