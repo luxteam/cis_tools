@@ -16,6 +16,7 @@ def initializeRPR():
 
 def rpr_render():
 	
+	cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
 	cmds.setAttr("defaultRenderGlobals.imageFormat", 8)
 	iterations = {pass_limit}
 	if iterations:

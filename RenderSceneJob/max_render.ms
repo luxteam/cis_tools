@@ -26,6 +26,7 @@ function rpr_render = (
         renderers.current.passLimit = 1000
     )
 	
+    renderers.current = Radeon_ProRender()
     renderers.current.renderDevice = {render_device_type}
     renderers.current.renderLimit = 1
 
