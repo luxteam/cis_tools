@@ -61,11 +61,11 @@ def main():
 		}
 
 		# change render scene
-		if endFrame - startFrame != 0:
-			scene_name = args.scene.split("\\")[-1].split(".")[0]
-			scene = args.scene.replace(scene_name, file_name + "_" + str(frame))
-		else:
+		if startFrame == 1 and endFrame == 1:
 			scene = args.scene
+		else:
+			scene_name = args.scene.split("\\")[-1].split(".")[0]
+			scene = args.scene.replace(scene_name, file_name + "_" + str(frame))	
 
 		ScriptPath = os.path.join(current_path, "cfg_{}.json".format(file_name + "_" + str(frame)))
 		cmdRun = '"{tool}" "{scene}" "{template}"\n'.format(tool="C:\\rprSdkWin64\\RprsRender64.exe", scene=scene, template=ScriptPath)
