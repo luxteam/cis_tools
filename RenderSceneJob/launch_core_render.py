@@ -35,9 +35,14 @@ def main():
 	timeout = 3600 / (endFrame - startFrame + 1)
 	render_time = 0
 
+	if startFrame == 1 and endFrame == 1:
+		animation = False
+	else:
+		animation = True
+
 	# parse file
 	sceneName = os.path.basename(args.sceneName)
-	if '_' in sceneName:
+	if animation:
 		file_name = '_'.join(sceneName.split("_")[0:-1])
 	else:
 		file_name = sceneName.split(".")[0]
@@ -45,7 +50,7 @@ def main():
 
 	for frame in range(startFrame, endFrame + 1):
 
-		if endFrame - startFrame != 0:
+		if animation:
 			post_data = {'tool': 'Core', 'current_frame': frame, 'id': args.id, 'status':'frame'}
 			response = requests.post(args.django_ip, data=post_data)
 
@@ -54,8 +59,12 @@ def main():
 		config_json["height"] = int(args.height)
 		config_json["iterations"] = int(args.pass_limit)
 		config_json["threads"] = 4
-		config_json["output"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".png")
-		config_json["output.json"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")
+		if animation:
+			config_json["output"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".png")
+			config_json["output.json"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")
+		else:
+			config_json["output"] = os.path.join(output_path, file_name + ".png")
+			config_json["output.json"] = os.path.join(output_path, file_name + "_original.json")
 		config_json["context"] = {
 			"gpu0": 1,
 			"gpu1": 0,
@@ -64,11 +73,11 @@ def main():
 		}
 
 		# change render scene
-		if startFrame == 1 and endFrame == 1:
-			scene = args.scene
-		else:
+		if animation:
 			scene_name = args.scene.split("\\")[-1].split(".")[0]
 			scene = args.scene.replace(scene_name, file_name + "_" + str(frame))	
+		else:
+			scene = args.scene
 
 		ScriptPath = os.path.join(current_path, "cfg_{}.json".format(file_name + "_" + str(frame)))
 		cmdRun = '"{tool}" "{scene}" "{template}"\n'.format(tool="C:\\rprSdkWin64\\RprsRender64.exe", scene=scene, template=ScriptPath)
@@ -96,8 +105,12 @@ def main():
 
 
 		# post request
-		with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")) as f:
-			data = json.loads(f.read().replace("\\", "\\\\"))
+		if animation:
+			with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")) as f:
+				data = json.loads(f.read().replace("\\", "\\\\"))
+		else:
+			with open(os.path.join(output_path, file_name + "_original.json")) as f:
+				data = json.loads(f.read().replace("\\", "\\\\"))
 		render_time += data['render.time.ms'] / 1000
 
 	render_time = round(render_time, 2)
