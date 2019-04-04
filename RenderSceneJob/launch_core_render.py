@@ -37,7 +37,10 @@ def main():
 
 	# parse file
 	sceneName = os.path.basename(args.sceneName)
-	file_name = '_'.join(sceneName.split("_")[0:-1])
+	if '_' in sceneName:
+		file_name = '_'.join(sceneName.split("_")[0:-1])
+	else:
+		file_name = sceneName.split(".")[0]
 	file_format = sceneName.split(".")[1]
 
 	for frame in range(startFrame, endFrame + 1):
