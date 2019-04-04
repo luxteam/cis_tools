@@ -19,14 +19,19 @@ function rpr_render = (
 	assetsFile = "{res_path}\\{scene}"
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
+    renderers.current = Radeon_ProRender()
+
     pass_limit = {pass_limit}
     if (pass_limit > 0) then (
         renderers.current.passLimit = {pass_limit}
     ) else if (pass_limit > 1000) then (
         renderers.current.passLimit = 1000
     )
+
+    if (renderers.current.passLimit < 10) do (
+        renderers.current.passLimit = 10
+    )
 	
-    renderers.current = Radeon_ProRender()
     renderers.current.renderDevice = {render_device_type}
     renderers.current.renderLimit = 1
 
