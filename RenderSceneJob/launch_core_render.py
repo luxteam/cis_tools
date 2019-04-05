@@ -100,7 +100,7 @@ def main():
 			data = json.loads(f.read().replace("\\", "\\\\"))
 		render_time = data['render.time.ms'] / 1000
 
-	else if len(scenes) > 1 and animation:
+	elif len(scenes) > 1 and animation:
 
 		sceneName = os.path.basename(args.sceneName)
 		file_name = '_'.join(sceneName.split("_")[0:-1])
