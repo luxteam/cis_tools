@@ -23,6 +23,7 @@ def main():
 	parser.add_argument('--id', required=True)
 
 	parser.add_argument('--tool', required=True)
+	parser.add_argument('--scene', required=True)
 	parser.add_argument('--pass_limit', required=True)
 	parser.add_argument('--width', required=True)
 	parser.add_argument('--height', required=True)
