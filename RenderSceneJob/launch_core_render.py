@@ -6,7 +6,7 @@ import psutil
 import json
 import requests
 
-def getScenes():
+def getScenes(folder):
 	scenes = []
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
