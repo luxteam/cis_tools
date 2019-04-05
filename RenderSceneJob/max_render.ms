@@ -23,6 +23,7 @@ function rpr_render = (
     if classof renderers.current != classof rpr do (
         renderers.current = Radeon_ProRender()
         renderers.current.passLimit = 100
+    )
 
     pass_limit = {pass_limit}
     if (pass_limit > 0) then (
