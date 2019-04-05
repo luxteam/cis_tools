@@ -23,7 +23,6 @@ def main():
 	parser.add_argument('--id', required=True)
 
 	parser.add_argument('--tool', required=True)
-	parser.add_argument('--scene', required=True)
 	parser.add_argument('--pass_limit', required=True)
 	parser.add_argument('--width', required=True)
 	parser.add_argument('--height', required=True)
@@ -126,8 +125,8 @@ def main():
 				"debug": 0
 			}
 
-			scene_name = args.scene.split("\\")[-1].split(".")[0]
-			scene = args.scene.replace(scene_name, file_name + "_" + str(frame))	
+			scene_name = scenes[0].split("\\")[-1].split(".")[0]
+			scene = scenes[0].replace(scene_name, file_name + "_" + str(frame))	
 
 			ScriptPath = os.path.join(current_path, "cfg_{}.json".format(file_name + "_" + str(frame)))
 			cmdRun = '"{tool}" "{scene}" "{template}"\n'.format(tool="C:\\rprSdkWin64\\RprsRender64.exe", scene=scene, template=ScriptPath)
