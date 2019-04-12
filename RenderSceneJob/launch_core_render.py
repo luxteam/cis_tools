@@ -165,7 +165,7 @@ def main():
 
 			frame = re.findall(r'_\d*', file_name)
 			if frame:
-				frame = int(frame[-1][1:])
+				frame = '_' + frame[-1][1:]
 				file_name = '_'.join(sceneName.split("_")[0:-1]) + str(frame).zfill(3)
 
 			file_format = sceneName.split(".")[1]
