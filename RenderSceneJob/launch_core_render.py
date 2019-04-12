@@ -1,6 +1,7 @@
 import argparse
 import sys
 import os
+import re
 import subprocess
 import psutil
 import json
@@ -161,6 +162,12 @@ def main():
 		for scene in scenes:
 			sceneName = os.path.basename(scene)
 			file_name = sceneName.split(".")[0]
+
+			frame = re.findall(r'_\d*', file_name)
+			if frame:
+				frame = int(frame[-1][1:])
+				file_name = '_'.join(sceneName.split("_")[0:-1]) + str(frame).zfill(3)
+
 			file_format = sceneName.split(".")[1]
 
 			config_json = {}
