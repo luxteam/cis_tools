@@ -163,7 +163,7 @@ def main():
 			sceneName = os.path.basename(scene)
 			file_name = sceneName.split(".")[0]
 
-			frame = re.findall(r'_\d*', file_name)
+			frame = re.findall(r'_\d+', file_name)
 			if frame:
 				frame = frame[-1][1:]
 				file_name = '_'.join(sceneName.split("_")[0:-1]) + '_' + frame.zfill(3)
