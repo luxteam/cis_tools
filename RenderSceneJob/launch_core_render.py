@@ -30,6 +30,7 @@ def main():
 	parser.add_argument('--sceneName', required=True)
 	parser.add_argument('--startFrame', required=True)
 	parser.add_argument('--endFrame', required=True)
+	parser.add_argument('--gpu', required=True)
 
 	args = parser.parse_args()
 
@@ -63,10 +64,14 @@ def main():
 		config_json["iterations"] = int(args.pass_limit)
 		config_json["threads"] = 4
 		config_json["output"] = os.path.join(output_path, file_name + ".png")
-		config_json["output.json"] = os.path.join(output_path, file_name + "_original.json")
+		config_json["output.json"] = os.path.join(output_path, file_name + ".json")
 		config_json["context"] = {
-			"gpu0": 1,
-			"gpu1": 0,
+			"gpu0": 1 if 'gpu0' in args.gpu else 0,
+			"gpu1": 1 if 'gpu1' in args.gpu else 0,
+			"gpu2": 1 if 'gpu2' in args.gpu else 0,
+			"gpu3": 1 if 'gpu3' in args.gpu else 0,
+			"gpu4": 1 if 'gpu4' in args.gpu else 0,
+			"gpu5": 1 if 'gpu5' in args.gpu else 0,
 			"threads": 16,
 			"debug": 0
 		}
@@ -97,7 +102,7 @@ def main():
 
 
 		# post request
-		with open(os.path.join(output_path, file_name + "_original.json")) as f:
+		with open(os.path.join(output_path, file_name + ".json")) as f:
 			data = json.loads(f.read().replace("\\", "\\\\"))
 		render_time = data['render.time.ms'] / 1000
 
@@ -118,7 +123,7 @@ def main():
 			config_json["iterations"] = int(args.pass_limit)
 			config_json["threads"] = 4
 			config_json["output"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".png")
-			config_json["output.json"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")
+			config_json["output.json"] = os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".json")
 			config_json["context"] = {
 				"gpu0": 1,
 				"gpu1": 0,
@@ -153,7 +158,7 @@ def main():
 					child.terminate()
 				p.terminate()
 
-			with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + "_original.json")) as f:
+			with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".json")) as f:
 				data = json.loads(f.read().replace("\\", "\\\\"))
 			render_time += data['render.time.ms'] / 1000
 
@@ -176,7 +181,7 @@ def main():
 			config_json["iterations"] = int(args.pass_limit)
 			config_json["threads"] = 4
 			config_json["output"] = os.path.join(output_path, file_name + ".png")
-			config_json["output.json"] = os.path.join(output_path, file_name + "_original.json")
+			config_json["output.json"] = os.path.join(output_path, file_name + ".json")
 			config_json["context"] = {
 				"gpu0": 1,
 				"gpu1": 0,
@@ -210,7 +215,7 @@ def main():
 
 
 			# post request
-			with open(os.path.join(output_path, file_name + "_original.json")) as f:
+			with open(os.path.join(output_path, file_name + ".json")) as f:
 				data = json.loads(f.read().replace("\\", "\\\\"))
 			render_time += data['render.time.ms'] / 1000
 
