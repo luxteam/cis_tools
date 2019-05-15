@@ -103,7 +103,7 @@ def main():
 		stdout, stderr = p.communicate()
 		rc = 0
 
-		with open(os.path.join('Output', "core_log.txt"), 'w', encoding='utf-8') as file:
+		with open(os.path.join('Output', "core_log.txt"), 'a', encoding='utf-8') as file:
 			stdout = stdout.decode("utf-8")
 			file.write(stdout)
 
@@ -176,7 +176,7 @@ def main():
 			stdout, stderr = p.communicate()
 			rc = 0
 
-			with open(os.path.join('Output', "core_log.txt"), 'w', encoding='utf-8') as file:
+			with open(os.path.join('Output', "core_log.txt"), 'a', encoding='utf-8') as file:
 				stdout = stdout.decode("utf-8")
 				file.write(stdout)
 
@@ -245,7 +245,7 @@ def main():
 			stdout, stderr = p.communicate()
 			rc = 0
 
-			with open(os.path.join('Output', "core_log.txt"), 'w', encoding='utf-8') as file:
+			with open(os.path.join('Output', "core_log.txt"), 'a', encoding='utf-8') as file:
 				stdout = stdout.decode("utf-8")
 				file.write(stdout)
 
