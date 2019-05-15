@@ -67,7 +67,7 @@ def main():
 	# single rpr file
 	if len(scenes) == 1:
 		sceneName = os.path.basename(str_to_raw(args.sceneName))
-		file_name, file_format = parse_scenename(args.sceneName)
+		file_name, file_format = parse_scenename(sceneName)
 
 		config_json = {}
 		config_json["width"] = int(args.width)
@@ -132,7 +132,7 @@ def main():
 
 	elif len(scenes) > 1 and animation:
 		sceneName = os.path.basename(str_to_raw(args.sceneName))
-		file_name, file_format = parse_scenename(args.sceneName)
+		file_name, file_format = parse_scenename(sceneName)
 
 		for frame in range(startFrame, endFrame + 1):
 
