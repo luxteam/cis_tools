@@ -13,6 +13,12 @@ def parse_scenename(name):
 	ext = split_name[-1]
 	return filename, ext
 
+
+def str_to_raw(s):
+    raw_map = {8:r'\b', 7:r'\a', 12:r'\f', 10:r'\n', 13:r'\r', 9:r'\t', 11:r'\v'}
+    return r''.join(i if ord(i) > 32 else raw_map.get(ord(i), i) for i in s)
+
+
 def getScenes(folder):
 	scenes = []
 	for rootdir, dirs, files in os.walk(folder):
@@ -60,7 +66,7 @@ def main():
 
 	# single rpr file
 	if len(scenes) == 1:
-		sceneName = os.path.basename(args.sceneName)
+		sceneName = os.path.basename(str_to_raw(args.sceneName))
 		file_name, file_format = parse_scenename(args.sceneName)
 
 		config_json = {}
@@ -112,7 +118,7 @@ def main():
 		render_time = data['render.time.ms'] / 1000
 
 	elif len(scenes) > 1 and animation:
-		sceneName = os.path.basename(args.sceneName)
+		sceneName = os.path.basename(str_to_raw(args.sceneName))
 		file_name, file_format = parse_scenename(args.sceneName)
 
 		for frame in range(startFrame, endFrame + 1):
@@ -172,7 +178,7 @@ def main():
 	else:
 
 		for scene in scenes:
-			sceneName = os.path.basename(scene)
+			sceneName = os.path.basename(str_to_raw(scene))
 			file_name, file_format = parse_scenename(scene)
 
 			frame = re.findall(r'_\d+', file_name)
