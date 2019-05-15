@@ -103,6 +103,15 @@ def main():
 		stdout, stderr = p.communicate()
 		rc = 0
 
+		with open(os.path.join('Output', "core_log.txt"), 'w', encoding='utf-8') as file:
+			stdout = stdout.decode("utf-8")
+			file.write(stdout)
+
+		with open(os.path.join('Output', "core_log.txt"), 'a', encoding='utf-8') as file:
+			file.write("\n ----STEDERR---- \n")
+			stderr = stderr.decode("utf-8")
+			file.write(stderr)
+
 		try:
 			rc = p.wait(timeout=timeout)
 		except psutil.TimeoutExpired as err:
@@ -111,6 +120,7 @@ def main():
 				child.terminate()
 			p.terminate()
 
+		
 
 		# post request
 		try:
@@ -165,6 +175,15 @@ def main():
 			p = psutil.Popen(cmdScriptPath, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			stdout, stderr = p.communicate()
 			rc = 0
+
+			with open(os.path.join('Output', "core_log.txt"), 'w', encoding='utf-8') as file:
+				stdout = stdout.decode("utf-8")
+				file.write(stdout)
+
+			with open(os.path.join('Output', "core_log.txt"), 'a', encoding='utf-8') as file:
+				file.write("\n ----STEDERR---- \n")
+				stderr = stderr.decode("utf-8")
+				file.write(stderr)
 
 			try:
 				rc = p.wait(timeout=timeout)
@@ -226,6 +245,15 @@ def main():
 			stdout, stderr = p.communicate()
 			rc = 0
 
+			with open(os.path.join('Output', "core_log.txt"), 'w', encoding='utf-8') as file:
+				stdout = stdout.decode("utf-8")
+				file.write(stdout)
+
+			with open(os.path.join('Output', "core_log.txt"), 'a', encoding='utf-8') as file:
+				file.write("\n ----STEDERR---- \n")
+				stderr = stderr.decode("utf-8")
+				file.write(stderr)
+
 			try:
 				rc = p.wait(timeout=timeout)
 			except psutil.TimeoutExpired as err:
@@ -233,7 +261,6 @@ def main():
 				for child in reversed(p.children(recursive=True)):
 					child.terminate()
 				p.terminate()
-
 
 			# post request
 			try:
