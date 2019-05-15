@@ -113,9 +113,12 @@ def main():
 
 
 		# post request
-		with open(os.path.join(output_path, file_name + ".json")) as f:
-			data = json.loads(f.read().replace("\\", "\\\\"))
-		render_time = data['render.time.ms'] / 1000
+		try:
+			with open(os.path.join(output_path, file_name + ".json")) as f:
+				data = json.loads(f.read().replace("\\", "\\\\"))
+			render_time = data['render.time.ms'] / 1000
+		except:
+			print("Error render")
 
 	elif len(scenes) > 1 and animation:
 		sceneName = os.path.basename(str_to_raw(args.sceneName))
@@ -171,9 +174,12 @@ def main():
 					child.terminate()
 				p.terminate()
 
-			with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".json")) as f:
-				data = json.loads(f.read().replace("\\", "\\\\"))
-			render_time += data['render.time.ms'] / 1000
+			try:
+				with open(os.path.join(output_path, file_name + "_" + str(frame).zfill(3) + ".json")) as f:
+					data = json.loads(f.read().replace("\\", "\\\\"))
+				render_time += data['render.time.ms'] / 1000
+			except:
+				print("Error render")
 
 	else:
 
@@ -230,9 +236,12 @@ def main():
 
 
 			# post request
-			with open(os.path.join(output_path, file_name + ".json")) as f:
-				data = json.loads(f.read().replace("\\", "\\\\"))
-			render_time += data['render.time.ms'] / 1000
+			try:
+				with open(os.path.join(output_path, file_name + ".json")) as f:
+					data = json.loads(f.read().replace("\\", "\\\\"))
+				render_time += data['render.time.ms'] / 1000
+			except:
+				print("Error render")
 
 
 	render_time = round(render_time, 2)
