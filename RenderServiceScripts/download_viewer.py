@@ -14,8 +14,6 @@ def main():
 	with open("RprViewer.zip", 'wb') as f:
 		f.write(r.content)
 		
-	print ("SUCCESS")
-
 	
 if __name__ == "__main__":
 
