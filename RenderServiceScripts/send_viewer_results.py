@@ -23,7 +23,7 @@ def main():
 
 	artifacts = {}
 	for job in job_json['artifacts']:
-		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/Output/{art}"\
+		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/{art}"\
 																			.format(jenkins_job=args.jenkins_job, build_number=args.build_number, art=job['fileName'])
 	post_data = {'status': args.status, 'artifacts':str(artifacts), 'id': args.id, 'build_number': args.build_number}
 	response = requests.post(django_url, data=post_data)
