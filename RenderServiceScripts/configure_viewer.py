@@ -41,9 +41,9 @@ def main():
 		json.dump(config, f, indent=' ')
 		
 	# pack zip
-	zip_name = "RPRViewerPack_{}.zip".format(args.version)
-	subprocess.check_call('7z a "{}" ./"{}"/*'.format(zip_name, "."), shell=True)
-	
+	zip_name = "RPRViewerPack_{}.zip".format(args.version)	
+	st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "."), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	st.communicate()
 	
 	p = psutil.Popen("RadeonProViewer.exe", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	try:
