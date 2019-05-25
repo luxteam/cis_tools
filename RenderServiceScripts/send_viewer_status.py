@@ -11,7 +11,7 @@ def main():
 	parser.add_argument('--django_ip')
 	args = parser.parse_args()
 
-	post_data = {'status': args.status, 'tool': args.tool, 'id': args.id}
+	post_data = {'status': args.status, 'id': args.id}
 	response = requests.post(args.django_ip, data=post_data)
 	print(response)
 
