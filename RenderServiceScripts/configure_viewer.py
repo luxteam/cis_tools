@@ -33,6 +33,7 @@ def main():
 		config = json.load(f)
 	config['scene']['path'] = gltf_file
 	config['uiConfig'] = ui_config
+	config['save_frames'] =  "yes"
 	config['engine'] = args.engine
 	config['screen']['width'] = int(args.width)
 	config['screen']['height'] = int(args.height)
