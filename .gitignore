@@ -2,3 +2,6 @@ benchmark.csv
 *.pyc
 RenderSceneJob/config.py
 RenderSceneJob/__pycache__
+RenderSceneJob_Test/config.py
+RenderServiceScripts/config.py
+RenderServiceScriptsDebug/config.py
