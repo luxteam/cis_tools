@@ -5,6 +5,7 @@ import json
 def main():
 
 	parser = argparse.ArgumentParser()
+	parser.add_argument('--version')
 	parser.add_argument('--width')
 	parser.add_argument('--height')
 	parser.add_argument('--engine')
@@ -36,8 +37,10 @@ def main():
 		json.dump(config, f, indent=' ')
 		
 	# pack zip
-	subprocess.check_call('7z a "{}" ./"{}"/*'.format("RPRViewerPack_{}.zip".format(args.version), "."), shell=True)
-		
+	zip_name = "RPRViewerPack_{}.zip".format(args.version)
+	subprocess.check_call('7z a "{}" ./"{}"/*'.format(zip_name, "."), shell=True)
+	
+	return zip_name
 	
 if __name__ == "__main__":
 
