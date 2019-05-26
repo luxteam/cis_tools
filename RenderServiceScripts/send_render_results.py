@@ -17,7 +17,7 @@ def main():
 
 	
 	get_json = requests.get("https://rpr.cis.luxoft.com/job/{jenkins_job}/{build_number}/api/json?pretty=true".format(jenkins_job=args.jenkins_job, build_number=args.build_number), \
-		auth=(config.username, config.password))
+		auth=(config.jenkins_username, config.jenkins_password))
 
 	job_json = json.loads(get_json.text)
 
