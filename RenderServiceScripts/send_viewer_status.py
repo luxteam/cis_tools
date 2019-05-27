@@ -24,11 +24,12 @@ def main():
 				print("POST request failed, status code: " + str(response.status_code))
 				break
 		except Exception as e:
-			print("POST requests failed. Retry ...")
 			if try_count == 2:
-					print("POST requests try 3 failed. Finishing work.")
-					break
-				try_count += 1
+				print("POST requests try 3 failed. Finishing work.")
+				break
+			try_count += 1
+			print("POST requests failed. Retry ...")
+				
 			
 
 if __name__ == "__main__":
