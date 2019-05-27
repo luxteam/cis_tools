@@ -17,7 +17,7 @@ def main():
 			if response.status_code == 200:
 				print("GET request successfuly done. Saving file.")
 				with open("RprViewer.zip", 'wb') as f:
-					f.write(r.content)
+					f.write(response.content)
 				break
 			else:
 				print("GET request failed, status code: " + str(response.status_code))
