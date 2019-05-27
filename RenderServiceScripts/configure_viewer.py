@@ -28,7 +28,7 @@ def main():
 	if ui_config == None:
 		ui_config = "UIConfig.json"
 
-	config = []
+	config = {}
 	config['scene']['path'] = gltf_file
 	config['screen']['width'] = int(args.width)
 	config['screen']['height'] = int(args.height)
