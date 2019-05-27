@@ -14,7 +14,7 @@ def main():
 	post_data = {'status': args.status, 'id': args.id}
 	
 	try_count = 0
-	while(try_count < 3):
+	while try_count < 3:
 		try:
 			response = requests.post(args.django_ip, data=post_data)
 			if response.status_code  == 200:

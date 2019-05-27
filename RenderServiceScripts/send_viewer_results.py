@@ -16,21 +16,52 @@ def main():
 
 	django_url = args.django_ip
 
-	get_json = requests.get("http://rpr.cis.luxoft.com/job/{jenkins_job}/{build_number}/api/json?pretty=true".format(jenkins_job=args.jenkins_job, build_number=args.build_number), \
-		auth=(config.jenkins_username, config.jenkins_password))
+	try_count = 0
+	while try_count < 3:
+		try:
+			response = requests.get("http://rpr.cis.luxoft.com/job/{jenkins_job}/{build_number}/api/json?pretty=true".format(jenkins_job=args.jenkins_job, build_number=args.build_number), \
+				auth=(config.jenkins_username, config.jenkins_password))
+			if response.status_code  == 200:
+				print("GET request successfuly done.")
+				break
+			else:
+				print("GET reques failed, status code: " + str(response.status_code))
+				break
+		except Exception as e:
+			if try_count == 2:
+				print("GET request try 3 failed. Finishing work.")
+				break
+			try_count += 1
+			print("GET request failed. Retry ...")
+		
 
-	job_json = json.loads(get_json.text)
+	job_json = json.loads(response.text)
 
 	artifacts = {}
 	for job in job_json['artifacts']:
 		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/{art}"\
-																			.format(jenkins_job=args.jenkins_job, build_number=args.build_number, art=job['fileName'])
+			.format(jenkins_job=args.jenkins_job, build_number=args.build_number, art=job['fileName'])
+
 	post_data = {'status': args.status, 'artifacts':str(artifacts), 'id': args.id, 'build_number': args.build_number}
-	response = requests.post(django_url, data=post_data)
-	print(response)
 
+	try_count = 0
+	while try_count < 3:	
+		try:
+			response = requests.post(django_url, data=post_data)
+			if response.status_code  == 200:
+				print("POST request successfuly sent.")
+				break
+			else:
+				print("POST reques failed, status code: " + str(response.status_code))
+				break
+		except Exception as e:
+			if try_count == 2:
+				print("POST request try 3 failed. Finishing work.")
+				break
+			try_count += 1
+			print("POST request failed. Retry ...")
+		
 if __name__ == "__main__":
-
 	main()
-	exit(0)
+
 
