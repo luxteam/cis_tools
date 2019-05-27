@@ -1,6 +1,7 @@
 import requests
 import argparse
 import config
+import urllib3
 
 def main():
 
@@ -8,6 +9,8 @@ def main():
 	parser.add_argument('--version')
 	args = parser.parse_args()
 
+	urllib3.disable_warnings()
+	
 	try_count = 0
 	while(try_count < 3):
 		try:
