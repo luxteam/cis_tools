@@ -12,6 +12,7 @@ def main():
 	parser.add_argument('--width')
 	parser.add_argument('--height')
 	parser.add_argument('--engine')
+	parser.add_argument('--iterations')
 	args = parser.parse_args()
 
 	# find GLTF scene and UIConfig
@@ -75,7 +76,7 @@ def main():
 	st.communicate()
 
 	config['save_frames'] = "yes"
-	config['iterations_per_frame'] = 100
+	config['iterations_per_frame'] = int(args.iterations)
 	config['frame_exit_after'] = 1
 	with open('config.json', 'w') as f:
 		json.dump(config, f, indent=' ')
