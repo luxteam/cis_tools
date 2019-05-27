@@ -12,9 +12,23 @@ def main():
 	args = parser.parse_args()
 
 	post_data = {'status': args.status, 'id': args.id}
-	response = requests.post(args.django_ip, data=post_data)
-	print(response)
+	
+	try_count = 0
+	while(try_count < 3):
+		try:
+			response = requests.post(args.django_ip, data=post_data)
+			if response.status_code  == 200:
+				print("POST request successfuly sent.")
+				break
+			else:
+				print("POST request failed, status code: " + str(response.status_code))
+				if try_count == 2:
+					print("POST requests try 3 failed. Finishing work.")
+					break
+				try_count += 1
+			
 
 if __name__ == "__main__":
 	main()
+	return(0)
 
