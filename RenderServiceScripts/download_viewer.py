@@ -8,13 +8,27 @@ def main():
 	parser.add_argument('--version')
 	args = parser.parse_args()
 
-	r = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
-		.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False)
-
-	with open("RprViewer.zip", 'wb') as f:
-		f.write(r.content)
-		
+	try_count = 0
+	while(try_count < 3):
+		try:
+			response = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
+				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False)
+			
+			if response.status_code == 200:
+				print("GET request successfuly done. Saving file.")
+				with open("RprViewer.zip", 'wb') as f:
+					f.write(r.content)
+				break
+			else:
+				print("GET request failed, status code: " + str(response.status_code))
+				break
+		except Exception as e:
+			if try_count == 2:
+				print("GET request try 3 failed. Finishing work.")
+				break
+			try_count += 1
+			print("GET requests failed. Retry ...")
+	
 	
 if __name__ == "__main__":
-
 	main()
