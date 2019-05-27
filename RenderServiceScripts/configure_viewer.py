@@ -61,6 +61,7 @@ def main():
 	config['default_light']['add'] = "no"
 	config['default_light']['position'] = [0.0, 20.0, 20.0, 1.0]
 	config['default_light']['intensity'] = 5000.0
+	config['textures'] = {}
 	config['textures']['flip_y'] = "no"
 
 	with open('config.json', 'w') as f:
