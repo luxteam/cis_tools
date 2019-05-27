@@ -29,6 +29,7 @@ def main():
 		ui_config = "UIConfig.json"
 
 	config = {}
+	config['scene'] = {}
 	config['scene']['path'] = gltf_file
 	config['screen']['width'] = int(args.width)
 	config['screen']['height'] = int(args.height)
@@ -51,9 +52,11 @@ def main():
 	config['camera_fov_step'] = 0.1
 	config['camera_fov_step'] = 0.1
 	config['uiConfig'] = ui_config
+	config['environment_light'] = {}
 	config['environment_light']['add'] = "no"
 	config['environment_light']['source'] = "sky.hdr"
 	config['environment_light']['intensity'] = 1.5
+	config['default_light'] = {}
 	config['default_light']['add'] = "no"
 	config['default_light']['position'] = [0.0, 20.0, 20.0, 1.0]
 	config['default_light']['intensity'] = 5000.0
