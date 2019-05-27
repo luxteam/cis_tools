@@ -44,6 +44,8 @@ def main():
 	config['iterations_per_frame'] = 1
 	config['camera'] = 0
 	config['save_frames'] = "no"
+	config['frame_exit_after'] = 0
+	config['output_image_format'] = "png"
 	config['camera_step'] = 0.3
 	config['camera_roll_step'] = 2.0
 	config['camera_fov_step'] = 0.1
@@ -74,7 +76,7 @@ def main():
 
 	config['save_frames'] = "yes"
 	config['iterations_per_frame'] = 100
-	#config['exit_after_frame'] = 1
+	config['frame_exit_after'] = 1
 	with open('config.json', 'w') as f:
 		json.dump(config, f, indent=' ')
 	

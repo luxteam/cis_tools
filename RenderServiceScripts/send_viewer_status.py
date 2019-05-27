@@ -21,14 +21,14 @@ def main():
 				print("POST request successfuly sent.")
 				break
 			else:
-				print("POST request failed, status code: " + str(response.status_code))
+				print("POST reques failed, status code: " + str(response.status_code))
 				break
 		except Exception as e:
 			if try_count == 2:
-				print("POST requests try 3 failed. Finishing work.")
+				print("POST request try 3 failed. Finishing work.")
 				break
 			try_count += 1
-			print("POST requests failed. Retry ...")
+			print("POST request failed. Retry ...")
 				
 			
 
