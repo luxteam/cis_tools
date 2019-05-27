@@ -15,7 +15,7 @@ def main():
 	while try_count < 3:
 		try:
 			response = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
-				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False)
+				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False, timeout=None)
 			
 			if response.status_code == 200:
 				print("GET request successfuly done. Saving file.")
