@@ -31,6 +31,7 @@ def main():
 	config = {}
 	config['scene'] = {}
 	config['scene']['path'] = gltf_file
+	config['screen'] = {}
 	config['screen']['width'] = int(args.width)
 	config['screen']['height'] = int(args.height)
 	config['screen']['full_screen'] = "no"
