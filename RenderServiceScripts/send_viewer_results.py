@@ -25,7 +25,7 @@ def main():
 				print("GET request successfuly done.")
 				break
 			else:
-				print("GET reques failed, status code: " + str(response.status_code))
+				print("GET request failed, status code: " + str(response.status_code))
 				break
 		except Exception as e:
 			if try_count == 2:
@@ -52,7 +52,7 @@ def main():
 				print("POST request successfuly sent.")
 				break
 			else:
-				print("POST reques failed, status code: " + str(response.status_code))
+				print("POST request failed, status code: " + str(response.status_code))
 				break
 		except Exception as e:
 			if try_count == 2:
