@@ -95,5 +95,7 @@ def main():
 	print(zip_name)
 	
 if __name__ == "__main__":
-
-	main()
+	try:
+		main()
+	except:
+		exit(1)
