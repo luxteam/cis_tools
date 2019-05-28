@@ -72,8 +72,12 @@ def main():
 	with open('config.json', 'w') as f:
 		json.dump(config, f, indent=' ')
 		
+	# parse scene name
+	split_name = args.scene_name.split('.')
+	filename = '.'.join(split_name[0:-1])
+
 	# pack zip
-	zip_name = "RPRViewerPack_{}_{}_{}.zip".format(args.version, args.scene_name, args.scene_version)	
+	zip_name = "RPRViewerPack_{}_{}_{}.zip".format(args.version, filename, args.scene_version)	
 	st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "."), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	st.communicate()
 
