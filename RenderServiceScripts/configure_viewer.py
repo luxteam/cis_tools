@@ -8,6 +8,8 @@ import psutil
 def main():
 
 	parser = argparse.ArgumentParser()
+	parser.add_argument('--scene_name')
+	parser.add_argument('--scene_version')
 	parser.add_argument('--version')
 	parser.add_argument('--width')
 	parser.add_argument('--height')
@@ -71,7 +73,7 @@ def main():
 		json.dump(config, f, indent=' ')
 		
 	# pack zip
-	zip_name = "RPRViewerPack_{}.zip".format(args.version)	
+	zip_name = "RPRViewerPack_{}_{}_{}.zip".format(args.version, args.scene_name, args.scene_version)	
 	st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "."), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	st.communicate()
 
