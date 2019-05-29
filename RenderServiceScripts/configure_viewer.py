@@ -29,7 +29,7 @@ def main():
 				ui_config = os.path.join("scene", file)
 	# set default
 	if ui_config == None:
-		ui_config = "UIConfig.json"
+		ui_config = ""
 
 	config = {}
 	config['scene'] = {}
@@ -70,7 +70,7 @@ def main():
 	config['textures']['flip_y'] = "no"
 
 	with open('config.json', 'w') as f:
-		json.dump(config, f, indent=' ')
+		json.dump(config, f, indent=' ', sort_keys=True)
 		
 	# parse scene name
 	split_name = args.scene_name.split('.')
