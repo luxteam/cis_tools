@@ -39,10 +39,9 @@ def main():
 
 	artifacts = {}
 	for job in job_json['artifacts']:
-		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/{art}"\
+		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/Output/{art}"\
 			.format(jenkins_job=args.jenkins_job, build_number=args.build_number, art=job['fileName'])
-
-	zip_link = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/*zip*/archive.zip"\
+	zip_link = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/Output/*zip*/Output.zip"\
 																					.format(jenkins_job=args.jenkins_job, build_number=args.build_number)
 
 	post_data = {'status': args.status, 'artifacts':str(artifacts), 'id': args.id, 'build_number': args.build_number, 'zip_link': zip_link}
