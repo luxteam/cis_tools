@@ -7,9 +7,8 @@ import platform
 import logging
 
 
-# logging
-logging.basicConfig(filename="output.log", level=logging.INFO)
-logger = logging.getLogger()
+logging.basicConfig(filename="error.log", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -53,17 +52,21 @@ def main():
 
 
 	after_files = os.listdir()
-	diff_files = list(set(before_files) - set(after_files))
+	diff_files = list(set(after_files) - set(before_files))
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
 
 	for f in diff_files:
-		os.rename(diff_files, os.path.join("Output", diff_files))
+		os.rename(f, os.path.join("Output", f))
+
+	# parse scene name
+	split_name = args.filename.split('.')
+	filename = '.'.join(split_name[0:-1])
 
 	# pack zip
 	zip_name = "ResultsPack_{}.zip".format(filename)	
-	st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "Output"), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	st = psutil.Popen('7z a "{}" ./{}/*'.format(zip_name, "Output"), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	st.communicate()
 	
 	print(zip_name)
@@ -71,5 +74,6 @@ def main():
 if __name__ == "__main__":
 	try:
 		main()
-	except:
+	except Exception as ex:
+		logger.critical(ex)
 		exit(1)
