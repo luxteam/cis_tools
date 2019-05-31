@@ -36,11 +36,11 @@ def main():
 			except Exception as ex:
 				print(ex)
 
-		with open("output.log", 'w', encoding='utf-8') as file:
+		with open("output.txt", 'w', encoding='utf-8') as file:
 			stdout = stdout.decode("utf-8")
 			file.write(stdout)
 
-		with open("output.log", 'a', encoding='utf-8') as file:
+		with open("output.txt", 'a', encoding='utf-8') as file:
 			file.write("\n ----STDERR---- \n")
 			stderr = stderr.decode("utf-8")
 			file.write(stderr)
