@@ -31,43 +31,14 @@ def main():
 	if ui_config == None:
 		ui_config = ""
 
-	config = {}
-	config['scene'] = {}
+	with open("config.json") as f:
+		config = json.loads(f.read())
+
 	config['scene']['path'] = gltf_file
-	config['screen'] = {}
 	config['screen']['width'] = int(args.width)
 	config['screen']['height'] = int(args.height)
-	config['screen']['full_screen'] = "no"
 	config['engine'] = args.engine
-	config['primary_device'] = 0
-	config['use_mgpu'] = "yes"
-	config['use_denoiser'] = "yes"
-	config['loader'] = "fx-gltf"
-	config['render_interop'] = "yes"
-	config['iterations_per_frame'] = 1
-	config['camera'] = 0
-	config['save_frames'] = "no"
-	config['frame_exit_after'] = 0
-	config['output_image_format'] = "png"
-	config['camera_step'] = 0.3
-	config['camera_roll_step'] = 2.0
-	config['camera_fov_step'] = 0.1
-	config['time_mode'] = "real"
-	config['animation'] = "on"
-	config['camera_fov_step'] = 0.1
-	config['camera_fov_step'] = 0.1
-	config['camera_fov_step'] = 0.1
 	config['uiConfig'] = ui_config
-	config['environment_light'] = {}
-	config['environment_light']['add'] = "no"
-	config['environment_light']['source'] = "sky.hdr"
-	config['environment_light']['intensity'] = 1.5
-	config['default_light'] = {}
-	config['default_light']['add'] = "no"
-	config['default_light']['position'] = [0.0, 20.0, 20.0, 1.0]
-	config['default_light']['intensity'] = 5000.0
-	config['textures'] = {}
-	config['textures']['flip_y'] = "no"
 
 	with open('config.json', 'w') as f:
 		json.dump(config, f, indent=' ', sort_keys=True)
@@ -110,7 +81,14 @@ def main():
 	print(zip_name)
 	
 if __name__ == "__main__":
-	try:
-		main()
-	except:
-		exit(1)
+	try_count = 0
+	while try_count < 3:
+		try:
+			main()
+			exit(0)
+		except Exception as ex:
+			with open("exception.txt", 'a') as f:
+				f.write(str(ex) + "\r\n")
+			try_count += 1
+			if try_count == 3:
+				exit(1)
