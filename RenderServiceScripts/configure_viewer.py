@@ -125,6 +125,14 @@ def main():
 		
 		if not os.path.isfile("img0001.png") and args.engine != "ogl":
 			logger.error("Failed to render image!")
+			try:
+				zip_name = "Failed_RPRViewerPack_{}_{}_{}.zip".format(args.version, filename, args.scene_version)	
+				st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "."), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				st.communicate()
+			except Exception as ex:
+				logger.error("Zip package build failed.")
+				logger.error(str(ex))
+				logger.error(traceback.format_exc())	
 			exit(1)
 		else:
 			logger.info("Testing was finished successfuly.")
