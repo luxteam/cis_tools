@@ -68,9 +68,7 @@ def main():
 	config['engine'] = args.engine
 	if args.engine == "hyb":
 		config['draw_engine'] = "vw_vulkan"
-	elif args.engine == "rpr":
-		config['draw_engine'] = "vw_d3d12"
-	elif args.engine == "ogl":
+	elif args.engine in ("rpr", "ogl"):
 		config['draw_engine'] = "ogl"
 		
 	config['uiConfig'] = ui_config
