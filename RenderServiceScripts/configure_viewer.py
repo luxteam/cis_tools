@@ -115,8 +115,8 @@ def main():
 				logger.error(traceback.format_exc())	
 
 		with open("viewer_log.txt", 'w', encoding='utf-8') as file:
-				stdout = stdout.decode("utf-8")
-				file.write(stdout)
+			stdout = stdout.decode("utf-8")
+			file.write(stdout)
 
 		with open("viewer_log.txt", 'a', encoding='utf-8') as file:
 			file.write("\n ----STDERR---- \n")
