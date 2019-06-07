@@ -122,8 +122,7 @@ def main():
 			file.write(stderr)
 		
 		if not os.path.isfile("img0001.png") and args.engine != "ogl":
-			logger.error("Failed to render image!")
-			exit(1)
+			logger.error("Failed to render image! Retry ...")
 		else:
 			logger.info("Testing was finished successfuly.")
 
