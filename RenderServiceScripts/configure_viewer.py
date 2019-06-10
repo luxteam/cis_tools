@@ -81,16 +81,22 @@ def main():
 	filename = '.'.join(split_name[0:-1])
 
 	# pack zip
-	try:
-		zip_name = "RPRViewerPack_{}_{}_{}.zip".format(args.version, filename, args.scene_version)	
-		st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "."), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		st.communicate()
-		logger.info("Zip package was built successfuly.")
-	except Exception as ex:
-		logger.error("Zip package build failed.")
-		logger.error(str(ex))
-		logger.error(traceback.format_exc())	
-		exit(1)
+	repeat_launch = False
+	for file in os.listdir():
+		if file.endswith(".zip"):
+			repeat_launch = True
+
+	if not repeat_launch:
+		try:
+			zip_name = "RPRViewerPack_{}_{}_{}.zip".format(args.version, filename, args.scene_version)	
+			st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "."), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			st.communicate()
+			logger.info("Zip package was built successfuly.")
+		except Exception as ex:
+			logger.error("Zip package build failed.")
+			logger.error(str(ex))
+			logger.error(traceback.format_exc())	
+			exit(1)
 
 	config['save_frames'] = "yes"
 	config['iterations_per_frame'] = int(args.iterations)
