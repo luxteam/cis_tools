@@ -105,12 +105,12 @@ def main():
 		json.dump(config, f, indent=' ')
 	
 	# Fix empty stdout 113 line.
-	stdout, stderr = ("", "")
+	stdout, stderr = (b'', b'')
 
 	if os.path.isfile("RadeonProViewer.exe"):
 		p = psutil.Popen("RadeonProViewer.exe", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		try:
-			stdout, stderr = p.communicate(timeout=60)
+			stdout, stderr = p.communicate(timeout=300)
 		except (subprocess.TimeoutExpired, psutil.TimeoutExpired) as err:
 			try:
 				for child in reversed(p.children(recursive=True)):
@@ -133,8 +133,6 @@ def main():
 			logger.error("Failed to render image! Retry ...")
 		else:
 			logger.info("Testing was finished successfuly.")
-
-		print(zip_name)
 
 	else:
 		logger.error("Failed! No exe file in package.")
