@@ -104,11 +104,13 @@ def main():
 	with open('config.json', 'w') as f:
 		json.dump(config, f, indent=' ')
 	
-	if os.path.isfile("RadeonProViewer.exe"):
+	# Fix empty stdout 113 line.
+	stdout, stderr = ("", "")
 
+	if os.path.isfile("RadeonProViewer.exe"):
 		p = psutil.Popen("RadeonProViewer.exe", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		try:
-			stdout, stderr = p.communicate(timeout=600)
+			stdout, stderr = p.communicate(timeout=60)
 		except (subprocess.TimeoutExpired, psutil.TimeoutExpired) as err:
 			try:
 				for child in reversed(p.children(recursive=True)):
