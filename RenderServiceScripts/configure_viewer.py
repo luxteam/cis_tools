@@ -88,7 +88,7 @@ def main():
 
 	if not repeat_launch:
 		try:
-			zip_name = "RPRViewerPack_{}_{}_{}.zip".format(args.version, filename, args.scene_version)	
+			zip_name = "RPRViewerPack_{}_{}_{}.zip".format(args.version, filename)	
 			st = psutil.Popen('7z a "{}" ./"{}"/*'.format(zip_name, "."), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			st.communicate()
 			logger.info("Zip package was built successfuly.")
