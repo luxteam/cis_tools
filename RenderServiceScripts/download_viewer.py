@@ -14,9 +14,18 @@ def main():
 	try_count = 0
 	while try_count < 3:
 		try:
+			headers_response = requests.head("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
+				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False)
+			size = headers_response.headers['Content-Length']
+
 			response = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
 				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False, timeout=None)
-			
+			downloaded_size = response.headers['Content-Length']
+
+			if size != downloaded_size:
+				print("Server error. Retrying ...")
+				raise Exception("Server error")
+
 			if response.status_code == 200:
 				print("GET request successfuly done. Saving file.")
 				with open("RprViewer.zip", 'wb') as f:
