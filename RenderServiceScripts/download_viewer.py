@@ -3,6 +3,7 @@ import argparse
 import config
 import urllib3
 import logging
+import os
 
 
 # logging
@@ -20,18 +21,16 @@ def main():
 	try_count = 0
 	while try_count < 3:
 		try:
-			headers_response = requests.head("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
-				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False)
-			size = headers_response.headers['Content-Length']
-			logger.info("Original size: " + size)
-
 			response = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
 				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False, timeout=None)
-			downloaded_size = response.headers['Content-Length']
-			logger.info("Downloaded size: " + downloaded_size)
+			original_size = response.headers['Content-Length']
+			downloaded_size = os.path.getsize('RprViewer.zip')
+			logger.info("Original size: " + original_size)
+			logger.info("Downloaded size: " + str(downloaded_size))
 			logger.info("Status code: " + str(response.status_code))
 
-			if size != downloaded_size:
+			if original_size != downloaded_size:
+				logger.error("Server error. Retrying ...")
 				print("Server error. Retrying ...")
 				raise Exception("Server error")
 
