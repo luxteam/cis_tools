@@ -24,20 +24,19 @@ def main():
 			response = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
 				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False, timeout=None)
 			original_size = response.headers['Content-Length']
-			downloaded_size = os.path.getsize('RprViewer.zip')
 			logger.info("Original size: " + original_size)
-			logger.info("Downloaded size: " + str(downloaded_size))
-			logger.info("Status code: " + str(response.status_code))
-
-			if original_size != downloaded_size:
-				logger.error("Server error. Retrying ...")
-				print("Server error. Retrying ...")
-				raise Exception("Server error")
-
+		
 			if response.status_code == 200:
 				print("GET request successfuly done. Saving file.")
 				with open("RprViewer.zip", 'wb') as f:
 					f.write(response.content)
+
+				downloaded_size = os.path.getsize('RprViewer.zip')
+				logger.info("Downloaded size: " + str(downloaded_size))
+				if int(original_size) != downloaded_size:
+					logger.error("Server error. Retrying ...")
+					print("Server error. Retrying ...")
+					raise Exception("Server error")
 				break
 			else:
 				print("GET request failed, status code: " + str(response.status_code))
