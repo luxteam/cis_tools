@@ -13,11 +13,11 @@ def main():
 	scene = []
 	for rootdir, dirs, files in os.walk(folder):
 		for file in files:
-			if file.endswith('.blend'):
+			if file.endswith('.max'):
 				scene.append(os.path.join(rootdir, file))
-
+				
 	print (scene[0])
-
+	
 	
 if __name__ == "__main__":
 
