@@ -15,14 +15,12 @@ def main():
 	parser.add_argument('--build_number')
 	args = parser.parse_args()
 
-	django_url = args.django_ip
-
-	get_json = requests.get("http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/api/json?pretty=true".format(jenkins_job=args.jenkins_job, build_number=args.build_number), \
-		auth=(config.username, config.password))
+	
+	get_json = requests.get("https://rpr.cis.luxoft.com/job/{jenkins_job}/{build_number}/api/json?pretty=true".format(jenkins_job=args.jenkins_job, build_number=args.build_number), \
+		auth=(config.jenkins_username, config.jenkins_password))
 
 	job_json = json.loads(get_json.text)
 
-	
 	artifacts = {}
 	for job in job_json['artifacts']:
 		artifacts[job['fileName']] = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/Output/{art}"\
@@ -31,8 +29,8 @@ def main():
 	zip_link = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/*zip*/archive.zip"\
 																					.format(jenkins_job=args.jenkins_job, build_number=args.build_number)
 
-	post_data = {'status': args.status, 'tool': args.tool, 'zip_link': zip_link, 'artifacts':str(artifacts), 'id': args.id}
-	response = requests.post(django_url, data=post_data)
+	post_data = {'status': args.status, 'tool': args.tool, 'zip_link': zip_link, 'artifacts':str(artifacts), 'id': args.id, 'build_number': args.build_number}
+	response = requests.post(args.django_ip, data=post_data)
 	print(response)
 
 if __name__ == "__main__":

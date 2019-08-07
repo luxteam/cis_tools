@@ -81,11 +81,11 @@ def main():
 	stdout, stderr = p.communicate()
 
 	if args.startFrame == args.endFrame:
-		with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'w', encoding='utf-8') as file:
+		with open(os.path.join('Output', "blender_log.txt"), 'w', encoding='utf-8') as file:
 			stdout = stdout.decode("utf-8")
 			file.write(stdout)
 
-		with open(os.path.join('Output', "blender_log.txt".format(scene=scene)), 'a', encoding='utf-8') as file:
+		with open(os.path.join('Output', "blender_log.txt"), 'a', encoding='utf-8') as file:
 			file.write("\n ----STEDERR---- \n")
 			stderr = stderr.decode("utf-8")
 			file.write(stderr)
