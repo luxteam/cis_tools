@@ -39,8 +39,9 @@ def main():
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
-	parser.add_argument('--render_device_type', required=True)
-	parser.add_argument('--pass_limit', required=True)
+	parser.add_argument('--min_samples', required=True)
+	parser.add_argument('--max_samples', required=True)
+	parser.add_argument('--noise_threshold', required=True)
 	parser.add_argument('--startFrame', required=True)
 	parser.add_argument('--endFrame', required=True)
 	parser.add_argument('--sceneName', required=True)
@@ -48,7 +49,6 @@ def main():
 	args = parser.parse_args()
 
 	current_path = os.getcwd()
-	redshift_scene = os.path.join(current_path, args.scene)
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
@@ -56,6 +56,7 @@ def main():
 	
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
+
 	# check zip/7z
 	files = os.listdir(work_path)
 	zip_file = False
@@ -71,14 +72,14 @@ def main():
 	with open("maya_render.py") as f:
 		py_template = f.read()
 	
-	pyScript = py_template.format(scene = args.scene, pass_limit = args.pass_limit, scene_name = sceneName, \
-			res_path=output_path, render_device_type = args.render_device_type, startFrame=args.startFrame, endFrame=args.endFrame, project=project)
+	pyScript = py_template.format(scene = args.scene, min_samples = args.min_samples, max_samples = args.max_samples, noise_threshold = args.noise_threshold, \
+			 scene_name = sceneName, res_path=output_path, startFrame=args.startFrame, endFrame=args.endFrame, project=project)
 
 	with open('maya_render.py', 'w') as f:
 		f.write(pyScript)
 
 	cmdRun = '''
-	set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_tool.txt
+	set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_log.txt
 	set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 	set PYTHONPATH=%cd%;%PYTHONPATH%
 	"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import maya_render as render\\"); python(\\"render.main()\\");" ''' \
@@ -116,7 +117,7 @@ def main():
 		data = json.loads(f.read())
 
 	post_data = {'tool': 'Maya', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
-		 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
+		 'min_samples': data['min_samples'], 'max_samples': data['max_samples'], 'noise_threshold': data['noise_threshold'], 'id': args.id, 'status':'render_info'}
 	response = requests.post(args.django_ip, data=post_data)
 
 
