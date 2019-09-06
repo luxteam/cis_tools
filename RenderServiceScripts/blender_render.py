@@ -5,6 +5,7 @@ import sys
 import json
 import os
 import logging
+import pyrpr
 
 
 def initializeRPR():
