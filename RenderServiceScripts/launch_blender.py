@@ -19,7 +19,6 @@ def main():
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
-	parser.add_argument('--render_device_type', required=True)
 	parser.add_argument('--min_samples', required=True)
 	parser.add_argument('--max_samples', required=True)
 	parser.add_argument('--noise_threshold', required=True)
@@ -38,7 +37,7 @@ def main():
 
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
 
-	BlenderScript = blender_script_template.format(render_device_type=args.render_device_type, pass_limit=args.pass_limit, \
+	BlenderScript = blender_script_template.format(min_samples=args.min_samples, max_samples=args.max_samples, noise_threshold=args.noise_threshold, \
 													res_path=current_path, scene_name=args.scene, startFrame=args.startFrame, endFrame=args.endFrame, \
 													sceneName=sceneName)
 
@@ -120,7 +119,7 @@ def main():
 			data = json.loads(f.read())
 
 			post_data = {'tool': 'Blender', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
-				 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
+				 'min_samples': data['min_samples'], 'max_samples': data['max_samples'], 'noise_threshold': data['noise_threshold'], 'id': args.id, 'status':'render_info'}
 			response = requests.post(args.django_ip, data=post_data)
 
 	return rc
