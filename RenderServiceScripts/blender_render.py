@@ -9,13 +9,9 @@ import logging
 
 
 def initializeRPR():
-	# RPR Settings
-	if not addon_utils.check("rprblender")[0]:
-		addon_utils.enable("rprblender", default_set=True, persistent=False, handle_error=None)
-
-	scene_name, scene = helpers.get_current_scene()
-	set_value(scene.render, 'engine', "RPR")
-	set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', 1)
+	scene = bpy.context.scene
+	enable_rpr_render(scene)
+	set_value(scene.rpr.limits, 'seconds', 1)
 	bpy.ops.render.render()
 
 
@@ -23,14 +19,29 @@ def set_value(path, name, value):
 	if hasattr(path, name):
 		setattr(path, name, value)
 	else:
-		logging.warning("No attribute found ")
+		print("No attribute found {{}}".format(name))
 
 
 def get_value(path, name):
 	if hasattr(path, name):
 		return getattr(path, name)
 	else:
-		logging.warning("No attribute found ")
+		print("No attribute found ")
+
+
+def enable_rpr_render(scene):
+	if not addon_utils.check('rprblender')[0]:
+		addon_utils.enable('rprblender', default_set=True, persistent=False, handle_error=None)
+	set_value(scene.render, 'engine', 'RPR')
+
+
+def set_render_device():
+	render_devices = bpy.context.preferences.addons['rprblender'].preferences.settings.final_devices
+	set_value(bpy.context.preferences.addons['rprblender'].preferences.settings.final_devices, "cpu_state", False)
+	set_value(bpy.context.preferences.addons['rprblender'].preferences.settings.final_devices, "gpu_states[0]", True)
+	device_name = pyrpr.Context.gpu_devices[0]['name']
+
+	return device_name
 
 
 def render(scene_name):
@@ -39,26 +50,18 @@ def render(scene_name):
 	bpy.ops.wm.open_mainfile(filepath=os.path.join(r"{res_path}", scene_name))
 
 	# get scene name
-	scene_name, scene = helpers.get_current_scene()
+	scene = bpy.context.scene
+
+	# enable rpr
+	enable_rpr_render(scene)
 
 	# Render device in RPR
-	set_value(helpers.get_user_settings(), "include_uncertified_devices", True)
+	device_name = set_render_device()
 
-	if '{render_device_type}' == 'dual':
-		helpers.set_render_devices(use_cpu=True, use_gpu=True)
-	elif '{render_device_type}' == 'cpu':
-		helpers.set_render_devices(use_cpu=True, use_gpu=False)
-	elif '{render_device_type}' == 'gpu':
-		helpers.set_render_devices(use_cpu=False, use_gpu=True)
-
-	device_name = helpers.render_resources_helper.get_used_devices()
-
-	iterations = {pass_limit}
-	if iterations:
-		set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', iterations)
-		
-	if get_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations') > 1000:
-		set_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations', 1000)
+	set_value(scene.rpr.limits, 'min_samples', {min_samples})
+	set_value(scene.rpr.limits, 'max_samples', {max_samples})
+	set_value(scene.rpr.limits, 'noise_threshold', {noise_threshold})
+	set_value(scene.rpr.limits, 'seconds', 1800)
 
 	# image format
 	set_value(scene.render.image_settings, 'quality', 100)
@@ -102,6 +105,5 @@ def render(scene_name):
 
 
 if __name__ == "__main__":
-		
 	initializeRPR()
 	render(r'{scene_name}')
