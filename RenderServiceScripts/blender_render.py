@@ -99,7 +99,9 @@ def render(scene_name):
 	report['render_time'] = round(render_time, 2)
 	report['width'] = get_value(bpy.context.scene.render, 'resolution_x')
 	report['height'] = get_value(bpy.context.scene.render, 'resolution_y')
-	report['iterations'] = get_value(bpy.context.scene.rpr.render.rendering_limits, 'iterations')
+	report['min_samples'] = get_value(scene.rpr.limits, 'min_samples')
+	report['max_samples'] = get_value(scene.rpr.limits, 'max_samples')
+	report['noise_threshold'] = get_value(scene.rpr.limits, 'noise_threshold')
 	with open(os.path.join("{res_path}", "render_info.json"), 'w') as f:
 		json.dump(report, f, indent=' ')
 
