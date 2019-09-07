@@ -32,9 +32,9 @@ def main():
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
 	parser.add_argument('--sceneName', required=True)
-	parser.add_argument('--min_samples', required=True)
-	parser.add_argument('--max_samples', required=True)
-	parser.add_argument('--noise_threshold', required=True)
+	parser.add_argument('--min_samples')
+	parser.add_argument('--max_samples')
+	parser.add_argument('--noise_threshold')
 
 	args = parser.parse_args()
 
@@ -46,7 +46,7 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
-	work_path = "C:/JN/WS/RenderServiceRenderJob/"
+	work_path = "C:/JN/WS/RenderServiceConvertJob/"
 
 	# check zip/7z
 	files = os.listdir(work_path)
