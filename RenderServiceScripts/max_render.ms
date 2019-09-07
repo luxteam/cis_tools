@@ -6,9 +6,7 @@ units.SystemType = #Meters
 function initializeRPR = (
 
     renderers.current = Radeon_ProRender()
-    renderers.current.passLimit = 1
-    renderers.current.renderDevice = {render_device_type}
-    renderers.current.renderLimit = 1
+    renderers.current.timeLimit = 1
     black_jpg = "{res_path}\\initializeRPR.jpg"
     render outputfile:black_jpg
 
@@ -22,22 +20,11 @@ function rpr_render = (
     rpr = Radeon_ProRender()
     if classof renderers.current != classof rpr do (
         renderers.current = Radeon_ProRender()
-        renderers.current.passLimit = 100
     )
 
-    pass_limit = {pass_limit}
-    if (pass_limit > 0) then (
-        renderers.current.passLimit = {pass_limit}
-    ) else if (pass_limit > 1000) then (
-        renderers.current.passLimit = 1000
-    )
-
-    if (renderers.current.passLimit < 10) do (
-        renderers.current.passLimit = 10
-    )
-	
-    renderers.current.renderDevice = {render_device_type}
-    renderers.current.renderLimit = 1
+    renderers.current.samplesMin = {min_samples} 
+    renderers.current.samplesMax = {max_samples}  
+    renderers.current.adaptiveNoiseThreshold = {noise_threshold}  
 
     image_path = "{res_path}\\Output\\{scene_name}.jpg"
 
@@ -52,7 +39,13 @@ function rpr_render = (
     json_line = "{{\n" 
     format "%" json_line to:a
 
-    json_line = "  \"iterations\": " + (renderers.current.passLimit as string) + ",\n"
+    json_line = "  \"min_samples\": " + (renderers.current.samplesMin as string) + ",\n"
+    format "%" json_line to:a
+
+    json_line = "  \"max_samples\": " + (renderers.current.samplesMax as string) + ",\n"
+    format "%" json_line to:a
+
+    json_line = "  \"noise_threshold\": " + (renderers.current.adaptiveNoiseThreshold as string) + ",\n"
     format "%" json_line to:a
 
     json_line = "  \"render_time\": " + (relapsed as string) + ",\n"
