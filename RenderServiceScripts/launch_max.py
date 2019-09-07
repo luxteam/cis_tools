@@ -40,22 +40,15 @@ def main():
 
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
-	parser.add_argument('--render_device_type', required=True)
-	parser.add_argument('--pass_limit', required=True)
+	parser.add_argument('--min_samples', required=True)
+	parser.add_argument('--max_samples', required=True)
+	parser.add_argument('--noise_threshold', required=True)
 	parser.add_argument('--startFrame', required=True)
 	parser.add_argument('--endFrame', required=True)
 	parser.add_argument('--sceneName', required=True)
 
 	args = parser.parse_args()
 	current_path = os.getcwd().replace("\\", "\\\\")
-
-	render_device_type = args.render_device_type
-	if render_device_type == 'gpu':
-		render_device_type = '2'
-	elif render_device_type == 'cpu':
-		render_device_type = '1'
-	elif render_device_type == 'dual':
-		render_device_type = '3'
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
@@ -65,8 +58,8 @@ def main():
 
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	
-	maxScript = max_script_template.format(scene=args.scene, pass_limit=args.pass_limit, \
-		render_device_type=render_device_type, scene_name = sceneName, res_path=current_path)
+	maxScript = max_script_template.format(scene=args.scene, min_samples = args.min_samples, max_samples = args.max_samples, \
+		 noise_threshold = args.noise_threshold, scene_name = sceneName, res_path=current_path)
 
 	with open('max_render.ms', 'w') as f:
 		f.write(maxScript)
@@ -102,13 +95,16 @@ def main():
 			rc = 0
 			break
 
-	# post request
-	with open(os.path.join(current_path, "render_info.json")) as f:
-		data = json.loads(f.read())
+	try:
+		# post request
+		with open(os.path.join(current_path, "render_info.json")) as f:
+			data = json.loads(f.read())
 
-	post_data = {'tool': 'Max', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
-		 'iterations': data['iterations'], 'id': args.id, 'status':'render_info'}
-	response = requests.post(args.django_ip, data=post_data)
+		post_data = {'tool': 'Max', 'render_time': data['render_time'], 'width': data['width'], 'height': data['height'],\
+			 'min_samples': data['min_samples'], 'max_samples': data['max_samples'], 'noise_threshold': data['noise_threshold'], 'id': args.id, 'status':'render_info'}
+		response = requests.post(args.django_ip, data=post_data)
+	except Exception as ex:
+		print(ex)
 
 	return rc
 
