@@ -32,6 +32,9 @@ def main():
 	parser.add_argument('--tool', required=True)
 	parser.add_argument('--scene', required=True)
 	parser.add_argument('--sceneName', required=True)
+	parser.add_argument('--min_samples', required=True)
+	parser.add_argument('--max_samples', required=True)
+	parser.add_argument('--noise_threshold', required=True)
 
 	args = parser.parse_args()
 
@@ -44,7 +47,7 @@ def main():
 	
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/Render_Scene_Render/"
-	
+
 	# check zip/7z
 	files = os.listdir(work_path)
 	zip_file = False
