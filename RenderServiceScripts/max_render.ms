@@ -22,9 +22,15 @@ function rpr_render = (
         renderers.current = Radeon_ProRender()
     )
 
-    renderers.current.samplesMin = {min_samples} 
-    renderers.current.samplesMax = {max_samples}  
-    renderers.current.adaptiveNoiseThreshold = {noise_threshold}  
+    if {min_samples} > 0 then (
+       renderers.current.samplesMin = {min_samples} 
+    )
+    if {max_samples} > 0 then (
+       renderers.current.samplesMax = {max_samples} 
+    )
+    if {noise_threshold} > 0 then (
+       renderers.current.adaptiveNoiseThreshold = {noise_threshold} 
+    ) 
 
     image_path = "{res_path}\\Output\\{scene_name}.jpg"
 

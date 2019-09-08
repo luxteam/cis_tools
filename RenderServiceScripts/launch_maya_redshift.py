@@ -46,7 +46,7 @@ def main():
 	output_path = os.path.join(current_path, "Output")
 	
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
-	work_path = "C:/JN/WS/RenderServiceRenderJob/"
+	work_path = "C:/JN/WS/RenderServiceRenderJob_Render/"
 
 	# check zip/7z
 	files = os.listdir(work_path)
