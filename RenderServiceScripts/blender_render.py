@@ -58,9 +58,12 @@ def render(scene_name):
 	# Render device in RPR
 	device_name = set_render_device()
 
-	set_value(scene.rpr.limits, 'min_samples', {min_samples})
-	set_value(scene.rpr.limits, 'max_samples', {max_samples})
-	set_value(scene.rpr.limits, 'noise_threshold', {noise_threshold})
+	if {min_samples}:
+		set_value(scene.rpr.limits, 'min_samples', {min_samples})
+	if {max_samples}:
+		set_value(scene.rpr.limits, 'max_samples', {max_samples})
+	if {noise_threshold}:
+		set_value(scene.rpr.limits, 'noise_threshold', {noise_threshold})
 	set_value(scene.rpr.limits, 'seconds', 1800)
 
 	# image format

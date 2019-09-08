@@ -21,9 +21,12 @@ def rpr_render():
 	cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
 	cmds.setAttr("defaultRenderGlobals.imageFormat", 8)
 
-	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", {max_samples})
-	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaMinIterations", {min_samples})
-	cmds.setAttr("RadeonProRenderGlobals.adaptiveThreshold", {noise_threshold})
+	if {max_samples}:
+		cmds.setAttr("RadeonProRenderGlobals.completionCriteriaIterations", {max_samples})
+	if {min_samples}:
+		cmds.setAttr("RadeonProRenderGlobals.completionCriteriaMinIterations", {min_samples})
+	if {noise_threshold}:
+		cmds.setAttr("RadeonProRenderGlobals.adaptiveThreshold", {noise_threshold})
 	cmds.setAttr("RadeonProRenderGlobals.completionCriteriaMinutes", 30)
 
 	cmds.optionVar(rm="RPR_DevicesSelected")
