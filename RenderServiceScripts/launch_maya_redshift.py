@@ -72,7 +72,7 @@ def main():
 
 	os.rename("redshift_tool.log", os.path.join("Output", "redshift_tool.log"))	
 	render_time = round(get_rs_render_time(os.path.join(current_path, "Output", "redshift_tool.log")), 2)
-	post_data = {'tool': 'Redshift', 'render_time': render_time, 'id': args.id, 'status':'render_info'}
+	post_data = {'tool': 'Maya (Redshift)', 'render_time': render_time, 'id': args.id, 'status':'render_info'}
 	response = requests.post(args.django_ip, data=post_data)
 
 
