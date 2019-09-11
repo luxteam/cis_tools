@@ -1,0 +1,6 @@
+setProject("C:/JN/WS/RenderServiceRenderJob_Render");
+string $aov_nodes[] = `ls -type "RedshiftAOV"`;
+for ($node in $aov_nodes) {
+	setAttr ($node + ".filePrefix") -type "string" "C:/JN/WS/RenderServiceRenderJob_Render/Output/";
+}
+setAttr defaultRenderGlobals.imageFilePrefix -type "string" ("C:/JN/WS/RenderServiceRenderJob_Render/Output/" + `file -q -sn -shn`);
