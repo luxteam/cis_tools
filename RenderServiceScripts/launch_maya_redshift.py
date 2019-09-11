@@ -70,11 +70,14 @@ def main():
 	p = psutil.Popen(os.path.join(current_path, 'redshift_script.bat'))
 	stdout, stderr = p.communicate()
 
-	os.rename("redshift_tool.txt", os.path.join("Output", "redshift_tool.txt"))	
-	render_time = round(get_rs_render_time(os.path.join(current_path, "Output", "redshift_tool.txt")), 2)
-	post_data = {'tool': 'Maya (Redshift)', 'render_time': render_time, 'id': args.id, 'status':'render_info'}
-	response = requests.post(args.django_ip, data=post_data)
-
+	try:
+		os.rename("redshift_tool.txt", os.path.join("Output", "redshift_tool.txt"))	
+		render_time = round(get_rs_render_time(os.path.join(current_path, "Output", "redshift_tool.txt")), 2)
+		post_data = {'tool': 'Maya (Redshift)', 'render_time': render_time, 'id': args.id, 'status':'render_info'}
+		response = requests.post(args.django_ip, data=post_data)
+	except Exception as ex:
+		print(ex)
+		print("Error during parsing render time")
 
 if __name__ == "__main__":
 	main()
