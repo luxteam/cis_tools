@@ -61,7 +61,7 @@ def main():
 		project = work_path
 
 	# Redshift batch render
-	cmd_render = '''set MAYA_SCRIPT_PATH=%CD%;MAYA_SCRIPT_PATH; \n"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "source maya_mel.mel" -proj "{project}" -log redshift_tool.txt -of jpg -rd {output_path} {redshift_scene}'''\
+	cmd_render = '''set MAYA_SCRIPT_PATH=%CD%;MAYA_SCRIPT_PATH; \n"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "source convert.mel" -proj "{project}" -log redshift_tool.txt -of jpg -rd {output_path} {redshift_scene}'''\
 					.format(tool=args.tool, scene_name = sceneName, output_path=output_path, redshift_scene=redshift_scene, project=project)
 
 	with open(os.path.join(current_path, 'redshift_script.bat'), 'w') as f:
