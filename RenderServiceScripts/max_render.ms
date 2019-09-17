@@ -32,6 +32,13 @@ function rpr_render = (
        renderers.current.adaptiveNoiseThreshold = {noise_threshold} 
     ) 
 
+    if {width} > 0 then (
+        renderWidth = {width}
+    )
+    if {height} > 0 then (
+        renderHeight = {height}
+    )
+
     image_path = "{res_path}\\Output\\{scene_name}.jpg"
 
     rstart = timeStamp()

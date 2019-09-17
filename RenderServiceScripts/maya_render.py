@@ -29,6 +29,11 @@ def rpr_render():
         cmds.setAttr("RadeonProRenderGlobals.adaptiveThreshold", {noise_threshold})
     cmds.setAttr("RadeonProRenderGlobals.completionCriteriaMinutes", 30)
 
+    if {width}:
+        cmds.setAttr("defaultResolution.width", {width})
+    if {height}:
+        cmds.setAttr("defaultResolution.height", {height})
+
     cmds.optionVar(rm="RPR_DevicesSelected")
     cmds.optionVar(iva=("RPR_DevicesSelected", 1))
     

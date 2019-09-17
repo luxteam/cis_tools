@@ -46,6 +46,8 @@ def main():
 	parser.add_argument('--startFrame', required=True)
 	parser.add_argument('--endFrame', required=True)
 	parser.add_argument('--sceneName', required=True)
+	parser.add_argument('--width', required=True)
+	parser.add_argument('--height', required=True)
 
 	args = parser.parse_args()
 	current_path = os.getcwd().replace("\\", "\\\\")
@@ -59,7 +61,7 @@ def main():
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	
 	maxScript = max_script_template.format(scene=args.scene, min_samples = args.min_samples, max_samples = args.max_samples, \
-		 noise_threshold = args.noise_threshold, scene_name = sceneName, res_path=current_path)
+		width = args.width, height = args.height, noise_threshold = args.noise_threshold, scene_name = sceneName, res_path=current_path)
 
 	with open('max_render.ms', 'w') as f:
 		f.write(maxScript)
