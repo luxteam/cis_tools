@@ -66,6 +66,11 @@ def render(scene_name):
 		set_value(scene.rpr.limits, 'noise_threshold', {noise_threshold})
 	set_value(scene.rpr.limits, 'seconds', 1800)
 
+	if {width}:
+		set_value(bpy.context.scene.render, 'resolution_x', {width})
+	if {height}:
+		set_value(bpy.context.scene.render, 'resolution_y', {height})
+
 	# image format
 	set_value(scene.render.image_settings, 'quality', 100)
 	set_value(scene.render.image_settings, 'compression', 0)

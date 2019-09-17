@@ -35,6 +35,8 @@ def main():
 	parser.add_argument('--min_samples', required=True)
 	parser.add_argument('--max_samples', required=True)
 	parser.add_argument('--noise_threshold', required=True)
+	parser.add_argument('--width', required=True)
+	parser.add_argument('--height', required=True)
 
 	args = parser.parse_args()
 
