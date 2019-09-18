@@ -9,20 +9,20 @@ setAttr defaultRenderGlobals.imageFilePrefix -type "string" ("{res_path}" + "{sc
 
 setAttr redshiftOptions.progressiveRenderingEnabled 0;
 
-if {max_samples} {
+if {max_samples} {{
     setAttr redshiftOptions.unifiedMaxSamples {max_samples};
-}
-if {min_samples} {
+}}
+if {min_samples} {{
     setAttr redshiftOptions.unifiedMinSamples {min_samples};
-}
-if {noise_threshold} {
+}}
+if {noise_threshold} {{
     setAttr redshiftOptions.unifiedAdaptiveErrorThreshold {noise_threshold};
-}
+}}
 
-if {width} {
+if {width} {{
   setAttr defaultResolution.width {width};
-}
-if {height} {
+}}
+if {height} {{
   setAttr defaultResolution.height {height};
-}
+}}
 
