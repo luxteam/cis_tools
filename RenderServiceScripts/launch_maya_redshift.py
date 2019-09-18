@@ -62,8 +62,17 @@ def main():
 	if not zip_file:
 		project = work_path
 
+	with open(os.path.join(current_path, 'render_func.mel'), 'r') as rf:
+		render_func = rf.read()
+
+	render_script = render_func.format(min_samples = args.min_samples, max_samples = args.max_samples, noise_threshold = args.noise_threshold, \
+			width = args.width, height = args.height, scene_name = sceneName, res_path=output_path, project=project)
+
+	with open(os.path.join(current_path, 'redshift_render.mel'), 'w') as rf:
+		rf.write(render_script)
+
 	# Redshift batch render
-	cmd_render = '''set MAYA_SCRIPT_PATH=%CD%;MAYA_SCRIPT_PATH; \n"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "source render_func.mel" -proj "{project}" -log redshift_tool.txt -of jpg -rd {output_path} {redshift_scene}'''\
+	cmd_render = '''set MAYA_SCRIPT_PATH=%CD%;MAYA_SCRIPT_PATH; \n"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "source redshift_render.mel" -proj "{project}" -log redshift_tool.txt -of jpg -rd {output_path} {redshift_scene}'''\
 					.format(tool=args.tool, scene_name = sceneName, output_path=output_path, redshift_scene=redshift_scene, project=project)
 
 	with open(os.path.join(current_path, 'redshift_script.bat'), 'w') as f:

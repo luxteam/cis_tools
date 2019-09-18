@@ -1,6 +1,27 @@
-setProject("C:/JN/WS/RenderServiceRenderJob_Render");
+setProject("{project}");
+
 string $aov_nodes[] = `ls -type "RedshiftAOV"`;
 for ($node in $aov_nodes) {
-	setAttr ($node + ".filePrefix") -type "string" "C:/JN/WS/RenderServiceRenderJob_Render/Output/";
+	setAttr ($node + ".filePrefix") -type "string" "{res_path}";
 }
-setAttr defaultRenderGlobals.imageFilePrefix -type "string" ("C:/JN/WS/RenderServiceRenderJob_Render/Output/" + `file -q -sn -shn`);
+setAttr defaultRenderGlobals.imageFilePrefix -type "string" ("{res_path}" + "{scene_name}");
+
+setAttr "redshiftOptions.progressiveRenderingEnabled" 0;
+
+if ({max_samples} > 0) then (
+    setAttr "redshiftOptions.unifiedMaxSamples" {max_samples};
+)
+if ({min_samples} > 0) then (
+    setAttr "redshiftOptions.unifiedMinSamples" {min_samples};
+)
+if ({noise_threshold} > 0) then (
+    setAttr "redshiftOptions.unifiedAdaptiveErrorThreshold" {noise_threshold};
+)
+
+if ({width}) then (
+  setAttr "defaultResolution.width" {width};
+)
+if ({height}) then (
+  setAttr "defaultResolution.height" {height};
+)
+
