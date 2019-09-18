@@ -1,9 +1,10 @@
 setProject("{project}");
 
 string $aov_nodes[] = `ls -type "RedshiftAOV"`;
-for ($node in $aov_nodes) {
+for ($node in $aov_nodes) {{
 	setAttr ($node + ".filePrefix") -type "string" "{res_path}";
-}
+}}
+
 setAttr defaultRenderGlobals.imageFilePrefix -type "string" ("{res_path}" + "{scene_name}");
 
 setAttr "redshiftOptions.progressiveRenderingEnabled" 0;
@@ -18,10 +19,10 @@ if ({noise_threshold} > 0) then (
     setAttr "redshiftOptions.unifiedAdaptiveErrorThreshold" {noise_threshold};
 )
 
-if ({width}) then (
+if ({width} > 0) then (
   setAttr "defaultResolution.width" {width};
 )
-if ({height}) then (
+if ({height} > 0) then (
   setAttr "defaultResolution.height" {height};
 )
 
