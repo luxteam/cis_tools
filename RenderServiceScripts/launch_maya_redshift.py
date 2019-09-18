@@ -45,7 +45,7 @@ def main():
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
-	output_path = os.path.join(current_path, "Output")
+	output_path = (os.path.join(current_path, "Output")).replace("\\", "/")
 	
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/RenderServiceRenderJob_Render/"
@@ -72,8 +72,8 @@ def main():
 		rf.write(render_script)
 
 	# Redshift batch render
-	cmd_render = '''set MAYA_SCRIPT_PATH=%CD%;MAYA_SCRIPT_PATH; \n"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "source redshift_render.mel" -proj "{project}" -log redshift_tool.txt -of jpg -rd {output_path} {redshift_scene}'''\
-					.format(tool=args.tool, scene_name = sceneName, output_path=output_path, redshift_scene=redshift_scene, project=project)
+	cmd_render = '''set MAYA_SCRIPT_PATH=%CD%;MAYA_SCRIPT_PATH; \n"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "source redshift_render.mel" -log redshift_tool.txt -of jpg {redshift_scene}'''\
+					.format(tool=args.tool, scene_name = sceneName, redshift_scene=redshift_scene)
 
 	with open(os.path.join(current_path, 'redshift_script.bat'), 'w') as f:
 		f.write(cmd_render)				
