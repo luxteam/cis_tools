@@ -5,6 +5,13 @@ for ($node in $aov_nodes) {{
 	setAttr ($node + ".filePrefix") -type "string" "{res_path}";
 }}
 
+string $unresolved_files[] = `filePathEditor -query -listFiles "" -unresolved -attributeOnly`;
+
+string $new_path = "{project}";
+for ($item in $unresolved_files) {
+    filePathEditor -repath $new_path -recursive -replaceAll true $item ;
+}
+
 setAttr defaultRenderGlobals.imageFilePrefix -type "string" ("{res_path}" + "{scene_name}");
 
 setAttr redshiftOptions.progressiveRenderingEnabled 0;
