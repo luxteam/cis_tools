@@ -45,7 +45,7 @@ def main():
 
 	if not os.path.exists('Output'):
 		os.makedirs('Output')
-	output_path = (os.path.join(current_path, "Output")).replace("\\", "/")
+	output_path = (os.path.join(current_path, "Output/")).replace("\\", "/")
 	
 	sceneName = os.path.basename(args.sceneName).split(".")[0]
 	work_path = "C:/JN/WS/RenderServiceRenderJob_Render/"
