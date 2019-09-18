@@ -16,6 +16,14 @@ def initializeRPR():
     mel.eval("renderIntoNewWindow render")
 
 
+def resolveFilePath():
+    unresolved = cmds.filePathEditor(query=True, listFiles="", unresolved=True, attributeOnly=True)
+
+    new_path = "{project}";
+    for item in source_files:
+        cmds.filePathEditor(item, repath=new_path, recursive=True, replaceAll=True)
+
+
 def rpr_render():
     
     cmds.setAttr("defaultRenderGlobals.currentRenderer", "FireRender", type="string")
@@ -84,5 +92,6 @@ def main():
     initializeRPR()
     mel.eval("setProject(\"{project}\")")
     cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
+    resolveFilePath()
     rpr_render()
     cmds.evalDeferred(cmds.quit(abort=True))
