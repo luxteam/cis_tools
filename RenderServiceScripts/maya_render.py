@@ -17,10 +17,10 @@ def initializeRPR():
 
 
 def resolveFilePath():
-    unresolved = cmds.filePathEditor(query=True, listFiles="", unresolved=True, attributeOnly=True)
+    unresolved_files = cmds.filePathEditor(query=True, listFiles="", unresolved=True, attributeOnly=True)
 
     new_path = "{project}";
-    for item in source_files:
+    for item in unresolved_files:
         cmds.filePathEditor(item, repath=new_path, recursive=True, replaceAll=True)
 
 
