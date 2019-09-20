@@ -97,7 +97,7 @@ def main():
 		try:
 			rc = p.wait(timeout=5)
 		except psutil.TimeoutExpired as err:
-			fatal_errors_titles = ['maya', 'Student Version File', 'Radeon ProRender Error', 'Script Editor', 'File containce mental ray nodes']
+			fatal_errors_titles = ['maya', 'Student Version File', 'Radeon ProRender Error', 'Script Editor', 'File contains mental ray nodes']
 			if set(fatal_errors_titles).intersection(get_windows_titles()):
 				rc = -1
 				try:
