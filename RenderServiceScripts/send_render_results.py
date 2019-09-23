@@ -13,6 +13,7 @@ def main():
 	parser.add_argument('--django_ip')
 	parser.add_argument('--jenkins_job')
 	parser.add_argument('--build_number')
+	parser.add_argument('--fail_reason')
 	args = parser.parse_args()
 
 	
@@ -29,7 +30,7 @@ def main():
 	zip_link = "http://172.30.23.112:8088/job/{jenkins_job}/{build_number}/artifact/*zip*/archive.zip"\
 																					.format(jenkins_job=args.jenkins_job, build_number=args.build_number)
 
-	post_data = {'status': args.status, 'tool': args.tool, 'zip_link': zip_link, 'artifacts':str(artifacts), 'id': args.id, 'build_number': args.build_number}
+	post_data = {'status': args.status, 'fail_reason': args.fail_reason, 'tool': args.tool, 'zip_link': zip_link, 'artifacts':str(artifacts), 'id': args.id, 'build_number': args.build_number}
 	response = requests.post(args.django_ip, data=post_data)
 	print(response)
 
