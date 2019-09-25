@@ -146,8 +146,7 @@ def main():
 		width = args.width, height = args.height, res_path=current_path_for_maya, startFrame=args.startFrame, endFrame=args.endFrame, scene_path=maya_scene, project=project)
 
 	# scene name
-	split_name = os.path.basename(maya_scene).split(".")
-	filename = '.'.join(split_name[0:-1])
+	filename = os.path.basename(maya_scene).split(".")[0]
 
 	# save render py file
 	render_file = "render_{}.py".format(filename) 
@@ -237,8 +236,8 @@ def main():
 			fail_reason = "Timeout expired"
 		elif rc == -1:
 			rc = -1
-			logger.info("Crash window: {}".format(list(error_window)[0]))
-			fail_reason = "Crash window: {}".format(list(error_window)[0])
+			logger.info("crash window - {}".format(list(error_window)[0]))
+			fail_reason = "crash window - {}".format(list(error_window)[0])
 		elif not images:
 			rc = -1
 			logger.info("Fail reason: rendering failed, no output image")
