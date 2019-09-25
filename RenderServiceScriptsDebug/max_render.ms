@@ -1,14 +1,12 @@
 resetMaxFile #noPrompt
 SetQuietMode true
-logsystem.logName "Output\\rprLog.txt"
+logsystem.logName "Output\\render_log.txt"
 units.SystemType = #Meters
 
 function initializeRPR = (
 
     renderers.current = Radeon_ProRender()
-    renderers.current.passLimit = 1
-    renderers.current.renderDevice = {render_device_type}
-    renderers.current.renderLimit = 1
+    renderers.current.timeLimit = 1
     black_jpg = "{res_path}\\initializeRPR.jpg"
     render outputfile:black_jpg
 
@@ -16,30 +14,32 @@ function initializeRPR = (
 
 function rpr_render = (
 	
-	assetsFile = "{res_path}\\{scene}"
+	assetsFile = "{scene_path}"
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
     rpr = Radeon_ProRender()
     if classof renderers.current != classof rpr do (
         renderers.current = Radeon_ProRender()
-        renderers.current.passLimit = 100
     )
 
-    pass_limit = {pass_limit}
-    if (pass_limit > 0) then (
-        renderers.current.passLimit = {pass_limit}
-    ) else if (pass_limit > 1000) then (
-        renderers.current.passLimit = 1000
+    if {min_samples} > 0 then (
+       renderers.current.samplesMin = {min_samples} 
+    )
+    if {max_samples} > 0 then (
+       renderers.current.samplesMax = {max_samples} 
+    )
+    if {noise_threshold} > 0 then (
+       renderers.current.adaptiveNoiseThreshold = {noise_threshold} 
+    ) 
+
+    if {width} > 0 then (
+        renderWidth = {width}
+    )
+    if {height} > 0 then (
+        renderHeight = {height}
     )
 
-    if (renderers.current.passLimit < 10) do (
-        renderers.current.passLimit = 10
-    )
-	
-    renderers.current.renderDevice = {render_device_type}
-    renderers.current.renderLimit = 1
-
-    image_path = "{res_path}\\Output\\{scene_name}.jpg"
+    image_path = "{res_path}\\Output\\" + maxFileName + ".jpg"
 
     rstart = timeStamp()
     render outputfile:image_path
@@ -52,7 +52,13 @@ function rpr_render = (
     json_line = "{{\n" 
     format "%" json_line to:a
 
-    json_line = "  \"iterations\": " + (renderers.current.passLimit as string) + ",\n"
+    json_line = "  \"min_samples\": " + (renderers.current.samplesMin as string) + ",\n"
+    format "%" json_line to:a
+
+    json_line = "  \"max_samples\": " + (renderers.current.samplesMax as string) + ",\n"
+    format "%" json_line to:a
+
+    json_line = "  \"noise_threshold\": " + (renderers.current.adaptiveNoiseThreshold as string) + ",\n"
     format "%" json_line to:a
 
     json_line = "  \"render_time\": " + (relapsed as string) + ",\n"

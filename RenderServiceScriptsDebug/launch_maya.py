@@ -3,7 +3,6 @@ import subprocess
 import psutil
 import json
 import ctypes
-import pyscreenshot
 import requests
 import glob
 import os
@@ -139,7 +138,7 @@ def main():
 		project = current_path_for_maya
 
 	# read maya template
-	with open ("maya_render.py") as f:
+	with open("maya_render.py") as f:
 		maya_script_template = f.read()
 	
 	maya_script = maya_script_template.format(min_samples=args.min_samples, max_samples=args.max_samples, noise_threshold=args.noise_threshold, \
@@ -159,7 +158,7 @@ def main():
 		set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 		set PYTHONPATH=%cd%;%PYTHONPATH%
 		"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import {render_file} as render\\"); python(\\"render.main()\\");" 
-		'''.format(tool=args.tool, render_file=render_file.split('.')[0])
+		'''.format(tool=args.tool, render_file=render_file)
 	render_bat_file = "launch_render_{}.bat".format(filename)
 	with open(render_bat_file, 'w') as f:
 		f.write(cmd_command)
