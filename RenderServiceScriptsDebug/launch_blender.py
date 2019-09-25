@@ -89,17 +89,13 @@ def main():
 	with open ("blender_render.py") as f:
 		blender_script_template = f.read()
 
-	# starting rendering
-	logger.info("Starting rendering scene: {}".format(blender_scene))
-	post_data = {'status': 'Rendering', 'id': args.id}
-	send_status(post_data, args.django_ip)
-
 	# format template for current scene
 	blender_script = blender_script_template.format(min_samples=args.min_samples, max_samples=args.max_samples, noise_threshold=args.noise_threshold, \
 		width = args.width, height = args.height, res_path=os.getcwd(), startFrame=args.startFrame, endFrame=args.endFrame, scene_path=blender_scene)
 
 	# scene name
-	filename = os.path.basename(blender_scene).split(".")[0]
+	split_name = os.path.basename(blender_scene).split(".")
+	filename = '.'.join(split_name[0:-1])
 
 	# save render py file
 	render_file = "render_{}.py".format(filename) 
@@ -112,6 +108,11 @@ def main():
 	render_bat_file = "launch_render_{}.bat".format(filename)
 	with open(render_bat_file, 'w') as f:
 		f.write(cmd_command)
+
+	# starting rendering
+	logger.info("Starting rendering scene: {}".format(blender_scene))
+	post_data = {'status': 'Rendering', 'id': args.id}
+	send_status(post_data, args.django_ip)
 
 	# start render
 	p = psutil.Popen(render_bat_file, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
