@@ -51,7 +51,8 @@ def render(scene_path):
 
 	# get scene name
 	scene = bpy.context.scene
-	scenename = bpy.path.basename(bpy.context.blend_data.filepath).split('.')[0]
+	split_name = bpy.path.basename(bpy.context.blend_data.filepath).split('.')
+	scenename = '.'.join(split_name[0:-1])
 
 	# enable rpr
 	enable_rpr_render(scene)
