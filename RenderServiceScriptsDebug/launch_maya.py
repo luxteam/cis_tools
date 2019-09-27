@@ -131,7 +131,7 @@ def main():
 	for file in files:
 		if file.endswith(".zip") or file.endswith(".7z"):
 			zip_file = True
-			project = "/".join(maya_scene.split("/")[1:-2])
+			project = "/".join(maya_scene.split("/")[:-2])
 			
 	if not zip_file:
 		project = current_path_for_maya
