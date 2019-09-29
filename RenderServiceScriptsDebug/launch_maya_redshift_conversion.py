@@ -93,6 +93,28 @@ def get_rs_render_time(log_name):
 				return float(x.second + x.minute * 60 + float(x.microsecond / 1000000))
 
 
+def get_windows_titles():
+	EnumWindows = ctypes.windll.user32.EnumWindows
+	EnumWindowsProc = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+	GetWindowText = ctypes.windll.user32.GetWindowTextW
+	GetWindowTextLength = ctypes.windll.user32.GetWindowTextLengthW
+	IsWindowVisible = ctypes.windll.user32.IsWindowVisible
+
+	titles = []
+
+	def foreach_window(hwnd, lParam):
+		if IsWindowVisible(hwnd):
+			length = GetWindowTextLength(hwnd)
+			buff = ctypes.create_unicode_buffer(length + 1)
+			GetWindowText(hwnd, buff, length + 1)
+			titles.append(buff.value)
+		return True
+
+	EnumWindows(EnumWindowsProc(foreach_window), 0)
+
+	return titles
+
+
 def main():
 
 	parser = argparse.ArgumentParser()
@@ -100,13 +122,6 @@ def main():
 	parser.add_argument('--id', required=True)
 	parser.add_argument('--build_number', required=True)
 	parser.add_argument('--tool', required=True)
-	parser.add_argument('--min_samples', required=True)
-	parser.add_argument('--max_samples', required=True)
-	parser.add_argument('--noise_threshold', required=True)
-	parser.add_argument('--startFrame', required=True)
-	parser.add_argument('--endFrame', required=True)
-	parser.add_argument('--width', required=True)
-	parser.add_argument('--height', required=True)
 	args = parser.parse_args()
 
 	# create output folder for images and logs
@@ -132,33 +147,32 @@ def main():
 
 	# read maya template
 	with open("redshift_render.py") as f:
-		maya_script_template = f.read()
+		redshift_script_template = f.read()
 
-	maya_script = maya_script_template.format(min_samples=args.min_samples, max_samples=args.max_samples, noise_threshold=args.noise_threshold, \
-		width = args.width, height = args.height, res_path=current_path_for_maya, startFrame=args.startFrame, endFrame=args.endFrame, scene_path=maya_scene, project=project)
+	redshift_script = redshift_script_template.format(res_path=current_path_for_maya, scene_path=maya_scene, project=project)
 
 	# scene name
 	filename = os.path.basename(maya_scene).split(".")[0]
 
 	# save render py file
-	render_file = "render_{}.py".format(filename) 
-	with open(render_file, 'w') as f:
-		f.write(maya_script)
+	redshift_render_file = "render_redshift_{}.py".format(filename) 
+	with open(redshift_render_file, 'w') as f:
+		f.write(redshift_script)
 
 	# Redshift batch render
 	cmd_command = '''
-		set MAYA_CMD_FILE_OUTPUT=%cd%/Output/maya_render_log.txt
+		set MAYA_CMD_FILE_OUTPUT=%cd%/Output/maya_redshift_render_log.txt
 		set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
 		set PYTHONPATH=%cd%;%PYTHONPATH%
-		"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "python(\\"import {render_file} as render\\"); python(\\"render.main()\\");" -log "Output\\batch_render_log.txt" -of jpg {maya_scene}
-		'''.format(tool=args.tool, maya_scene=maya_scene, render_file=render_file.split('.')[0])
+		"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Render.exe" -r redshift -preRender "python(\\"import {redshift_render_file} as render\\"); python(\\"render.main()\\");" -log "Output\\batch_redshift_render_log.txt" -of jpg {maya_scene}
+		'''.format(tool=args.tool, maya_scene=maya_scene, redshift_render_file=redshift_render_file.split('.')[0])
 	render_bat_file = "launch_render_{}.bat".format(filename)
 	with open(render_bat_file, 'w') as f:
 		f.write(cmd_command)		
 
 	# starting rendering
-	logger.info("Starting rendering scene: {}".format(maya_scene))
-	post_data = {'status': 'Rendering', 'id': args.id}
+	logger.info("Starting rendering redshift scene: {}".format(maya_scene))
+	post_data = {'status': 'Rendering redshift', 'id': args.id}
 	send_status(post_data, args.django_ip)	
 
 	# start render
@@ -169,34 +183,97 @@ def main():
 	try:
 		stdout, stderr = p.communicate(timeout=2000)
 	except (subprocess.TimeoutExpired, psutil.TimeoutExpired) as err:
-		rc = -1
+		rc = -3
 		for child in reversed(p.children(recursive=True)):
 			child.terminate()
 		p.terminate()
 
 	# update render status
-	logger.info("Finished rendering scene: {}".format(maya_scene))
-	post_data = {'status': 'Completed', 'id': args.id}
+	logger.info("Finished rendering redshift scene: {}".format(maya_scene))
+	logger.info("Starting converting redshift scene: {}".format(maya_scene))
+	post_data = {'status': 'Converting redshift', 'id': args.id}
 	send_status(post_data, args.django_ip)
 
 	# send render info
 	logger.info("Sending render info")
-	if os.path.exists("render_info.json"):
-		render_time = 0
-		try:
-			render_time = round(get_rs_render_time(os.path.join("Output", "maya_render_log.txt")), 2)
-		except:
-			logger.info("Error. No render time!")
+	render_time = 0
+	try:
+		render_time = round(get_rs_render_time(os.path.join("Output", "maya_redshift_render_log.txt")), 2)
+		post_data = {'render_time': render_time, 'id': args.id, 'status':'redshift_render_info'}
+		send_status(post_data, args.django_ip)
+	except:
+		logger.info("Error. No render time!")
 			
-		with open("render_info.json") as f:
+	
+	# read maya template
+	with open("rpr_render.py") as f:
+		rpr_script_template = f.read()
+	
+	rpr_script = rpr_script_template.format(res_path=current_path_for_maya, scene_path=maya_scene, project=project)
+
+	# save render py file
+	render_rpr_file = "render_rpr_{}.py".format(filename) 
+	with open(render_rpr_file, 'w') as f:
+		f.write(rpr_script)
+
+	# save bat file
+	cmd_command = '''
+		set MAYA_CMD_FILE_OUTPUT=%cd%/Output/rpr_render_log.txt
+		set MAYA_SCRIPT_PATH=%cd%;%MAYA_SCRIPT_PATH%
+		set PYTHONPATH=%cd%;%PYTHONPATH%
+		"C:\\Program Files\\Autodesk\\Maya{tool}\\bin\\Maya.exe" -command "python(\\"import {render_rpr_file} as render\\"); python(\\"render.main()\\");" 
+		'''.format(tool=args.tool, render_rpr_file=render_rpr_file.split('.')[0])
+	render_bat_file = "launch_render_{}.bat".format(filename)
+	with open(render_bat_file, 'w') as f:
+		f.write(cmd_command)
+
+	# starting rendering
+	logger.info("Starting rendering rpr scene: {}".format(maya_scene))
+	post_data = {'status': 'Rendering RPR', 'id': args.id}
+	send_status(post_data, args.django_ip)
+
+	# start render
+	p = psutil.Popen(render_bat_file, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	# catch timeout ~30 minutes
+	rc = 0
+	total_timeout = 70 # ~35 minutes
+	error_window = None
+	while True:
+		try:
+			stdout, stderr = p.communicate(timeout=30)
+		except (subprocess.TimeoutExpired, psutil.TimeoutExpired) as err:
+			total_timeout -= 1
+			fatal_errors_titles = ['maya', 'Student Version File', 'Radeon ProRender Error', 'Script Editor', 'File contains mental ray nodes']
+			error_window = set(fatal_errors_titles).intersection(get_windows_titles())
+			if error_window:
+				rc = -1
+				for child in reversed(p.children(recursive=True)):
+					child.terminate()
+				p.terminate()
+				break
+			elif not total_timeout:
+				rc = -2
+				break
+		else:
+			break
+
+	# update render status
+	logger.info("Finished rendering rpr scene: {}".format(maya_scene))
+	post_data = {'status': 'Completed', 'id': args.id}
+	send_status(post_data, args.django_ip)
+
+	# send render info
+	logger.info("Sending rpr render info")
+	if os.path.exists("rpr_render_info.json"):
+		with open("rpr_render_info.json") as f:
 			data = json.loads(f.read())
-		
-		post_data = {'render_time': render_time, 'width': data['width'], 'height': data['height'], 'min_samples': data['min_samples'], \
-			'max_samples': data['max_samples'], 'noise_threshold': data['noise_threshold'], 'id': args.id, 'status':'render_info'}
+
+		post_data = {'render_time': data['render_time'], 'id': args.id, 'status':'rpr_render_info'}
 		send_status(post_data, args.django_ip)
 	else:
 		logger.info("Error. No render info!")
-
+		
 	# preparing dict with output files for post
 	files = {}
 	output_files = os.listdir('Output')
@@ -209,16 +286,23 @@ def main():
 	fail_reason = "Unknown"
 
 	images = glob.glob(os.path.join('Output' ,'*.jpg'))
-	if rc == 0 and images:
+	if rc == 0 and len(images) > 1:
 		logger.info("Render status: success")
 		status = "Success"
 	else:
 		logger.info("Render status: failure")
 		status = "Failure"
 		if rc == -1:
-			logger.info("Fail reason: timeout expired")
-			fail_reason = "Timeout expired"
-		elif not images:
+			logger.info("Fail reason: redshift timeout expired")
+			fail_reason = "Redshift timeout expired"
+		elif rc == -1:
+			rc = -1
+			logger.info("crash window - {}".format(list(error_window)[0]))
+			fail_reason = "crash window - {}".format(list(error_window)[0])
+		elif rc == -3:
+			logger.info("Fail reason: rpr timeout expired")
+			fail_reason = "RPR timeout expired"
+		elif len(images) < 2:
 			rc = -1
 			logger.info("Fail reason: rendering failed, no output image")
 			fail_reason = "No output image"
