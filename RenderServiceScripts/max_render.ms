@@ -1,6 +1,6 @@
 resetMaxFile #noPrompt
 SetQuietMode true
-logsystem.logName "Output\\rprLog.txt"
+logsystem.logName "Output\\render_log.txt"
 units.SystemType = #Meters
 
 function initializeRPR = (
@@ -14,7 +14,7 @@ function initializeRPR = (
 
 function rpr_render = (
 	
-	assetsFile = "{res_path}\\{scene}"
+	assetsFile = "{scene_path}"
 	loadMaxFile assetsFile useFileUnits:true quiet:true
 	
     rpr = Radeon_ProRender()
@@ -39,7 +39,7 @@ function rpr_render = (
         renderHeight = {height}
     )
 
-    image_path = "{res_path}\\Output\\{scene_name}.jpg"
+    image_path = "{res_path}\\Output\\" + maxFileName + ".jpg"
 
     rstart = timeStamp()
     render outputfile:image_path

@@ -18,10 +18,13 @@ def initializeRPR():
 
 def resolveFilePath():
     unresolved_files = cmds.filePathEditor(query=True, listFiles="", unresolved=True, attributeOnly=True)
-
-    new_path = "{project}";
-    for item in unresolved_files:
-        cmds.filePathEditor(item, repath=new_path, recursive=True, replaceAll=True)
+    if unresolved_files:
+        try:
+            new_path = "{project}";
+            for item in unresolved_files:
+                cmds.filePathEditor(item, repath=new_path, recursive=True, replaceAll=True)
+        except:
+            pass
 
 
 def rpr_render():
@@ -50,14 +53,18 @@ def rpr_render():
         if cmds.getAttr(cam + ".renderable"):
             cmds.lookThru(cam)
 
+    # scene name
+    split_name = cmds.file(q=True, sn=True, shn=True).split('.')
+    scenename = '.'.join(split_name[0:-1])
+
     render_time = 0
     startFrame = {startFrame}
     endFrame = {endFrame}
     if startFrame == endFrame:
         if startFrame != 1:
-            output = os.path.join("{res_path}", "{scene_name}_" + str(startFrame).zfill(3))
+            output = os.path.join("{res_path}", "Output", scenename + "_" + str(startFrame).zfill(3))
         else:
-            output = os.path.join("{res_path}", "{scene_name}")
+            output = os.path.join("{res_path}", "Output", scenename)
         cmds.fireRender(waitForItTwo=True)
         start_time = datetime.datetime.now()
         mel.eval("renderIntoNewWindow render")
@@ -71,7 +78,7 @@ def rpr_render():
             start_time = datetime.datetime.now()
             mel.eval("renderIntoNewWindow render")
             render_time += (datetime.datetime.now() - start_time).total_seconds()
-            output = os.path.join("{res_path}", "{scene_name}_" + str(i).zfill(3))
+            output = os.path.join("{res_path}", "Output", scenename + "_" + str(i).zfill(3))
             cmds.renderWindowEditor("renderView", edit=True, dst="color")
             cmds.renderWindowEditor("renderView", edit=True, com=True, writeImage=output)
 
@@ -91,7 +98,7 @@ def main():
 
     initializeRPR()
     mel.eval("setProject(\"{project}\")")
-    cmds.file("{scene}", f=True, options="v=0;", ignoreVersion=True, o=True)
+    cmds.file("{scene_path}", f=True, options="v=0;", ignoreVersion=True, o=True)
     resolveFilePath()
     rpr_render()
     cmds.evalDeferred(cmds.quit(abort=True))

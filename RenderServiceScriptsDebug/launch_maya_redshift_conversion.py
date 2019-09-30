@@ -8,9 +8,10 @@ import datetime
 import glob
 import os
 import logging
+import ctypes
 
 # logging
-logging.basicConfig(filename="launch_render_log.txt", level=logging.INFO, format='%(asctime)s :: %(levelname)s :: %(message)s')
+logging.basicConfig(filename="launch_conversion_log.txt", level=logging.INFO, format='%(asctime)s :: %(levelname)s :: %(message)s')
 logger = logging.getLogger(__name__)
 
 
@@ -146,7 +147,7 @@ def main():
 		project = current_path_for_maya
 
 	# read maya template
-	with open("redshift_render.py") as f:
+	with open("conversion_redshift_render.py") as f:
 		redshift_script_template = f.read()
 
 	redshift_script = redshift_script_template.format(res_path=current_path_for_maya, scene_path=maya_scene, project=project)
@@ -196,17 +197,17 @@ def main():
 
 	# send render info
 	logger.info("Sending render info")
-	render_time = 0
+	redshift_render_time = 0
 	try:
-		render_time = round(get_rs_render_time(os.path.join("Output", "maya_redshift_render_log.txt")), 2)
-		post_data = {'render_time': render_time, 'id': args.id, 'status':'redshift_render_info'}
+		redshift_render_time = round(get_rs_render_time(os.path.join("Output", "batch_redshift_render_log.txt")), 2)
+		post_data = {'redshift_render_time': redshift_render_time, 'id': args.id, 'status':'redshift_render_info'}
 		send_status(post_data, args.django_ip)
 	except:
 		logger.info("Error. No render time!")
 			
 	
 	# read maya template
-	with open("rpr_render.py") as f:
+	with open("conversion_rpr_render.py") as f:
 		rpr_script_template = f.read()
 	
 	rpr_script = rpr_script_template.format(res_path=current_path_for_maya, scene_path=maya_scene, project=project)
@@ -269,7 +270,7 @@ def main():
 		with open("rpr_render_info.json") as f:
 			data = json.loads(f.read())
 
-		post_data = {'render_time': data['render_time'], 'id': args.id, 'status':'rpr_render_info'}
+		post_data = {'rpr_render_time': data['rpr_render_time'], 'id': args.id, 'status':'rpr_render_info'}
 		send_status(post_data, args.django_ip)
 	else:
 		logger.info("Error. No render info!")

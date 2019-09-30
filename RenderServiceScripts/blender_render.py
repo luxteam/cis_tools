@@ -44,13 +44,15 @@ def set_render_device():
 	return device_name
 
 
-def render(scene_name):
+def render(scene_path):
 
 	# open scene
-	bpy.ops.wm.open_mainfile(filepath=os.path.join(r"{res_path}", scene_name))
+	bpy.ops.wm.open_mainfile(filepath=os.path.join(r"{res_path}", scene_path))
 
 	# get scene name
 	scene = bpy.context.scene
+	split_name = bpy.path.basename(bpy.context.blend_data.filepath).split('.')
+	scenename = '.'.join(split_name[0:-1])
 
 	# enable rpr
 	enable_rpr_render(scene)
@@ -78,7 +80,7 @@ def render(scene_name):
 	set_value(scene.render.image_settings, 'file_format', 'JPEG')
 
 	# output
-	set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}"))
+	set_value(scene.render, 'filepath', os.path.join(r"{res_path}", "Output", scenename))
 	set_value(scene.render, 'use_placeholder', True)
 	set_value(scene.render, 'use_file_extension', True)
 	set_value(scene.render, 'use_overwrite', True)
@@ -90,16 +92,16 @@ def render(scene_name):
 	if startFrame == endFrame:
 		if startFrame != 1:
 			scene.frame_set(startFrame)
-			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(startFrame).zfill(3)))
+			set_value(scene.render, 'filepath', os.path.join(r"{res_path}", "Output", scenename + "_" + str(startFrame).zfill(3)))
 		start_time = datetime.datetime.now()
-		bpy.ops.render.render(write_still=True, scene=scene_name)
+		bpy.ops.render.render(write_still=True, scene=scene_path)
 		render_time += (datetime.datetime.now() - start_time).total_seconds()
 	else:
 		for each in range(startFrame, endFrame+1):
 			scene.frame_set(each)
-			set_value(scene.render, 'filepath', os.path.join("{res_path}", "Output", "{sceneName}_" + str(each).zfill(3)))
+			set_value(scene.render, 'filepath', os.path.join(r"{res_path}", "Output", scenename + "_" + str(each).zfill(3)))
 			start_time = datetime.datetime.now()
-			bpy.ops.render.render(write_still=True, scene=scene_name)
+			bpy.ops.render.render(write_still=True, scene=scene_path)
 			render_time += (datetime.datetime.now() - start_time).total_seconds()
 
 	# results json
@@ -110,10 +112,10 @@ def render(scene_name):
 	report['min_samples'] = get_value(scene.rpr.limits, 'min_samples')
 	report['max_samples'] = get_value(scene.rpr.limits, 'max_samples')
 	report['noise_threshold'] = get_value(scene.rpr.limits, 'noise_threshold')
-	with open(os.path.join("{res_path}", "render_info.json"), 'w') as f:
+	with open(os.path.join(r"{res_path}", "render_info.json"), 'w') as f:
 		json.dump(report, f, indent=' ')
 
 
 if __name__ == "__main__":
 	initializeRPR()
-	render(r'{scene_name}')
+	render(r'{scene_path}')

@@ -14,11 +14,10 @@ def main():
 
 	django_url = args.django_ip
 
-	post_data = {'status': args.status, 'tool': args.tool, 'id': args.id}
+	post_data = {'status': args.status, 'id': args.id}
 	response = requests.post(django_url, data=post_data)
 	print(response)
 
 if __name__ == "__main__":
 	main()
 	exit(0)
-
