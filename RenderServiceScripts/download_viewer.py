@@ -21,7 +21,7 @@ def main():
 	try_count = 0
 	while try_count < 3:
 		try:
-			response = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer.zip"\
+			response = requests.get("https://rpr.cis.luxoft.com/job/RadeonProViewerAuto/job/master/{}/artifact/RprViewer_Windows.zip"\
 				.format(args.version), auth=(config.jenkins_username, config.jenkins_password), verify=False, timeout=None)
 			original_size = response.headers['Content-Length']
 			logger.info("Original size: " + original_size)
