@@ -13,6 +13,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--url')
 	parser.add_argument('--id')
+	parser.add_argument('--scene_name')
 	args = parser.parse_args()
 
 	url_login = "{}/accounts/login/".format(args.url) 
@@ -29,7 +30,7 @@ def main():
 
 	downloaded_file = client.post('{}/upload/download/{}'.format(args.url, args.id), data=login_data)
 
-	with open('scene.blend', 'wb') as f:
+	with open(args.scene_name, 'wb') as f:
 		f.write(downloaded_file.content)
 	
 	
