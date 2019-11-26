@@ -12,7 +12,7 @@ def main():
 	parser.add_argument('--django_ip')
 	args = parser.parse_args()
 
-	django_url = args.django_ip
+	django_url = args.django_ip + "/render/jenkins/"
 
 	post_data = {'status': args.status, 'id': args.id}
 	response = requests.post(django_url, data=post_data)
