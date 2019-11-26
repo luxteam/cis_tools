@@ -14,8 +14,10 @@ def main():
 	parser.add_argument('--fail_reason')
 	args = parser.parse_args()
 
+	django_url = args.django_ip + "/render/jenkins/"
+
 	post_data = {'status': args.status, 'fail_reason': args.fail_reason, 'id': args.id, 'build_number': args.build_number}
-	response = requests.post(args.django_ip, data=post_data)
+	response = requests.post(django_url, data=post_data)
 	print(response)
 
 if __name__ == "__main__":
