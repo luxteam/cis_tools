@@ -103,7 +103,7 @@ def main():
 		f.write(blender_script)
 
 	# save bat file
-	blender_path = r"C:\\Program Files\\Blender Foundation\\Blender\\blender.exe"
+	blender_path = r"C:\\Program Files\\Blender Foundation\\Blender 2.81\\blender.exe"
 	cmd_command = '"{blender_path}" -b -P "{render_file}"'.format(blender_path=blender_path, render_file=render_file)
 	render_bat_file = "launch_render_{}.bat".format(filename)
 	with open(render_bat_file, 'w') as f:
