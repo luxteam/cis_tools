@@ -8,9 +8,9 @@ source ./runJenkinsAgent.conf
 
 wget --timestamping  ${JENKINS_SERVER}/jnlpJars/agent.jar
 
-source scl_source enable devtoolset-7
+# source scl_source enable devtoolset-7
 
-gcc --version
+# gcc --version
 
 while true
 do
