@@ -60,6 +60,7 @@ def get_server_info(sesictrl_path):
 
 def is_license_expired(hserver):
 	used_license = subprocess.check_output([hserver, '-f']).decode()
+	print(used_license)
 	if "None" in used_license:
 		return True
 	return False
@@ -91,7 +92,7 @@ if __name__ == "__main__":
 		
 	if not is_license_expired(houdini_hserver_path):
 		print("License is already installed.")
-		#exit(0)
+		exit(0)
 	servername, servercode = get_server_info(houdini_sessictrl_path)
 
 	print('Server name: {}'.format(servername))
