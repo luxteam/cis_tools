@@ -68,8 +68,8 @@ if __name__ == "__main__":
 		houdini_sessictrl_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/houdini/sbin/sesictrl".format(args.version) 
 		houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(args.version) 
 	else:
-		houdini_sessictrl_path = r"/opt/hfs{}/houdini/sbin/sesictrl".format(version=args.version) 
-		houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(version=args.version) 
+		houdini_sessictrl_path = r"/opt/hfs{}/houdini/sbin/sesictrl".format(args.version) 
+		houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(args.version) 
 		
 	if not is_license_expired(houdini_hserver_path):
 		print("License is already installed.")
