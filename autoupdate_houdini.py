@@ -1,11 +1,29 @@
 import re
 import os
-import twill
 import argparse
 import subprocess
 import platform
 
-# install twill?
+def install(package):
+    subprocess.call([sys.executable, "-m", "pip", "install", package])
+
+try:
+	import twill
+	import platform
+except Exception as ex:
+	print("Required modules are missing, installing")
+	try:
+		install("twill")
+		install("platform")
+		install("jira")
+		import twill
+		import platform
+	except Exception as ex:
+		print(ex)
+		print("Not able to install dependency automatically")
+		print("Run: pip install twill platform")
+		sys.exit(-1)
+
 
 def get_form(field_ids):
 	for form in browser.forms:
@@ -105,6 +123,8 @@ if __name__ == "__main__":
 		lic_response = response['lic_response']
 		for key in lic_response['license_keys'] + [lic_response['server_key']]:
 			print(key)
-			print("{} -I {}".format(houdini_sessictrl_path, key))
-			output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key)).decode()
+			if system_pl == "Windows":
+				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key)).decode()
+			else:
+				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key), shell=True).decode()
 			print(output)
