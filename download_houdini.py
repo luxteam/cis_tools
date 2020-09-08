@@ -236,7 +236,8 @@ def installHoudini(os_name, version, houdini_installer):
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
 				os.chdir(os.path.join(binaries_path, path))
-				launchCommand('./houdini.install --auto-install --accept-EULA')
+				launchCommand('./houdini.install --auto-install --install-houdini --install-hfs-symlink --install-license \
+					--install-bin-symlink --make-dir --no-root-check --accept-EULA')
 
 	# os.remove(houdini_installer)
 
