@@ -178,7 +178,7 @@ def download_houdini(browser, os_name, houdini_version):
 
 	response = browser._session.get(download_link, cookies=response.cookies, stream=True)
 	if response.status_code == 200:
-		block_size = 1024*1024
+		block_size = 1024*1024*10
 		dl = 0
 		print("Starting downloading...")
 		total_length = int(response.headers.get('content-length'))
@@ -187,10 +187,10 @@ def download_houdini(browser, os_name, houdini_version):
 			for chunk in response.iter_content(chunk_size=block_size):
 				if chunk:
 					file.write(chunk)
-					f.flush()
+					file.flush()
 					dl += len(chunk)
 					done = int(50 * dl / total_length)
-					print("[{}{}] {}Mb of {}Mb" % ('=' * done, ' ' * (50-done), int(dl/1024.0/1024.0), int(total_length/1024.0/1024.0)))
+					print("Downloaded {}mb of {}mb".format(int(dl/1024.0/1024.0), int(total_length/1024.0/1024.0)))
 	else:
 		print("Can't download houdini version from cloudfront. Return code: {}".format(response.status_code))
 		exit(-1)
