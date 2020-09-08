@@ -216,6 +216,7 @@ def launchCommand(cmd):
 
 
 def installHoudini(os_name, version, houdini_installer):
+	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 
 	if os_name == "Windows":
 		cmd = '"{houdini_installer}" /S /AcceptEula=yes /LicenseServer=Yes /DesktopIcon=No ' \
@@ -230,8 +231,8 @@ def installHoudini(os_name, version, houdini_installer):
 		os.chdir('/Volumes/Houdini')
 		launchCommand('sudo installer -pkg Houdini.pkg -target')
 	else:
-		launchCommand('tar -xzf {}'.format(houdini_installer))
-		bin_paths = os.listdir(os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries"))
+		launchCommand('tar -xzf {} -C {}'.format(houdini_installer, binaries_path))
+		bin_paths = os.listdir(binaries_path)
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
 				os.chdir(path)
