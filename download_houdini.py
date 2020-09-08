@@ -178,11 +178,19 @@ def download_houdini(browser, os_name, houdini_version):
 
 	response = browser._session.get(download_link, cookies=response.cookies, stream=True)
 	if response.status_code == 200:
-		
+		block_size = 1024*1024
+		dl = 0
+		print("Starting downloading...")
+		total_length = int(response.headers.get('content-length'))
+		print("Total size {}Mb".format(int(total_length/1024.0/1024.0)))
 		with open(filepath, "wb") as file:
-			for chunk in response.iter_content(chunk_size=1024*1024):
+			for chunk in response.iter_content(chunk_size=block_size):
 				if chunk:
 					file.write(chunk)
+					f.flush()
+					dl += len(chunk)
+					done = int(50 * dl / total_length)
+					print("[{}{}] {}Mb of {}Mb" % ('=' * done, ' ' * (50-done), int(dl/1024.0/1024.0), int(total_length/1024.0/1024.0)))
 	else:
 		print("Can't download houdini version from cloudfront. Return code: {}".format(response.status_code))
 		exit(-1)
@@ -190,29 +198,8 @@ def download_houdini(browser, os_name, houdini_version):
 	return filepath
 
 
-def installHoudini(os_name, houdini_installer):
-
-	if os_name == "Windows":
-		cmd = '"{houdini_installer}" /S /AcceptEula=yes /LicenseServer=Yes /DesktopIcon=No ' \
-		  '/FileAssociations=Yes /HoudiniServer=Yes /EngineUnity=No ' \
-		  '/EngineMaya=No /EngineUnreal=No /HQueueServer=No ' \
-		  '/HQueueClient=No /IndustryFileAssociations=Yes ' \
-		  '/ForceLicenseServer=Yes /MainApp=Yes /Registry=Yes' \
-		  .format(houdini_installer=houdini_installer)
-	elif os_name == "Darwin":
-		cmd = 'sudo hdiutil attach {houdini_installer} \
-				cd /Volumes/Houdini \
-				sudo installer -pkg Houdini.pkg -target / \
-			'.format(houdini_installer=houdini_installer)
-	else:
-		houdini_installer_path = houdini_installer.split(".tar.gz")[0]
-		cmd = 'tar -xzf {houdini_installer} \
-				cd {houdini_installer_path} \
-				./houdini.install --auto-install --accept-EULA'.format(houdini_installer=houdini_installer, \
-					houdini_installer_path=houdini_installer_path)
-
+def launchCommand(cmd):
 	print("Execute command: {}".format(cmd))
-	print("Start install...")
 
 	p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	p.communicate()
@@ -224,6 +211,29 @@ def installHoudini(os_name, houdini_installer):
 		for child in reversed(p.children(recursive=True)):
 			child.terminate()
 		p.terminate()
+
+
+def installHoudini(os_name, version, houdini_installer):
+
+	if os_name == "Windows":
+		cmd = '"{houdini_installer}" /S /AcceptEula=yes /LicenseServer=Yes /DesktopIcon=No ' \
+		  '/FileAssociations=Yes /HoudiniServer=Yes /EngineUnity=No ' \
+		  '/EngineMaya=No /EngineUnreal=No /HQueueServer=No ' \
+		  '/HQueueClient=No /IndustryFileAssociations=Yes ' \
+		  '/ForceLicenseServer=Yes /MainApp=Yes /Registry=Yes' \
+		  .format(houdini_installer=houdini_installer)
+		launchCommand(cmd)
+	elif os_name == "Darwin":
+		launchCommand('sudo hdiutil attach {}'.format(houdini_installer))
+		os.chdir('/Volumes/Houdini')
+		launchCommand('sudo installer -pkg Houdini.pkg -target')
+	else:
+		launchCommand('tar -xzf {}'.format(houdini_installer))
+		bin_paths = os.listdir(os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries"))
+		for path in bin_paths:
+			if version in path and not "tar.gz" in path:
+				os.chdir(path)
+				launchCommand('./houdini.install --auto-install --accept-EULA')
 
 	# os.remove(houdini_installer)
 
@@ -290,7 +300,7 @@ if __name__ == "__main__":
 		submit_form({'sfx-login-username': args.username, 'sfx-login-password': args.password})
 
 		filepath = download_houdini(browser, os_name, args.version)
-		installHoudini(os_name, filepath)
+		installHoudini(os_name, args.version, filepath)
 		activate_license(browser, os_name, args.version)
 
 	print("FINISHED")
