@@ -212,7 +212,7 @@ def launchCommand(cmd):
 			child.terminate()
 		p.terminate()
 	except Exception as ex:
-		print(ex)
+		print("launch command exception:".format(ex))
 
 
 def installHoudini(os_name, version, houdini_installer):
