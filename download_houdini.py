@@ -130,7 +130,7 @@ def download_houdini(browser, os_name, houdini_version):
 
 	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 	if not os.path.exists(binaries_path):
-		os.path.makedirs(binaries_path)
+		os.makedirs(binaries_path)
 
 	if os_name == "Windows":
 		file_ext = "exe"
