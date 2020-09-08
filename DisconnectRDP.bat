@@ -1,1 +1,0 @@
-for /f "tokens=2-4" %a in ('query session') do @if "%a"=="%username%" if "%c"=="Active" tscon %b /dest:console

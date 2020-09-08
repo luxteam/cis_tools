@@ -211,6 +211,8 @@ def launchCommand(cmd):
 		for child in reversed(p.children(recursive=True)):
 			child.terminate()
 		p.terminate()
+	except Exception as ex:
+		print(ex)
 
 
 def installHoudini(os_name, version, houdini_installer):
