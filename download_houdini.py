@@ -149,8 +149,6 @@ def download_houdini(browser, os_name, houdini_version):
 		'X-Requested-With': 'XMLHttpRequest'
 	}
 
-	print("Ext: {}".format(file_ext))
-
 	response = browser._session.get(url, headers=headers)
 	if response.status_code == 200:
 		for line in response.text.split():
@@ -161,7 +159,6 @@ def download_houdini(browser, os_name, houdini_version):
 			elif "houdini-{}".format(houdini_version) in line and file_ext in line:
 				break
 
-		print(line)
 		download_link = 'https://www.sidefx.com' + line.split("\">")[0][6:]
 		print("Download link: {}".format(download_link))
 	else:
@@ -268,7 +265,7 @@ def checkInstalledHoudini(os_name, target_version):
 			else:
 				print("{} wil be deleted.".format(path))
 				try:
-					shutil.rmtree(os.path.join("/Applications/Houdini", path))
+					launchCommand("./removeHoudini {}".format(os.path.join("/Applications/Houdini", path)))
 				except Exception as ex:
 					print(ex)
 
