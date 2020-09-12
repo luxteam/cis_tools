@@ -227,14 +227,13 @@ def installHoudini(os_name, version, houdini_installer):
 		  .format(houdini_installer=houdini_installer)
 		launchCommand(cmd)
 	elif os_name == "Darwin":
-		launchCommand('sudo hdiutil attach {}'.format(houdini_installer))
-		os.chdir('/Volumes/Houdini')
-		launchCommand('sudo installer -pkg Houdini.pkg -target')
+		launchCommand('./installHoudini.sh {}'.format(houdini_installer))
 	else:
 		launchCommand('tar -xzf {} -C {}'.format(houdini_installer, binaries_path))
 		bin_paths = os.listdir(binaries_path)
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
+				os.rename()
 				os.chdir(os.path.join(binaries_path, path))
 				launchCommand('./houdini.install --auto-install --install-houdini --install-hfs-symlink --install-license \
 					--install-bin-symlink --make-dir --no-root-check --accept-EULA')
