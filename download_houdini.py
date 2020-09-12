@@ -149,16 +149,19 @@ def download_houdini(browser, os_name, houdini_version):
 		'X-Requested-With': 'XMLHttpRequest'
 	}
 
+	print("Ext: {}".format(file_ext))
+
 	response = browser._session.get(url, headers=headers)
 	if response.status_code == 200:
 		for line in response.text.split():
-			if os_name == "Windows" and "houdini-{}".format(houdini_version) in line and ".exe" in line:
+			if os_name == "Windows" and "houdini-{}".format(houdini_version) in line and file_ext in line:
 				break
-			elif os_name == "Darwin" and "houdini-{}".format(houdini_version) in line and ".dmg" in line:
+			elif os_name == "Darwin" and "houdini-{}".format(houdini_version) in line and file_ext in line:
 				break
-			elif "houdini-{}".format(houdini_version) in line and ".tar.gz" in line:
+			elif "houdini-{}".format(houdini_version) in line and file_ext in line:
 				break
 
+		print(line)
 		download_link = 'https://www.sidefx.com' + line.split("\">")[0][6:]
 		print("Download link: {}".format(download_link))
 	else:
