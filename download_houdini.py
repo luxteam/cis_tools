@@ -263,7 +263,7 @@ def checkInstalledHoudini(os_name, target_version):
 						print(ex)
 			
 		elif os_name == "Darwin":
-			houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(target_version)
+			houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(target_version)
 			houdini_paths = os.listdir("/Applications/Houdini")
 			for path in houdini_paths:
 				if target_version in path and os.path.exists(houdini_hserver_path):
@@ -277,7 +277,7 @@ def checkInstalledHoudini(os_name, target_version):
 						print(ex)
 
 		else:
-			houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(target_version)
+			houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(target_version)
 			houdini_paths = os.listdir("/opt")
 			for path in houdini_paths:
 				if target_version in path and os.path.exists(houdini_hserver_path):
@@ -289,7 +289,7 @@ def checkInstalledHoudini(os_name, target_version):
 						shutil.rmtree(os.path.join("/opt", path))
 					except Exception as ex:
 						print(ex)
-						
+
 	except Exception as ex:
 		print("Failed to check installed Houdini. Exception: {}".format(ex))
 
