@@ -271,6 +271,7 @@ def checkInstalledHoudini(os_name, target_version):
 					print("{} wil be deleted.".format(path))
 					try:
 						launchCommand("./removeHoudini {}".format(os.path.join("/Applications/Houdini", path)))
+						launchCommand("./removeHoudini {}".format(os.path.join("/Applications/Houdini", path)))
 					except Exception as ex:
 						print(ex)
 
