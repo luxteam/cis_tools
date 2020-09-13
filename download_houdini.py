@@ -245,16 +245,14 @@ def installHoudini(os_name, version, houdini_installer):
 
 def checkInstalledHoudini(os_name, target_version):
 
-	target_version_installed = False
-
 	try:
 		if os_name == "Windows":
 			houdini_sessictrl_path = r"C:\Program Files\Side Effects Software\Houdini {}\bin\sesictrl.exe".format(target_version) 
 			houdini_paths = os.listdir(r"C:\Program Files\Side Effects Software")
 			for path in houdini_paths:
 				if target_version in path and os.path.exists(houdini_sessictrl_path):
-					target_version_installed = True
 					launchCommand("hserver.exe")
+					return True
 				else:
 					print("{} wil be deleted.".format(path))
 					try:
@@ -267,8 +265,8 @@ def checkInstalledHoudini(os_name, target_version):
 			houdini_paths = os.listdir("/Applications/Houdini")
 			for path in houdini_paths:
 				if target_version in path and os.path.exists(houdini_hserver_path):
-					target_version_installed = True
 					launchCommand(houdini_hserver_path)
+					return True
 				else:
 					print("{} wil be deleted.".format(path))
 					try:
@@ -281,8 +279,8 @@ def checkInstalledHoudini(os_name, target_version):
 			houdini_paths = os.listdir("/opt")
 			for path in houdini_paths:
 				if target_version in path and os.path.exists(houdini_hserver_path):
-					target_version_installed = True
 					launchCommand(houdini_hserver_path)
+					return True
 				elif "hfs" in path and path != "hfs18.0":
 					print("{} wil be deleted.".format(path))
 					try:
@@ -293,7 +291,7 @@ def checkInstalledHoudini(os_name, target_version):
 	except Exception as ex:
 		print("Failed to check installed Houdini. Exception: {}".format(ex))
 
-	return target_version_installed
+	return False
 
 
 if __name__ == "__main__":
