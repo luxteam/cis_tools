@@ -14,7 +14,7 @@ try:
 	import shutil
 	import requests
 except Exception as ex:
-	print("Required modules are missing, installing")
+	print("Required modules are missing, trying to install...")
 	try:
 		install("twill")
 		install("shutil")
@@ -26,8 +26,8 @@ except Exception as ex:
 		import requests
 	except Exception as ex:
 		print(ex)
-		print("Not able to install dependency automatically")
-		print("Run: pip install twill platform shutil requests")
+		print("Failed to install dependency automatically.")
+		print("Run: pip install twill platform shutil requests manually.")
 		sys.exit(-1)
 
 
@@ -91,7 +91,7 @@ def activate_license(browser, os_name, houdini_version):
 		
 	if not is_license_expired(houdini_hserver_path):
 		print("License is already installed.")
-		exit(0)
+		return
 
 	servername, servercode = get_server_info(houdini_sessictrl_path)
 
@@ -141,6 +141,7 @@ def download_houdini(browser, os_name, houdini_version):
 	filepath = os.path.join(binaries_path, "houdini-{}.".format(houdini_version) + file_ext)
 
 	if os.path.exists(filepath):
+		print("Installer is already exist on PC.")
 		return filepath
 
 	url = 'https://www.sidefx.com/download/daily-builds/'
@@ -214,6 +215,8 @@ def launchCommand(cmd):
 	except Exception as ex:
 		print("launch command exception:".format(ex))
 
+	print("Executing finished.")
+
 
 def installHoudini(os_name, version, houdini_installer):
 	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
@@ -246,10 +249,12 @@ def checkInstalledHoudini(os_name, target_version):
 	target_version_installed = False
 
 	if os_name == "Windows":
+		houdini_sessictrl_path = r"C:\Program Files\Side Effects Software\Houdini {}\bin\sesictrl.exe".format(target_version) 
 		houdini_paths = os.listdir(r"C:\Program Files\Side Effects Software")
 		for path in houdini_paths:
-			if target_version in path:
+			if target_version in path and os.path.exists(houdini_sessictrl_path):
 				target_version_installed = True
+				launchCommand("hserver.exe")
 			else:
 				print("{} wil be deleted.".format(path))
 				try:
@@ -258,10 +263,12 @@ def checkInstalledHoudini(os_name, target_version):
 					print(ex)
 		
 	elif os_name == "Darwin":
+		houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(target_version)
 		houdini_paths = os.listdir("/Applications/Houdini")
 		for path in houdini_paths:
-			if target_version in path:
+			if target_version in path and os.path.exists(houdini_hserver_path):
 				target_version_installed = True
+				launchCommand(houdini_hserver_path)
 			else:
 				print("{} wil be deleted.".format(path))
 				try:
@@ -270,10 +277,12 @@ def checkInstalledHoudini(os_name, target_version):
 					print(ex)
 
 	else:
+		houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(target_version)
 		houdini_paths = os.listdir("/opt")
 		for path in houdini_paths:
-			if target_version in path:
+			if target_version in path and os.path.exists(houdini_hserver_path):
 				target_version_installed = True
+				launchCommand(houdini_hserver_path)
 			elif "hfs" in path and path != "hfs18.0":
 				print("{} wil be deleted.".format(path))
 				try:
@@ -305,6 +314,13 @@ if __name__ == "__main__":
 		filepath = download_houdini(browser, os_name, args.version)
 		installHoudini(os_name, args.version, filepath)
 		activate_license(browser, os_name, args.version)
+		if not checkInstalledHoudini(os_name, args.version):
+			os.remove(filepath)
+			filepath = download_houdini(browser, os_name, args.version)
+			installHoudini(os_name, args.version, filepath)
+			activate_license(browser, os_name, args.version)
+		else:
+			print("Houdini is successfully installed. Verification passed.")
 
 	print("FINISHED")
 
