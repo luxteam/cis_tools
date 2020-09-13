@@ -230,7 +230,7 @@ def installHoudini(os_name, version, houdini_installer):
 		  .format(houdini_installer=houdini_installer)
 		launchCommand(cmd)
 	elif os_name == "Darwin":
-		launchCommand('./installHoudini.sh {}'.format(houdini_installer))
+		launchCommand('{}/installHoudini.sh {}'.format(os.getenv("CIS_TOOLS"), houdini_installer))
 	else:
 		launchCommand('tar -xzf {} -C {}'.format(houdini_installer, binaries_path))
 		bin_paths = os.listdir(binaries_path)
@@ -270,8 +270,8 @@ def checkInstalledHoudini(os_name, target_version):
 				else:
 					print("{} wil be deleted.".format(path))
 					try:
-						launchCommand("./removeHoudini {}".format(os.path.join("/Applications/Houdini", path)))
-						launchCommand("./removeHoudini {}".format(os.path.join("/Applications/Houdini", path)))
+						launchCommand("{}/removeHoudini {}".format(os.getenv("CIS_TOOLS"), os.path.join("/Applications/Houdini", path)))
+						launchCommand("{}/removeHoudini {}".format(os.getenv("CIS_TOOLS"), os.path.join("/Applications/Houdini", path)))
 					except Exception as ex:
 						print(ex)
 
