@@ -247,47 +247,51 @@ def checkInstalledHoudini(os_name, target_version):
 
 	target_version_installed = False
 
-	if os_name == "Windows":
-		houdini_sessictrl_path = r"C:\Program Files\Side Effects Software\Houdini {}\bin\sesictrl.exe".format(target_version) 
-		houdini_paths = os.listdir(r"C:\Program Files\Side Effects Software")
-		for path in houdini_paths:
-			if target_version in path and os.path.exists(houdini_sessictrl_path):
-				target_version_installed = True
-				launchCommand("hserver.exe")
-			else:
-				print("{} wil be deleted.".format(path))
-				try:
-					shutil.rmtree(os.path.join(r"C:\Program Files\Side Effects Software", path))
-				except Exception as ex:
-					print(ex)
-		
-	elif os_name == "Darwin":
-		houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(target_version)
-		houdini_paths = os.listdir("/Applications/Houdini")
-		for path in houdini_paths:
-			if target_version in path and os.path.exists(houdini_hserver_path):
-				target_version_installed = True
-				launchCommand(houdini_hserver_path)
-			else:
-				print("{} wil be deleted.".format(path))
-				try:
-					launchCommand("./removeHoudini {}".format(os.path.join("/Applications/Houdini", path)))
-				except Exception as ex:
-					print(ex)
+	try:
+		if os_name == "Windows":
+			houdini_sessictrl_path = r"C:\Program Files\Side Effects Software\Houdini {}\bin\sesictrl.exe".format(target_version) 
+			houdini_paths = os.listdir(r"C:\Program Files\Side Effects Software")
+			for path in houdini_paths:
+				if target_version in path and os.path.exists(houdini_sessictrl_path):
+					target_version_installed = True
+					launchCommand("hserver.exe")
+				else:
+					print("{} wil be deleted.".format(path))
+					try:
+						shutil.rmtree(os.path.join(r"C:\Program Files\Side Effects Software", path))
+					except Exception as ex:
+						print(ex)
+			
+		elif os_name == "Darwin":
+			houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(target_version)
+			houdini_paths = os.listdir("/Applications/Houdini")
+			for path in houdini_paths:
+				if target_version in path and os.path.exists(houdini_hserver_path):
+					target_version_installed = True
+					launchCommand(houdini_hserver_path)
+				else:
+					print("{} wil be deleted.".format(path))
+					try:
+						launchCommand("./removeHoudini {}".format(os.path.join("/Applications/Houdini", path)))
+					except Exception as ex:
+						print(ex)
 
-	else:
-		houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(target_version)
-		houdini_paths = os.listdir("/opt")
-		for path in houdini_paths:
-			if target_version in path and os.path.exists(houdini_hserver_path):
-				target_version_installed = True
-				launchCommand(houdini_hserver_path)
-			elif "hfs" in path and path != "hfs18.0":
-				print("{} wil be deleted.".format(path))
-				try:
-					shutil.rmtree(os.path.join("/opt", path))
-				except Exception as ex:
-					print(ex)
+		else:
+			houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(target_version)
+			houdini_paths = os.listdir("/opt")
+			for path in houdini_paths:
+				if target_version in path and os.path.exists(houdini_hserver_path):
+					target_version_installed = True
+					launchCommand(houdini_hserver_path)
+				elif "hfs" in path and path != "hfs18.0":
+					print("{} wil be deleted.".format(path))
+					try:
+						shutil.rmtree(os.path.join("/opt", path))
+					except Exception as ex:
+						print(ex)
+						
+	except Exception as ex:
+		print("Failed to check installed Houdini. Exception: {}".format(ex))
 
 	return target_version_installed
 
