@@ -307,24 +307,23 @@ if __name__ == "__main__":
 
 	os_name = platform.system()
 
+	# authorization 
+	browser = twill.commands.browser
+	twill.commands.go('https://www.sidefx.com/login/')
+	submit_form({'sfx-login-username': args.username, 'sfx-login-password': args.password})
+
 	# True if target version is already installed 
 	if not checkInstalledHoudini(os_name, args.version):
-	
-		# authorization 
-		browser = twill.commands.browser
-		twill.commands.go('https://www.sidefx.com/login/')
-		submit_form({'sfx-login-username': args.username, 'sfx-login-password': args.password})
-
 		filepath = download_houdini(browser, os_name, args.version)
 		installHoudini(os_name, args.version, filepath)
-		activate_license(browser, os_name, args.version)
 		if not checkInstalledHoudini(os_name, args.version):
 			os.remove(filepath)
 			filepath = download_houdini(browser, os_name, args.version)
 			installHoudini(os_name, args.version, filepath)
-			activate_license(browser, os_name, args.version)
 		else:
 			print("Houdini is successfully installed. Verification passed.")
+
+	activate_license(browser, os_name, args.version)
 
 	print("FINISHED")
 
