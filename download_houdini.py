@@ -119,7 +119,7 @@ def activate_license(browser, os_name, houdini_version):
 		lic_response = response['lic_response']
 		for key in lic_response['license_keys'] + [lic_response['server_key']]:
 			print(key)
-			if system_pl == "Windows":
+			if os_name == "Windows":
 				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key)).decode()
 			else:
 				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key), shell=True).decode()
