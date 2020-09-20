@@ -67,9 +67,9 @@ def get_server_info(sesictrl_path):
 def is_license_expired(hserver):
 	used_license = subprocess.check_output([hserver, '-f']).decode()
 	print(used_license)
-	if "None" in used_license:
-		return True
-	return False
+	if "Used Licenses" in used_license:
+		return False
+	return True
 
 
 def activate_license(browser, os_name, houdini_version):
