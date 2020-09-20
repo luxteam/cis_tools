@@ -67,7 +67,7 @@ def get_server_info(sesictrl_path):
 def is_license_expired(hserver):
 	used_license = subprocess.check_output([hserver, '-f']).decode()
 	print(used_license)
-	if "Used Licenses" in used_license:
+	if "Used Licenses" in used_license and not "None" in used_license:
 		return False
 	return True
 
