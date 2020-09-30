@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 import subprocess
+import getpass
 
 
 def install(package):
@@ -86,8 +87,9 @@ def activate_license(browser, os_name, houdini_version):
 		houdini_sessictrl_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/houdini/sbin/sesictrl".format(houdini_version) 
 		houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(houdini_version) 
 	else:
-		houdini_sessictrl_path = r"/opt/hfs{}/houdini/sbin/sesictrl".format(houdini_version) 
-		houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(houdini_version) 
+
+		houdini_sessictrl_path = r"/home/{}/Houdini/hfs{}/houdini/sbin/sesictrl".format(getpass.getuser(), houdini_version) 
+		houdini_hserver_path = r"/home/{}/Houdini/hfs{}/bin/hserver".format(getpass.getuser(), houdini_version) 
 		
 	if not is_license_expired(houdini_hserver_path):
 		print("License is already installed.")
@@ -239,7 +241,7 @@ def installHoudini(os_name, version, houdini_installer):
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
 				houdini_installer_path = os.path.join(binaries_path, path)
-				launchCommand("{}/installHoudini.sh {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path))
+				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, version))
 
 
 def checkInstalledHoudini(os_name, target_version):
@@ -275,8 +277,8 @@ def checkInstalledHoudini(os_name, target_version):
 						print(ex)
 
 		else:
-			houdini_hserver_path = r"/opt/hfs{}/bin/hserver".format(target_version)
-			houdini_paths = os.listdir("/opt")
+			houdini_hserver_path = r"/home/{}/Houdini/hfs{}/bin/hserver".format(getpass.getuser(), target_version)
+			houdini_paths = os.listdir("/home/{}/Houdini".format(getpass.getuser()))
 			for path in houdini_paths:
 				if target_version in path and os.path.exists(houdini_hserver_path):
 					launchCommand(houdini_hserver_path)
@@ -284,7 +286,8 @@ def checkInstalledHoudini(os_name, target_version):
 				elif "hfs" in path and path != "hfs18.0":
 					print("{} wil be deleted.".format(path))
 					try:
-						launchCommand("{}/removeHoudini.sh {}".format(os.getenv("CIS_TOOLS"), os.path.join("/opt", path)))
+						launchCommand("{}/removeHoudini.sh {}".format(os.getenv("CIS_TOOLS"), \
+							os.path.join("/home/{}/Houdini".format(getpass.getuser(), path))))
 					except Exception as ex:
 						print(ex)
 
