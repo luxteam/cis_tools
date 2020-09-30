@@ -241,7 +241,8 @@ def installHoudini(os_name, version, houdini_installer):
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
 				houdini_installer_path = os.path.join(binaries_path, path)
-				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, version))
+				target_path = os.path.join("/home/{}/Houdini/hfs{}".format(getpass.getuser(), version))
+				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, target_path))
 
 
 def checkInstalledHoudini(os_name, target_version):
