@@ -231,17 +231,20 @@ def installHoudini(os_name, version, houdini_installer):
 		  '/ForceLicenseServer=Yes /MainApp=Yes /Registry=Yes' \
 		  .format(houdini_installer=houdini_installer)
 		launchCommand(cmd)
+
 	elif os_name == "Darwin":
 		launchCommand("hdiutil attach {} -mountpoint /Volumes/Houdini".format(houdini_installer))
 		launchCommand("{}/installHoudini.sh {}".format(os.getenv("CIS_TOOLS"), houdini_installer))
 		launchCommand("hdiutil detach /Volumes/Houdini")
+		
 	else:
 		launchCommand('tar -xzf {} -C {}'.format(houdini_installer, binaries_path))
 		bin_paths = os.listdir(binaries_path)
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
 				houdini_installer_path = os.path.join(binaries_path, path)
-				os.makedirs("/home/{}/Houdini".format(getpass.getuser()))
+				if not os.path.exists("/home/{}/Houdini".format(getpass.getuser())):
+					os.makedirs("/home/{}/Houdini".format(getpass.getuser()))
 				target_path = os.path.join("/home/{}/Houdini/hfs{}".format(getpass.getuser(), version))
 				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, target_path))
 
