@@ -241,6 +241,7 @@ def installHoudini(os_name, version, houdini_installer):
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
 				houdini_installer_path = os.path.join(binaries_path, path)
+				os.makedirs("/home/{}/Houdini".format(getpass.getuser()))
 				target_path = os.path.join("/home/{}/Houdini/hfs{}".format(getpass.getuser(), version))
 				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, target_path))
 
@@ -286,11 +287,14 @@ def checkInstalledHoudini(os_name, target_version):
 					return True
 				elif "hfs" in path and path != "hfs18.0":
 					print("{} wil be deleted.".format(path))
+					target_path = os.path.join("/home/{}/Houdini".format(getpass.getuser(), path))
 					try:
-						launchCommand("{}/removeHoudini.sh {}".format(os.getenv("CIS_TOOLS"), \
-							os.path.join("/home/{}/Houdini".format(getpass.getuser(), path))))
+						launchCommand("{}/removeHoudini.sh {}".format(os.getenv("CIS_TOOLS"), target_path))
 					except Exception as ex:
 						print(ex)
+					finally:
+						if os.path.exists(os.path.join("/home/{}/Houdini".format(getpass.getuser(), path))):
+							shutil.rmtree(target_path)
 
 	except Exception as ex:
 		print("Failed to check installed Houdini. Exception: {}".format(ex))
