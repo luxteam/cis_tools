@@ -66,7 +66,7 @@ def get_server_info(sesictrl_path):
 
 
 def is_license_expired(hserver):
-	used_license = subprocess.check_output([hserver, '-f']).decode()
+	used_license = subprocess.check_output([hserver, '-l']).decode()
 	print(used_license)
 	if "Used Licenses" in used_license and not "None" in used_license:
 		return False
@@ -224,7 +224,7 @@ def installHoudini(os_name, version, houdini_installer):
 	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 
 	if os_name == "Windows":
-		cmd = '"{houdini_installer}" /S /AcceptEula=yes /LicenseServer=Yes /DesktopIcon=No ' \
+		cmd = '"{houdini_installer}" /S /AcceptEula=20-05-05 /LicenseServer=Yes /DesktopIcon=No ' \
 		  '/FileAssociations=Yes /HoudiniServer=Yes /EngineUnity=No ' \
 		  '/EngineMaya=No /EngineUnreal=No /HQueueServer=No ' \
 		  '/HQueueClient=No /IndustryFileAssociations=Yes ' \
