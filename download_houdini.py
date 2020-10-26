@@ -259,12 +259,6 @@ def checkInstalledHoudini(os_name, target_version):
 				if target_version in path and os.path.exists(houdini_sessictrl_path):
 					launchCommand("hserver.exe")
 					return True
-				else:
-					print("{} wil be deleted.".format(path))
-					try:
-						shutil.rmtree(os.path.join(r"C:\Program Files\Side Effects Software", path))
-					except Exception as ex:
-						print(ex)
 			
 		elif os_name == "Darwin":
 			houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(target_version)
@@ -273,13 +267,6 @@ def checkInstalledHoudini(os_name, target_version):
 				if target_version in path and os.path.exists(houdini_hserver_path):
 					launchCommand(houdini_hserver_path)
 					return True
-				else:
-					print("{} wil be deleted.".format(path))
-					try:
-						launchCommand("{}/removeHoudini.sh {}".format(os.getenv("CIS_TOOLS"), os.path.join("/Applications/Houdini", path)))
-						launchCommand("{}/removeHoudini.sh {}".format(os.getenv("CIS_TOOLS"), os.path.join("/Applications/Houdini", path)))
-					except Exception as ex:
-						print(ex)
 
 		else:
 			houdini_hserver_path = r"/home/{}/Houdini/hfs{}/bin/hserver".format(getpass.getuser(), target_version)
@@ -288,16 +275,6 @@ def checkInstalledHoudini(os_name, target_version):
 				if target_version in path and os.path.exists(houdini_hserver_path):
 					launchCommand(houdini_hserver_path)
 					return True
-				elif "hfs" in path and path != "hfs18.0":
-					print("{} wil be deleted.".format(path))
-					target_path = os.path.join("/home/{}/Houdini".format(getpass.getuser(), path))
-					try:
-						launchCommand("{}/removeHoudini.sh {}".format(os.getenv("CIS_TOOLS"), target_path))
-					except Exception as ex:
-						print(ex)
-					finally:
-						if os.path.exists(os.path.join("/home/{}/Houdini".format(getpass.getuser(), path))):
-							shutil.rmtree(target_path)
 
 	except Exception as ex:
 		print("Failed to check installed Houdini. Exception: {}".format(ex))
