@@ -1,7 +1,7 @@
 c:
 cd c:\JN
 
-curl -O https://rpr.cis.luxoft.com/jnlpJars/agent.jar
+rem curl -O */jnlpJars/agent.jar
 
 :up 
 
