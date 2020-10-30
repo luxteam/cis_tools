@@ -15,6 +15,6 @@ JN_RUN_OPTIONS=${SCRIPTPATH}/runJenkinsAgent.conf
 HOSTNAME=`hostname`
 
 echo 'JENKINS_SECRET=145678901890190123457890123457890' >> $JN_RUN_OPTIONS
-echo 'JENKINS_SERVER=https://rpr.cis.luxoft.com'        >> $JN_RUN_OPTIONS
+echo 'JENKINS_SERVER=                          '        >> $JN_RUN_OPTIONS
 echo 'JENKINS_AGENTNAME=`hostname`'                     >> $JN_RUN_OPTIONS
 
