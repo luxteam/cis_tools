@@ -5,7 +5,6 @@ import argparse
 import subprocess
 import getpass
 
-
 def install(package):
 	subprocess.call([sys.executable, "-m", "pip", "install", package])
 
@@ -30,6 +29,14 @@ except Exception as ex:
 		print("Failed to install dependency automatically.")
 		print("Run: pip install twill platform shutil requests manually.")
 		sys.exit(-1)
+
+
+def Windows():
+    return platform.system() == "Windows"
+
+
+def MacOS():
+    return platform.system() == "Darwin"
 
 
 def get_form(field_ids):
@@ -68,29 +75,43 @@ def get_server_info(sesictrl_path):
 def is_license_expired(hserver):
 	used_license = subprocess.check_output([hserver, '-l']).decode()
 	print(used_license)
+	exit(-1)
 	if "Used Licenses" in used_license and not "None" in used_license:
 		return False
 	return True
 
 
-def activate_license(browser, os_name, houdini_version):
+def get_parent_dir(path):
+	return os.path.abspath(os.path.join(path, os.pardir))
 
-	houdini_sessictrl_path = None
-	houdini_hserver_path = None
-	servername, servercode = None, None
-	
-	if os_name == "Windows":
-		houdini_sessictrl_path = r"C:\Program Files\Side Effects Software\Houdini {}\bin\sesictrl.exe".format(houdini_version) 
+
+def get_houdini_install_dir(houdini_version, houdini_is_python3):
+	if Windows():
+		return r"C:\Program Files\Side Effects Software\Houdini {}{}".format(houdini_version, ' Python3' if houdini_is_python3 else '') 
+		
+	elif MacOS():
+		return r'/Applications/Houdini/Houdini{}{}'.format(houdini_version, '-py3' if houdini_is_python3 else '-py2')
+
+	else:
+		return r"/home/{}/Houdini/hfs{}{}".format(getpass.getuser(), houdini_version, '-py3' if houdini_is_python3 else '') 
+
+
+def activate_license(browser, houdini_version, houdini_is_python3):
+
+	install_dir = get_houdini_install_dir(houdini_version, houdini_is_python3)
+
+	if Windows():
+		houdini_sessictrl_path = install_dir + r'\bin\sesictrl.exe'
 		houdini_hserver_path = "hserver.exe"
 		
-	elif os_name == "Darwin":
-		houdini_sessictrl_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/houdini/sbin/sesictrl".format(houdini_version) 
-		houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(houdini_version) 
-	else:
+	elif MacOS():
+		houdini_sessictrl_path = install_dir + r"/Frameworks/Houdini.framework/Versions/Current/Resources/houdini/sbin/sesictrl"
+		houdini_hserver_path = install_dir + r"/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver"
 
-		houdini_sessictrl_path = r"/home/{}/Houdini/hfs{}/houdini/sbin/sesictrl".format(getpass.getuser(), houdini_version) 
-		houdini_hserver_path = r"/home/{}/Houdini/hfs{}/bin/hserver".format(getpass.getuser(), houdini_version) 
-		
+	else:
+		houdini_sessictrl_path = install_dir + r'/houdini/sbin/sesictrl'
+		houdini_hserver_path = install_dir + r'/bin/hserver'
+
 	if not is_license_expired(houdini_hserver_path):
 		print("License is already installed.")
 		return
@@ -121,26 +142,31 @@ def activate_license(browser, os_name, houdini_version):
 		lic_response = response['lic_response']
 		for key in lic_response['license_keys'] + [lic_response['server_key']]:
 			print(key)
-			if os_name == "Windows":
+			if Windows():
 				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key)).decode()
 			else:
 				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key), shell=True).decode()
 			print(output)
 
 
-def download_houdini(browser, os_name, houdini_version):
+def download_houdini(browser, houdini_version, houdini_is_python3):
 
 	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 	if not os.path.exists(binaries_path):
 		os.makedirs(binaries_path)
 
-	if os_name == "Windows":
-		file_ext = "exe"
-	elif os_name == "Darwin":
-		file_ext = "dmg"
+	houdini_name = 'houdini'
+	if houdini_is_python3:
+		houdini_name += '-py3'
+	houdini_name += '-' + houdini_version
+
+	if Windows():
+		file_ext = ".exe"
+	elif MacOS():
+		file_ext = ".dmg"
 	else:
-		file_ext = "tar.gz"
-	filepath = os.path.join(binaries_path, "houdini-{}.".format(houdini_version) + file_ext)
+		file_ext = ".tar.gz"
+	filepath = os.path.join(binaries_path, houdini_name + file_ext)
 
 	if os.path.exists(filepath):
 		print("Installer is already exist on PC.")
@@ -155,15 +181,15 @@ def download_houdini(browser, os_name, houdini_version):
 	response = browser._session.get(url, headers=headers)
 	if response.status_code == 200:
 		for line in response.text.split():
-			if os_name == "Windows" and "houdini-{}".format(houdini_version) in line and file_ext in line:
-				break
-			elif os_name == "Darwin" and "houdini-{}".format(houdini_version) in line and file_ext in line:
-				break
-			elif "houdini-{}".format(houdini_version) in line and file_ext in line:
+			if houdini_name in line and file_ext in line:
+				download_link = 'https://www.sidefx.com' + line.split("\">")[0][6:]
+				print("Download link: {}".format(download_link))
 				break
 
-		download_link = 'https://www.sidefx.com' + line.split("\">")[0][6:]
-		print("Download link: {}".format(download_link))
+		else:
+			print("No required build on daily-builds page.")
+			exit(-1)
+
 	else:
 		print("Can't get daily daily-builds page. Return code: {}".format(response.status_code))
 		exit(-1)
@@ -175,6 +201,12 @@ def download_houdini(browser, os_name, houdini_version):
 			if "Retry" in line:
 				download_link = line.split("\">")[0][6:].replace("&amp;", "&")
 				print("Redirect download link: {}".format(download_link))
+				break
+
+		else:
+			print('No redirect download link.')
+			exit(-1)
+
 	else:
 		print("Can't download houdini version from sidefx page. Return code: {}".format(response.status_code))
 		exit(-1)
@@ -220,64 +252,65 @@ def launchCommand(cmd):
 	print("Executing finished.")
 
 
-def installHoudini(os_name, version, houdini_installer):
-	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
+def installHoudini(version, is_python3, houdini_installer):
 
-	if os_name == "Windows":
-		cmd = '"{houdini_installer}" /S /AcceptEula=20-05-05 /LicenseServer=Yes /DesktopIcon=No ' \
-		  '/FileAssociations=Yes /HoudiniServer=Yes /EngineUnity=No ' \
-		  '/EngineMaya=No /EngineUnreal=No /HQueueServer=No ' \
-		  '/HQueueClient=No /IndustryFileAssociations=Yes ' \
-		  '/ForceLicenseServer=Yes /MainApp=Yes /Registry=Yes' \
-		  .format(houdini_installer=houdini_installer)
+	houdini_install_dir = get_houdini_install_dir(version, is_python3)
+	print(houdini_install_dir)
+
+	if Windows():
+		cmd = '"{houdini_installer}" /S /AcceptEULA=2020-05-05 /LicenseServer=Yes /DesktopIcon=No ' \
+		  '/MainApp=Yes /Registry=Yes'.format(houdini_installer=houdini_installer)
 		launchCommand(cmd)
+		if is_python3:
+			os.rename(houdini_install_dir[0:-8], houdini_install_dir)
 
-	elif os_name == "Darwin":
+	elif MacOS():
 		launchCommand("hdiutil attach {} -mountpoint /Volumes/Houdini".format(houdini_installer))
-		launchCommand("{}/installHoudini.sh {}".format(os.getenv("CIS_TOOLS"), houdini_installer))
+		launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer, houdini_install_dir))
 		launchCommand("hdiutil detach /Volumes/Houdini")
-		
+		if is_python3:
+			os.rename(houdini_install_dir[0:-4], houdini_install_dir)
+
 	else:
+		binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 		launchCommand('tar -xzf {} -C {}'.format(houdini_installer, binaries_path))
 		bin_paths = os.listdir(binaries_path)
 		for path in bin_paths:
 			if version in path and not "tar.gz" in path:
+
+				houdini_install_parent_dir = get_parent_dir(houdini_install_dir)
+				if not os.path.exists(houdini_install_parent_dir):
+					os.makedirs(houdini_install_parent_dir)
+
 				houdini_installer_path = os.path.join(binaries_path, path)
-				if not os.path.exists("/home/{}/Houdini".format(getpass.getuser())):
-					os.makedirs("/home/{}/Houdini".format(getpass.getuser()))
-				target_path = os.path.join("/home/{}/Houdini/hfs{}".format(getpass.getuser(), version))
-				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, target_path))
+				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, houdini_install_dir))
 
 
-def checkInstalledHoudini(os_name, target_version):
+def checkInstalledHoudini(target_version, target_is_python3):
+
+	install_dir = get_houdini_install_dir(target_version, target_is_python3)
+
+	if Windows():
+		houdini_required_file = install_dir + r'\bin\sesictrl.exe'
+		houdini_test_command = 'hserver.exe'
+
+	elif MacOS():
+		houdini_required_file = install_dir + r"/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver"
+		houdini_test_command = houdini_required_file
+
+	else:
+		houdini_required_file = install_dir + '/bin/hserver'
+		houdini_test_command = houdini_required_file
 
 	try:
-		if os_name == "Windows":
-			houdini_sessictrl_path = r"C:\Program Files\Side Effects Software\Houdini {}\bin\sesictrl.exe".format(target_version) 
-			houdini_paths = os.listdir(r"C:\Program Files\Side Effects Software")
-			for path in houdini_paths:
-				if target_version in path and os.path.exists(houdini_sessictrl_path):
-					launchCommand("hserver.exe")
-					return True
-			
-		elif os_name == "Darwin":
-			houdini_hserver_path = r"/Applications/Houdini/Houdini{}/Frameworks/Houdini.framework/Versions/Current/Resources/bin/hserver".format(target_version)
-			houdini_paths = os.listdir("/Applications/Houdini")
-			for path in houdini_paths:
-				if target_version in path and os.path.exists(houdini_hserver_path):
-					launchCommand(houdini_hserver_path)
-					return True
-
-		else:
-			houdini_hserver_path = r"/home/{}/Houdini/hfs{}/bin/hserver".format(getpass.getuser(), target_version)
-			houdini_paths = os.listdir("/home/{}/Houdini".format(getpass.getuser()))
-			for path in houdini_paths:
-				if target_version in path and os.path.exists(houdini_hserver_path):
-					launchCommand(houdini_hserver_path)
-					return True
-
+		for path in os.listdir(get_parent_dir(install_dir)):
+			if target_version in path and os.path.exists(houdini_required_file):
+				launchCommand(houdini_test_command)
+				return True
 	except Exception as ex:
 		print("Failed to check installed Houdini. Exception: {}".format(ex))
+
+	print("Houdini isn't installed.")
 
 	return False
 
@@ -288,9 +321,8 @@ if __name__ == "__main__":
 	parser.add_argument('-l', '--username', required=True)
 	parser.add_argument('-p', '--password', required=True)
 	parser.add_argument('-v', '--version', required=True)
+	parser.add_argument('--python3', action='store_true')
 	args = parser.parse_args()
-
-	os_name = platform.system()
 
 	# authorization 
 	browser = twill.commands.browser
@@ -298,18 +330,16 @@ if __name__ == "__main__":
 	submit_form({'sfx-login-username': args.username, 'sfx-login-password': args.password})
 
 	# True if target version is already installed 
-	if not checkInstalledHoudini(os_name, args.version):
-		filepath = download_houdini(browser, os_name, args.version)
-		installHoudini(os_name, args.version, filepath)
-		if not checkInstalledHoudini(os_name, args.version):
-			os.remove(filepath)
-			filepath = download_houdini(browser, os_name, args.version)
-			installHoudini(os_name, args.version, filepath)
+	if not checkInstalledHoudini(args.version, args.python3):
+		filepath = download_houdini(browser, args.version, args.python3)
+		installHoudini(args.version, args.python3, filepath)
+		if not checkInstalledHoudini(args.version, args.python3):
+			#os.remove(filepath)
+			filepath = download_houdini(browser, args.version, args.python3)
+			installHoudini(args.version, args.python3, filepath)
 		else:
 			print("Houdini is successfully installed. Verification passed.")
 
-	activate_license(browser, os_name, args.version)
+	activate_license(browser, args.version, args.python3)
 
 	print("FINISHED")
-
-	
