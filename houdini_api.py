@@ -1,10 +1,13 @@
 import re
 import os
 import sys
-import argparse
-import subprocess
-import getpass
+import time
 import hashlib
+import getpass
+import argparse
+import traceback
+import subprocess
+
 
 def install(package):
 	subprocess.call([sys.executable, "-m", "pip", "install", package])
@@ -290,6 +293,15 @@ def checkInstalledHoudini(target_version, target_is_python3):
 	return False
 
 
+def execute(sidefx, args):
+	# True if target version is already installed 
+	if not checkInstalledHoudini(args.version, args.python3):
+		filepath = download_houdini(sidefx_client, args.version, args.python3)
+		installHoudini(args.version, args.python3, filepath)
+		if checkInstalledHoudini(args.version, args.python3):
+			print("Houdini is successfully installed. Verification passed.")
+
+
 if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -307,12 +319,15 @@ if __name__ == "__main__":
 		endpoint_url="https://www.sidefx.com/api/",
 	)
 
-	# True if target version is already installed 
-	if not checkInstalledHoudini(args.version, args.python3):
-		filepath = download_houdini(sidefx_client, args.version, args.python3)
-		installHoudini(args.version, args.python3, filepath)
-		if checkInstalledHoudini(args.version, args.python3):
-			print("Houdini is successfully installed. Verification passed.")
+	try:
+		print("Try #1")
+		execute(sidefx, args)
+	except Exception as ex:
+		traceback.print_exc()
+		print("Failed to execute download and install scripts.")
+		print("Try #2 after 60 seconds")
+		time.sleep(60)
+		execute(sidefx, args)
 
 	activate_license(sidefx_client, args.version, args.python3)
 	
