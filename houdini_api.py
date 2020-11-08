@@ -247,7 +247,9 @@ def installHoudini(version, is_python3, houdini_installer):
 		launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer, houdini_install_dir))
 		launchCommand("hdiutil detach /Volumes/Houdini")
 		if is_python3:
-			os.rename(houdini_install_dir[0:-4], houdini_install_dir)
+			# need sudo 
+			# os.rename(houdini_install_dir[0:-4], houdini_install_dir)
+			pass
 
 	else:
 		binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
