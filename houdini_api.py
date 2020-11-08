@@ -102,7 +102,7 @@ def get_houdini_install_dir(houdini_version, houdini_is_python3):
 		return r'/Applications/Houdini/Houdini{}{}'.format(houdini_version, '-py3' if houdini_is_python3 else '-py2')
 
 	else:
-		return r"/home/{}/Houdini/hfs{}{}".format(getpass.getuser(), houdini_version, '-py3' if houdini_is_python3 else '') 
+		return r"/home/{}/Houdini/hfs{}{}".format(getpass.getuser(), houdini_version, '-py3' if houdini_is_python3 else '-py2') 
 
 
 def activate_license(sidefx_client, houdini_version, houdini_is_python3):
