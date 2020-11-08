@@ -4,6 +4,7 @@ import sys
 import argparse
 import subprocess
 import getpass
+import hashlib
 
 def install(package):
 	subprocess.call([sys.executable, "-m", "pip", "install", package])
@@ -28,15 +29,17 @@ except Exception as ex:
 		print(ex)
 		print("Failed to install dependency automatically.")
 		print("Run: pip install twill platform shutil requests manually.")
-		sys.exit(-1)
+		exit(-1)
+
+import sidefx
 
 
 def Windows():
-    return platform.system() == "Windows"
+	return platform.system() == "Windows"
 
 
 def MacOS():
-    return platform.system() == "Darwin"
+	return platform.system() == "Darwin"
 
 
 def get_form(field_ids):
@@ -75,7 +78,6 @@ def get_server_info(sesictrl_path):
 def is_license_expired(hserver):
 	used_license = subprocess.check_output([hserver, '-l']).decode()
 	print(used_license)
-	exit(-1)
 	if "Used Licenses" in used_license and not "None" in used_license:
 		return False
 	return True
@@ -83,6 +85,10 @@ def is_license_expired(hserver):
 
 def get_parent_dir(path):
 	return os.path.abspath(os.path.join(path, os.pardir))
+
+
+def parse_houdini_version(version):
+	return ".".join(version.split(".")[:-1]), version.split(".")[-1]
 
 
 def get_houdini_install_dir(houdini_version, houdini_is_python3):
@@ -96,7 +102,9 @@ def get_houdini_install_dir(houdini_version, houdini_is_python3):
 		return r"/home/{}/Houdini/hfs{}{}".format(getpass.getuser(), houdini_version, '-py3' if houdini_is_python3 else '') 
 
 
-def activate_license(browser, houdini_version, houdini_is_python3):
+def activate_license(sidefx_client, houdini_version, houdini_is_python3):
+
+	version, build = parse_houdini_version(houdini_version)
 
 	install_dir = get_houdini_install_dir(houdini_version, houdini_is_python3)
 
@@ -114,104 +122,69 @@ def activate_license(browser, houdini_version, houdini_is_python3):
 
 	if not is_license_expired(houdini_hserver_path):
 		print("License is already installed.")
-		return
+		# return
 
-	servername, servercode = get_server_info(houdini_sessictrl_path)
+	server_name, server_code = get_server_info(houdini_sessictrl_path)
 
-	print('Server name: {}'.format(servername))
-	print('Server code: {}'.format(servercode))
+	print('Server name: {}'.format(server_name))
+	print('Server code: {}'.format(server_code))
 
-	url = 'https://www.sidefx.com/services/non-commercial-license/'
-	headers = {
-		'referer': url,
-		'X-Requested-With': 'XMLHttpRequest'
-	}
+	license_strings = sidefx_client.license.get_non_commercial_license(
+        server_name=server_name, server_code=server_code, version=version, products='HOUDINI-NC')
 
-	request_data = {
-		'product': 'HOUDINI-NC',
-		'servername': servername,
-		'servercode': servercode,
-		'csrfmiddlewaretoken': get_csrf()
-	}
-	response = browser._session.post(url, data=request_data, headers=headers).json()
-
-	if response['errors']:
-		for error in response['errors']:
-			print('Error: {}'.format(error))
-	else:
-		lic_response = response['lic_response']
-		for key in lic_response['license_keys'] + [lic_response['server_key']]:
-			print(key)
-			if Windows():
-				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key)).decode()
-			else:
-				output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key), shell=True).decode()
-			print(output)
+	licenses = license_strings['license_keys']
+	for key in licenses:
+		print(key)
+		if Windows():
+			output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key)).decode()
+		else:
+			output = subprocess.check_output("{} -I {}".format(houdini_sessictrl_path, key), shell=True).decode()
+		print(output)
 
 
-def download_houdini(browser, houdini_version, houdini_is_python3):
+def validate_file_hash(filepath, hash):
+	file_hash = hashlib.md5()
+	with open(filepath, 'rb') as f:
+		for chunk in iter(lambda: f.read(4096), b''):
+			file_hash.update(chunk)
+	if file_hash.hexdigest() != hash:
+		return False
+	return True
+
+
+def download_houdini(sidefx_client, houdini_version, houdini_is_python3):
 
 	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 	if not os.path.exists(binaries_path):
 		os.makedirs(binaries_path)
 
-	houdini_name = 'houdini'
-	if houdini_is_python3:
-		houdini_name += '-py3'
-	houdini_name += '-' + houdini_version
-
 	if Windows():
-		file_ext = ".exe"
+		platform = "win64"
 	elif MacOS():
-		file_ext = ".dmg"
+		platform = "macosx"
 	else:
-		file_ext = ".tar.gz"
-	filepath = os.path.join(binaries_path, houdini_name + file_ext)
+		platform = "linux"
+	
+	version, build = parse_houdini_version(houdini_version)
 
+	if houdini_is_python3:
+		product = "houdini-py3"
+	else:
+		product = "houdini"
+
+	# Retrieve the latest daily build available
+	latest_release = sidefx_client.download.get_daily_build_download(
+		product=product, version=version, build=build, platform=platform)
+
+	filepath = os.path.join(binaries_path, latest_release['filename'])
 	if os.path.exists(filepath):
 		print("Installer is already exist on PC.")
-		return filepath
+		if validate_file_hash(filepath, latest_release['hash']):
+			return filepath
+		os.remove(filepath)
+		print("Local installer doesn't pass hash validation. Downloading new one...")
 
-	url = 'https://www.sidefx.com/download/daily-builds/'
-	headers = {
-		'referer': url,
-		'X-Requested-With': 'XMLHttpRequest'
-	}
-
-	response = browser._session.get(url, headers=headers)
-	if response.status_code == 200:
-		for line in response.text.split():
-			if houdini_name in line and file_ext in line:
-				download_link = 'https://www.sidefx.com' + line.split("\">")[0][6:]
-				print("Download link: {}".format(download_link))
-				break
-
-		else:
-			print("No required build on daily-builds page.")
-			exit(-1)
-
-	else:
-		print("Can't get daily daily-builds page. Return code: {}".format(response.status_code))
-		exit(-1)
-
-	response = browser._session.get(download_link)
-	if response.status_code == 200:
-		for line in response.text.split():
-			# In this line we can find redirect URL
-			if "Retry" in line:
-				download_link = line.split("\">")[0][6:].replace("&amp;", "&")
-				print("Redirect download link: {}".format(download_link))
-				break
-
-		else:
-			print('No redirect download link.')
-			exit(-1)
-
-	else:
-		print("Can't download houdini version from sidefx page. Return code: {}".format(response.status_code))
-		exit(-1)
-
-	response = browser._session.get(download_link, cookies=response.cookies, stream=True)
+	response = requests.get(latest_release['download_url'], stream=True)
 	if response.status_code == 200:
 		block_size = 1024*1024*10
 		dl = 0
@@ -227,10 +200,12 @@ def download_houdini(browser, houdini_version, houdini_is_python3):
 					done = int(50 * dl / total_length)
 					print("Downloaded {}mb of {}mb".format(int(dl/1024.0/1024.0), int(total_length/1024.0/1024.0)))
 	else:
-		print("Can't download houdini version from cloudfront. Return code: {}".format(response.status_code))
-		exit(-1)
+		raise Exception("Can't download houdini version from cloudfront. Return code: {}".format(response.status_code))
 
-	return filepath
+	if validate_file_hash(filepath, latest_release['hash']):
+		return filepath
+	else:
+		raise Exception('Checksum does not match!')
 
 
 def launchCommand(cmd):
@@ -318,28 +293,27 @@ def checkInstalledHoudini(target_version, target_is_python3):
 if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter)
-	parser.add_argument('-l', '--username', required=True)
-	parser.add_argument('-p', '--password', required=True)
+	parser.add_argument('-l', '--client_id', required=True)
+	parser.add_argument('-p', '--client_secret_key', required=True)
 	parser.add_argument('-v', '--version', required=True)
 	parser.add_argument('--python3', action='store_true')
 	args = parser.parse_args()
 
 	# authorization 
-	browser = twill.commands.browser
-	twill.commands.go('https://www.sidefx.com/login/')
-	submit_form({'sfx-login-username': args.username, 'sfx-login-password': args.password})
+	sidefx_client = sidefx.service(
+		access_token_url="https://www.sidefx.com/oauth2/application_token",
+		client_id=args.client_id,
+		client_secret_key=args.client_secret_key,
+		endpoint_url="https://www.sidefx.com/api/",
+	)
 
 	# True if target version is already installed 
 	if not checkInstalledHoudini(args.version, args.python3):
-		filepath = download_houdini(browser, args.version, args.python3)
+		filepath = download_houdini(sidefx_client, args.version, args.python3)
 		installHoudini(args.version, args.python3, filepath)
-		if not checkInstalledHoudini(args.version, args.python3):
-			#os.remove(filepath)
-			filepath = download_houdini(browser, args.version, args.python3)
-			installHoudini(args.version, args.python3, filepath)
-		else:
+		if checkInstalledHoudini(args.version, args.python3):
 			print("Houdini is successfully installed. Verification passed.")
 
-	activate_license(browser, args.version, args.python3)
-
+	activate_license(sidefx_client, args.version, args.python3)
+	
 	print("FINISHED")
