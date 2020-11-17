@@ -45,35 +45,6 @@ def MacOS():
 	return platform.system() == "Darwin"
 
 
-def get_form(field_ids):
-	for form in browser.forms:
-		for field_id in field_ids:
-			for field in form.inputs:
-				if field.get('id') == field_id:
-					break
-			else:
-				break
-		else:
-			return form
-	print('Failed to find form with field_ids={}'.format(field_ids))
-
-
-def submit_form(fields):
-	form = get_form(fields.keys())
-	for name, value in fields.items():
-		field = browser.form_field(form, name)
-		twill.utils.set_form_control_value(field, value)
-	browser.clicked(form, field)
-	twill.commands.submit()
-
-
-def get_csrf():
-	csrf_token = 'csrfmiddlewaretoken'
-	for form in browser.forms:
-		if csrf_token in form.inputs:
-			return form.inputs[csrf_token].value
-
-
 def get_server_info(sesictrl_path):
 	return re.split(' |\t', subprocess.check_output([sesictrl_path, '-n']).decode().splitlines()[1].lstrip())[1:]
 
@@ -215,7 +186,7 @@ def launchCommand(cmd):
 	print("Execute command: {}".format(cmd))
 
 	p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	p.communicate()
+	stdout, stderr = p.communicate()
 
 	try:
 		rc = p.wait(timeout=600)
@@ -226,6 +197,9 @@ def launchCommand(cmd):
 		p.terminate()
 	except Exception as ex:
 		print("launch command exception:".format(ex))
+
+	print("STDOUT: {}".format(stdout))
+	print("STDERR: {}".format(stderr))
 
 	print("Executing finished.")
 
