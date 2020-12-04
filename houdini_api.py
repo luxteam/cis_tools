@@ -244,7 +244,7 @@ def installHoudini(version, is_python3, houdini_installer):
 
 	elif MacOS():
 		launchCommand("hdiutil attach {} -mountpoint /Volumes/Houdini".format(houdini_installer))
-		launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_install_dir[0:-4], houdini_install_dir))
+		launchCommand("sudo {}/installHoudiniOSX.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_install_dir[0:-4], houdini_install_dir))
 		launchCommand("hdiutil detach /Volumes/Houdini")
 		if is_python3:
 			# need sudo 
@@ -263,7 +263,7 @@ def installHoudini(version, is_python3, houdini_installer):
 					os.makedirs(houdini_install_parent_dir)
 
 				houdini_installer_path = os.path.join(binaries_path, path)
-				launchCommand("{}/installHoudini.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, houdini_install_dir))
+				launchCommand("sudo {}/installHoudiniLinux.sh {} {}".format(os.getenv("CIS_TOOLS"), houdini_installer_path, houdini_install_dir))
 
 
 def checkInstalledHoudini(target_version, target_is_python3):
