@@ -10,7 +10,7 @@ import subprocess
 
 
 def install(package):
-	subprocess.call([sys.executable, "-m", "pip", "install", package])
+	subprocess.call([sys.executable, "-m", "pip", "install", "--user", package])
 
 try:
 	import twill
