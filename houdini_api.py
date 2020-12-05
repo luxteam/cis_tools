@@ -274,6 +274,8 @@ def execute(sidefx, args):
 		installHoudini(args.version, args.python3, filepath)
 		if checkInstalledHoudini(args.version, args.python3):
 			print("Houdini is successfully installed. Verification passed.")
+	else:
+		print("Houdini is already installed.")
 
 
 if __name__ == "__main__":
@@ -306,3 +308,4 @@ if __name__ == "__main__":
 	activate_license(sidefx_client, args.version, args.python3)
 	
 	print("FINISHED")
+	return 0
