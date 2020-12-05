@@ -308,4 +308,4 @@ if __name__ == "__main__":
 	activate_license(sidefx_client, args.version, args.python3)
 	
 	print("FINISHED")
-	return 0
+	exit(0)
