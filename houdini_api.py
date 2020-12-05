@@ -45,35 +45,6 @@ def MacOS():
 	return platform.system() == "Darwin"
 
 
-def get_form(field_ids):
-	for form in browser.forms:
-		for field_id in field_ids:
-			for field in form.inputs:
-				if field.get('id') == field_id:
-					break
-			else:
-				break
-		else:
-			return form
-	print('Failed to find form with field_ids={}'.format(field_ids))
-
-
-def submit_form(fields):
-	form = get_form(fields.keys())
-	for name, value in fields.items():
-		field = browser.form_field(form, name)
-		twill.utils.set_form_control_value(field, value)
-	browser.clicked(form, field)
-	twill.commands.submit()
-
-
-def get_csrf():
-	csrf_token = 'csrfmiddlewaretoken'
-	for form in browser.forms:
-		if csrf_token in form.inputs:
-			return form.inputs[csrf_token].value
-
-
 def get_server_info(sesictrl_path):
 	return re.split(' |\t', subprocess.check_output([sesictrl_path, '-n']).decode().splitlines()[1].lstrip())[1:]
 
@@ -179,6 +150,7 @@ def download_houdini(sidefx_client, houdini_version, houdini_is_python3):
 	latest_release = sidefx_client.download.get_daily_build_download(
 		product=product, version=version, build=build, platform=platform)
 
+	print("Latest release filename: {}".format(latest_release['filename']))
 	filepath = os.path.join(binaries_path, latest_release['filename'])
 	if os.path.exists(filepath):
 		print("Installer is already exist on PC.")
