@@ -150,7 +150,7 @@ def download_houdini(sidefx_client, houdini_version, houdini_is_python3):
 	latest_release = sidefx_client.download.get_daily_build_download(
 		product=product, version=version, build=build, platform=platform)
 
-	print("Latest release filename: {}".format(latest_release['filename']))
+	print("Latest release: {}".format(latest_release))
 	filepath = os.path.join(binaries_path, latest_release['filename'])
 	if os.path.exists(filepath):
 		print("Installer is already exist on PC.")
