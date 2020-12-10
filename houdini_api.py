@@ -81,10 +81,10 @@ def get_houdini_install_dir(houdini_version, houdini_is_python3):
 			installation_path = r"{}\Houdini {}{}".format(installation_root, houdini_version, ' Python3' if houdini_is_python3 else '')
 			
 		elif MacOS():
-			installation_path = r'{}/Houdini{}{}'.format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
+			installation_path = r'{}/Houdini/Houdini{}{}'.format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
 
 		else:
-			installation_path = r"{}/hfs{}{}".format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
+			installation_path = r"{}/Houdini/hfs{}{}".format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
 	return installation_path
 
 
