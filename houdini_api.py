@@ -66,8 +66,8 @@ def parse_houdini_version(version):
 
 
 def get_houdini_install_dir(houdini_version, houdini_is_python3):
-	installation_path = os.getenv("HOUDINI_INSTALLATION_PATH")
-	if not installation_path:
+	installation_root = os.getenv("HOUDINI_INSTALLATION_PATH")
+	if not installation_root:
 		if Windows():
 			installation_path = r"C:\Program Files\Side Effects Software\Houdini {}{}".format(houdini_version, ' Python3' if houdini_is_python3 else '')
 			
@@ -76,6 +76,15 @@ def get_houdini_install_dir(houdini_version, houdini_is_python3):
 
 		else:
 			installation_path = r"/home/{}/Houdini/hfs{}{}".format(getpass.getuser(), houdini_version, '-py3' if houdini_is_python3 else '-py2')
+	else:
+		if Windows():
+			installation_path = r"{}\Houdini {}{}".format(installation_root, houdini_version, ' Python3' if houdini_is_python3 else '')
+			
+		elif MacOS():
+			installation_path = r'{}/Houdini{}{}'.format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
+
+		else:
+			installation_path = r"{}/hfs{}{}".format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
 	return installation_path
 
 
