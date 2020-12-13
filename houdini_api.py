@@ -187,7 +187,7 @@ def launchCommand(cmd):
 	print("Execute command: {}".format(cmd))
 
 	p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	p.communicate()
+	stdout, stderr = p.communicate()
 
 	try:
 		rc = p.wait(timeout=600)
@@ -198,6 +198,9 @@ def launchCommand(cmd):
 		p.terminate()
 	except Exception as ex:
 		print("launch command exception:".format(ex))
+
+	print("STDOUT: {}".format(stdout))
+	print("STDERR: {}".format(stderr))
 
 	print("Executing finished.")
 
