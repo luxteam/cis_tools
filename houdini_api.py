@@ -66,14 +66,26 @@ def parse_houdini_version(version):
 
 
 def get_houdini_install_dir(houdini_version, houdini_is_python3):
-	if Windows():
-		return r"C:\Program Files\Side Effects Software\Houdini {}{}".format(houdini_version, ' Python3' if houdini_is_python3 else '') 
-		
-	elif MacOS():
-		return r'/Applications/Houdini/Houdini{}{}'.format(houdini_version, '-py3' if houdini_is_python3 else '-py2')
+	installation_root = os.getenv("HOUDINI_INSTALLATION_PATH")
+	if not installation_root:
+		if Windows():
+			installation_path = r"C:\Program Files\Side Effects Software\Houdini {}{}".format(houdini_version, ' Python3' if houdini_is_python3 else '')
+			
+		elif MacOS():
+			installation_path = r'/Applications/Houdini/Houdini{}{}'.format(houdini_version, '-py3' if houdini_is_python3 else '-py2')
 
+		else:
+			installation_path = r"/home/{}/Houdini/hfs{}{}".format(getpass.getuser(), houdini_version, '-py3' if houdini_is_python3 else '-py2')
 	else:
-		return r"/home/{}/Houdini/hfs{}{}".format(getpass.getuser(), houdini_version, '-py3' if houdini_is_python3 else '-py2') 
+		if Windows():
+			installation_path = r"{}\Houdini {}{}".format(installation_root, houdini_version, ' Python3' if houdini_is_python3 else '')
+			
+		elif MacOS():
+			installation_path = r'{}/Houdini/Houdini{}{}'.format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
+
+		else:
+			installation_path = r"{}/Houdini/hfs{}{}".format(installation_root, houdini_version, '-py3' if houdini_is_python3 else '-py2')
+	return installation_path
 
 
 def activate_license(sidefx_client, houdini_version, houdini_is_python3):
@@ -128,7 +140,9 @@ def validate_file_hash(filepath, hash):
 
 def download_houdini(sidefx_client, houdini_version, houdini_is_python3):
 
-	binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
+	binaries_path = os.getenv("HOUDINI_BINARIES_PATH")
+	if not binaries_path:
+		binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 	if not os.path.exists(binaries_path):
 		os.makedirs(binaries_path)
 
@@ -227,7 +241,9 @@ def installHoudini(version, is_python3, houdini_installer):
 			pass
 
 	else:
-		binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
+		binaries_path = os.getenv("HOUDINI_BINARIES_PATH")
+		if not binaries_path:
+			binaries_path = os.path.join(os.getenv("CIS_TOOLS"), "..", "PluginsBinaries")
 		launchCommand('tar -xzf {} -C {}'.format(houdini_installer, binaries_path))
 		bin_paths = os.listdir(binaries_path)
 		for path in bin_paths:
