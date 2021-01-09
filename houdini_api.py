@@ -149,7 +149,7 @@ def download_houdini(sidefx_client, houdini_version, houdini_is_python3):
 	if Windows():
 		platform = "win64"
 	elif MacOS():
-		platform = "macosx"
+		platform = "macos"
 	else:
 		platform = "linux"
 	
