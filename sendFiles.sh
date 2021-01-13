@@ -7,4 +7,4 @@ REMOTE_PATH=${REMOTE_ROOT}/${REMOTE_DIR}
 ssh ${REMOTE_HOST} "mkdir -p ${REMOTE_PATH}"
 
 # scp -r ${SOURCE} ${REMOTE_HOST}:${REMOTE_PATH}
-rsync -rvzca ${SOURCE} ${REMOTE_HOST}:${REMOTE_PATH}
+rsync -rvzcl ${SOURCE} ${REMOTE_HOST}:${REMOTE_PATH}
