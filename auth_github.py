@@ -2,7 +2,9 @@ import json
 import os
 import time
 import argparse
-from houdini_api import install
+
+def install(package):
+    subprocess.call([sys.executable, "-m", "pip", "install", "--user", package])
 
 try:
     import jwt
