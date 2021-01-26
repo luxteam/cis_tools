@@ -2,6 +2,7 @@ import json
 import os
 import time
 import argparse
+from houdini_api import install
 
 try:
     import jwt
