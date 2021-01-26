@@ -2,6 +2,8 @@ import json
 import os
 import time
 import argparse
+import subprocess
+import sys
 
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", "--user", package])
@@ -51,7 +53,7 @@ if __name__ == "__main__":
         # JWT expiration time (10 minute maximum)
         "exp": time_since_epoch_in_seconds + int(args.duration),
         # GitHub App's identifier
-        "iss": args.github_app_id
+        "iss": int(args.github_app_id)
     }
 
     jwt_token = jwt.encode(payload, private_key, args.algorithm)
