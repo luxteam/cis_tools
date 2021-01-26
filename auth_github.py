@@ -26,19 +26,20 @@ except Exception as ex:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--key', required=True)
     parser.add_argument('--github_app_id', required=True)
+    parser.add_argument('--organization_name', required=True)
     parser.add_argument('--algorithm', required=False, default="RS256")
     parser.add_argument('--duration', required=False, default=600)
 
     args = parser.parse_args()
 
+    key = os.getenv("github_app_key")
+
     time_since_epoch_in_seconds = int(time.time())
 
-    args.key = args.key.replace("-----BEGIN RSA PRIVATE KEY-----", "").replace("-----END RSA PRIVATE KEY-----", "").replace(" ", "\n")
-    args.key = "-----BEGIN RSA PRIVATE KEY-----\n" + args.key + "-----END RSA PRIVATE KEY-----\n"
-    key_bytes = args.key.encode()
-    print(key_bytes)
+    key = key.replace("-----BEGIN RSA PRIVATE KEY-----", "").replace("-----END RSA PRIVATE KEY-----", "").replace(" ", "\n")
+    key = "-----BEGIN RSA PRIVATE KEY-----\n" + key + "-----END RSA PRIVATE KEY-----\n"
+    key_bytes = key.encode()
     private_key = default_backend().load_pem_private_key(key_bytes, None)
 
     payload = {
@@ -53,10 +54,17 @@ if __name__ == "__main__":
     jwt_token = jwt.encode(payload, private_key, args.algorithm)
     headers = {"Authorization": "Bearer {}".format(jwt_token.decode())}
 
-    resp = requests.get("https://api.github.com/app/installations", headers=headers)
-    installation_id = json.loads(resp.content.decode())[0]["id"]
+    response = requests.get("https://api.github.com/app/installations", headers=headers)
+    installations_info = json.loads(response.content.decode())
+    for installation in installations_info:
+        if installation["account"]["html_url"].endswith(args.organization_name):
+            installation_id = installation["id"]
+            break
+    else:
+        print("Installation with specific organization or user name couldn't be found!")
+        exit(-1)
 
-    resp = requests.post("https://api.github.com/app/installations/{}/access_tokens".format(str(installation_id)), headers=headers)
-    installation_token = json.loads(resp.content.decode())["token"]
+    response = requests.post("https://api.github.com/app/installations/{}/access_tokens".format(str(installation_id)), headers=headers)
+    installation_token = json.loads(response.content.decode())["token"]
 
     print(installation_token)
