@@ -8,16 +8,26 @@ import sys
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", "--user", package])
 
+def get_version(package):
+    stdout = subprocess.check_output([sys.executable, "-m", "pip", "list"])
+    for installation in stdout.decode().split("\n"):
+        parts = installation.split()
+        if len(parts) == 2:
+            if parts[0] == package:
+                return parts[1]
+    return None
+
 try:
+    if get_version("cryptography") != "2.8":
+        install("cryptography==2.8")
     import jwt
     import requests
     from cryptography.hazmat.backends import default_backend
 except Exception as ex:
     print("Required modules are missing, trying to install...")
     try:
-        install("pyjwt")
-        install("requests")
-        install("cryptography")
+        install("pyjwt==1.7.1")
+        install("requests==2.22.0")
         import jwt
         import requests
         from cryptography.hazmat.backends import default_backend
@@ -38,7 +48,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    key = os.getenv("github_app_key")
+    key = os.getenv("GITHUB_APP_KEY")
 
     time_since_epoch_in_seconds = int(time.time())
 
