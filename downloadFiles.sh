@@ -1,0 +1,7 @@
+REMOTE_SOURCE=$1
+LOCAL_DIR=$2
+REMOTE_HOST=$3
+
+mkdir -p ${LOCAL_DIR}
+
+rsync -rvzcl ${REMOTE_HOST}:${REMOTE_SOURCE} ${LOCAL_DIR}

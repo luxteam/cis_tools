@@ -1,0 +1,7 @@
+SOURCE=$1
+REMOTE_PATH=$2
+REMOTE_HOST=$3
+
+ssh ${REMOTE_HOST} "mkdir -p ${REMOTE_PATH}"
+
+rsync -rvzcl ${SOURCE} ${REMOTE_HOST}:${REMOTE_PATH}
