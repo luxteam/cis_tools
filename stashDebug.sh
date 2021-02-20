@@ -4,4 +4,4 @@
 
 ssh $1 "mkdir -p $2"
 
-rsync -rvzcmW --info=stats2 $3 . $2:$2
+rsync -rvzcmW --info=stats2 $3 . $1:$2
