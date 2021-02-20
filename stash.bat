@@ -4,4 +4,4 @@ rem %3 - rsync parameters
 
 bash -c "ssh %1 'mkdir -p %2'"
 
-bash -c "rsync -rzcmW --info=stats2 %3 . %1:%2"
+bash -c "rsync -rzcmW --stats %~3 . %1:%2"
