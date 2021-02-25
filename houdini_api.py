@@ -116,7 +116,7 @@ def activate_license(sidefx_client, houdini_version, houdini_is_python3):
 	print('Server code: {}'.format(server_code))
 
 	license_strings = sidefx_client.license.get_non_commercial_license(
-        server_name=server_name, server_code=server_code, version=version, products='HOUDINI-NC')
+		server_name=server_name, server_code=server_code, version=version, products='HOUDINI-NC')
 
 	licenses = license_strings['license_keys']
 	for key in licenses:
@@ -133,7 +133,9 @@ def validate_file_hash(filepath, hash):
 	with open(filepath, 'rb') as f:
 		for chunk in iter(lambda: f.read(4096), b''):
 			file_hash.update(chunk)
-	if file_hash.hexdigest() != hash:
+	file_hex = file_hash.hexdigest()
+	print("HASH: {}".format(file_hex))
+	if file_hex != hash:
 		return False
 	return True
 
