@@ -1,4 +1,4 @@
-# $1 - Remote host
-# $2 - Remote path
+# $1 - Remote path
+# $2 - Remote host
 
-rsync -rzclm --stats $1:$2 .
+rsync -rvzclm $2:$1 .

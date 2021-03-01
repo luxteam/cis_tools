@@ -1,7 +1,7 @@
-rem %1 - Remote host
+rem %1 - Source
 rem %2 - Remote path
-rem %3 - rsync parameters
+rem %3 - Remote host
 
-bash -c "ssh %1 'mkdir -p %2'"
+bash -c "ssh %3 'mkdir -p %2'"
 
-bash -c "rsync -rzcmW --stats %~3 . %1:%2"
+bash -c "rsync -rvzcmW %1 %3:%2"

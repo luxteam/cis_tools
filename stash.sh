@@ -1,7 +1,7 @@
-# $1 - Remote host
+# $1 - Source
 # $2 - Remote path
-# $3 - rsync parameters
+# $3 - Remote host
 
-ssh $1 "mkdir -p $2"
+ssh $3 "mkdir -p $2"
 
-rsync -rzcmW --stats $3 . $1:$2
+rsync -rvzcmW $1 $3:$2
