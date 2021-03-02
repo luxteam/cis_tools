@@ -1,6 +1,7 @@
 REMOTE_SOURCE=$1
 LOCAL_DIR=$2
 REMOTE_HOST=$3
+CUSTOM_KEYS=$4
 
 mkdir -p ${LOCAL_DIR}
-rsync -rvzc --delete ${REMOTE_HOST}:${REMOTE_SOURCE} ${LOCAL_DIR}
+rsync -rvzc --delete ${CUSTOM_KEYS} ${REMOTE_HOST}:${REMOTE_SOURCE} ${LOCAL_DIR}
