@@ -4,4 +4,4 @@ REMOTE_HOST=$3
 CUSTOM_KEYS=$4
 
 mkdir -p ${LOCAL_DIR}
-rsync -rvzc --delete ${CUSTOM_KEYS} ${REMOTE_HOST}:${REMOTE_SOURCE} ${LOCAL_DIR}
+rsync -rvzcl --delete ${CUSTOM_KEYS} ${REMOTE_HOST}:${REMOTE_SOURCE} ${LOCAL_DIR}
