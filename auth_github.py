@@ -67,7 +67,9 @@ if __name__ == "__main__":
     }
 
     jwt_token = jwt.encode(payload, private_key, args.algorithm)
-    headers = {"Authorization": "Bearer {}".format(jwt_token.decode())}
+    if not isinstance(jwt_token, str):
+        jwt_token = jwt_token.decode()
+    headers = {"Authorization": "Bearer {}".format(jwt_token)}
 
     response = requests.get("https://api.github.com/app/installations", headers=headers)
     installations_info = json.loads(response.content.decode())
