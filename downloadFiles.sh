@@ -5,4 +5,4 @@ CUSTOM_KEYS=$4
 
 mkdir -p ${LOCAL_DIR}
 
-rsync -rvzcl ${CUSTOM_KEYS} ${REMOTE_HOST}:${REMOTE_SOURCE} ${LOCAL_DIR}
+rsync -rvztl ${CUSTOM_KEYS} ${REMOTE_HOST}:${REMOTE_SOURCE} ${LOCAL_DIR}

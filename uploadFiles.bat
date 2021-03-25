@@ -5,4 +5,4 @@ set CUSTOM_KEYS=%~4
 
 bash.exe -c "ssh %REMOTE_HOST% 'mkdir -p %REMOTE_PATH%'"
 
-bash.exe -c "rsync -rvzcW %CUSTOM_KEYS% %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%"
+bash.exe -c "rsync -rvztW %CUSTOM_KEYS% %SOURCE% %REMOTE_HOST%:%REMOTE_PATH%"
