@@ -1,0 +1,7 @@
+/Users/user/JN/cis_tools/mayauninstall
+hdiutil attach $1 -mountpoint /Volumes/RadeonProRenderMaya
+cd /Volumes/RadeonProRenderMaya/RadeonProRenderMayaInstaller.app/Contents/Packages
+installer -pkg RadeonProRender*.pkg -target /
+cd
+/Users/user/JN/cis_tools/mayapostinstall
+hdiutil detach /Volumes/RadeonProRenderMaya
