@@ -5,7 +5,7 @@
 
 ssh $1 "7z x $2 -o$3"
 
-if [["$4" == "true"]]
+if [ "$4" = "true" ]
 then
     ssh $1 "rm $2"
 fi
