@@ -5,4 +5,4 @@ CUSTOM_KEYS=$4
 
 ssh ${REMOTE_HOST} "mkdir -p ${REMOTE_PATH}"
 
-rsync -rvztl ${CUSTOM_KEYS} ${SOURCE} ${REMOTE_HOST}:${REMOTE_PATH}
+rsync -rvztl ${CUSTOM_KEYS} "${SOURCE}" ${REMOTE_HOST}:"${REMOTE_PATH}"
