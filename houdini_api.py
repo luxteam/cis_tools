@@ -2,9 +2,11 @@ import re
 import os
 import sys
 import time
+import shutil
 import hashlib
 import getpass
 import argparse
+import platform
 import traceback
 import subprocess
 
@@ -14,19 +16,13 @@ def install(package):
 
 try:
 	import twill
-	import platform
-	import shutil
 	import requests
 except Exception as ex:
 	print("Required modules are missing, trying to install...")
 	try:
 		install("twill")
-		install("shutil")
-		install("platform")
 		install("requests")
 		import twill
-		import platform
-		import shutil
 		import requests
 	except Exception as ex:
 		print(ex)
