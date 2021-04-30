@@ -1,5 +1,5 @@
-set SOURCE=%1
-set REMOTE_PATH=%2
+set SOURCE=%~1
+set REMOTE_PATH=%~2
 set REMOTE_HOST=%3
 set CUSTOM_KEYS=%~4
 
